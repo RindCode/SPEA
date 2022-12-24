@@ -1,0 +1,109 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctrl="clr-namespace:SPEA.App.Controls"
+                    xmlns:ctrl_se="clr-namespace:SPEA.App.Controls.SectionEditor"
+                    xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist">
+
+    <Style x:Key="SectionEditorControlStyle" TargetType="{x:Type ctrl_se:SectionEditorControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrl_se:SectionEditorControl}">
+                    <Grid>
+                        <Border
+                            x:Name="PART_MinorGrid"
+                            Visibility="Visible">
+                            <Border.Background>
+                                <DrawingBrush
+                                    x:Name="MinorGridBrush"
+                                    TileMode="Tile"
+                                    Viewport="{Binding MinorGridViewport, RelativeSource={RelativeSource TemplatedParent}}"
+                                    ViewportUnits="Absolute"
+                                    Drawing="{DynamicResource Geometry.SectionEditor.MinorGrid}"/>
+                            </Border.Background>
+                        </Border>
+                        <Border
+                            x:Name="PART_MajorGrid"
+                            Visibility="Visible">
+                            <Border.Background>
+                                <DrawingBrush
+                                    x:Name="MajorGridBrush"
+                                    Opacity="0.5"
+                                    TileMode="Tile"
+                                    Viewport="{Binding MajorGridViewport, RelativeSource={RelativeSource TemplatedParent}}"
+                                    ViewportUnits="Absolute"
+                                    Drawing="{DynamicResource Geometry.SectionEditor.MajorGrid}"/>
+                            </Border.Background>
+                        </Border>
+                        <ScrollViewer
+                            Margin="{TemplateBinding Margin}"
+                            Padding="{TemplateBinding Padding}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            Style="{DynamicResource ScrollViewerStyle}"
+                            CanContentScroll="True"
+                            HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Auto">
+                            <ctrl_se:InfinitePanel
+                                x:Name="PART_InfinitePanel"
+                                Background="Transparent"
+                                Focusable="False">
+                                <ctrl_se:SectionEditorItemsHostControl
+                                    x:Name="PART_ItemsHost"
+                                    Width="3000" Height="1500"
+                                    Background="SteelBlue" Opacity="0.3"
+                                    IsItemsHost="True"/>
+                            </ctrl_se:InfinitePanel>
+                            <!--<Grid>
+                                <Border
+                                    x:Name="PART_MinorGrid"
+                                    Visibility="Visible">
+                                    <Border.Background>
+                                        <DrawingBrush
+                                            x:Name="MinorGridBrush"
+                                            TileMode="Tile"
+                                            Viewport="0,0,10,10"
+                                            ViewportUnits="Absolute"
+                                            Drawing="{DynamicResource Geometry.SectionEditor.MinorGrid}"/>
+                                    </Border.Background>
+                                </Border>
+                                <Border
+                                    x:Name="PART_MajorGrid"
+                                    Visibility="Visible">
+                                    <Border.Background>
+                                        <DrawingBrush
+                                            x:Name="MajorGridBrush"
+                                            Opacity="0.5"
+                                            TileMode="Tile"
+                                            Viewport="0,0,100,100"
+                                            ViewportUnits="Absolute"
+                                            Drawing="{DynamicResource Geometry.SectionEditor.MajorGrid}"/>
+                                    </Border.Background>
+                                </Border>
+                                <ctrl_se:InfinitePanel
+                                    x:Name="PART_InfinitePanel"
+                                    Background="Transparent">
+                                    <Grid x:Name="PART_Content">
+                                        <ctrl_se:SectionEditorItemsHostControl
+                                            Width="3000" Height="1500"
+                                            Background="Tomato" Opacity="0.3"
+                                            IsItemsHost="True"/>
+                                    </Grid>
+                                </ctrl_se:InfinitePanel>
+                            </Grid>-->
+                        </ScrollViewer>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="MinorGridEnabled" Value="False">
+                            <Setter TargetName="PART_MinorGrid" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                        <Trigger Property="MajorGridEnabled" Value="False">
+                            <Setter TargetName="PART_MajorGrid" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

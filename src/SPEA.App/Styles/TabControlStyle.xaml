@@ -1,0 +1,186 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:ctrl="clr-namespace:SPEA.App.Controls">
+
+    <Style x:Key="HorizontalTabControlStyle" TargetType="{x:Type ctrl:STabControl}">
+        <Setter Property="Background" Value="{DynamicResource Element.Foreground.Base}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrl:STabControl}">
+                    <Grid x:Name="MainGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            x:Name="TabControlHeaderBorder"
+                            Background="{DynamicResource LinearGradient.PrimaryPalette.Levels1to1a}"
+                            BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"
+                            BorderThickness="1">
+                            <Grid x:Name="TabControlHeaderGrid">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    x:Name="LeadingContentArea">
+                                    <ContentPresenter
+                                        x:Name="LeadingContentSource"
+                                        ContentSource="LeadingContent"/>
+                                </Border>
+                                <TabPanel
+                                    x:Name="TabControlArea"
+                                    Background="Transparent"
+                                    HorizontalAlignment="{Binding Path=TabsHorizontalAlignment, RelativeSource={RelativeSource TemplatedParent}}"
+                                    IsItemsHost="True"/>
+                                <Border
+                                    x:Name="TrailingContentArea">
+                                    <ContentPresenter
+                                        x:Name="TrailingContentSource"
+                                        Grid.Column="1"
+                                        ContentSource="TrailingContent"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Border
+                            x:Name="ContentBorder"
+                            Grid.Row="1" Grid.Column="1">
+                            <ContentPresenter
+                                x:Name="PART_SelectedContentHost"
+                                ContentSource="SelectedContent"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="LeadingContentSource" Property="Content" Value="{x:Null}">
+                            <Setter TargetName="LeadingContentArea" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger SourceName="TrailingContentSource" Property="Content" Value="{x:Null}">
+                            <Setter TargetName="TrailingContentArea" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Top">
+                            <Setter TargetName="TabControlHeaderBorder" Property="Grid.Row" Value="0"/>
+                            <Setter TargetName="TabControlHeaderBorder" Property="Grid.RowSpan" Value="1"/>
+                            <Setter TargetName="LeadingContentArea" Property="Grid.Row" Value="0"/>
+                            <Setter TargetName="LeadingContentArea" Property="Grid.Column" Value="0"/>
+                            <Setter TargetName="TabControlArea" Property="Grid.Row" Value="0"/>
+                            <Setter TargetName="TabControlArea" Property="Grid.Column" Value="1"/>
+                            <Setter TargetName="TrailingContentArea" Property="Grid.Row" Value="0"/>
+                            <Setter TargetName="TrailingContentArea" Property="Grid.Column" Value="2"/>
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Bottom">
+                            <Setter TargetName="TabControlHeaderBorder" Property="Grid.Row" Value="2"/>
+                            <Setter TargetName="TabControlHeaderBorder" Property="Grid.RowSpan" Value="1"/>
+                            <Setter TargetName="LeadingContentArea" Property="Grid.Row" Value="0"/>
+                            <Setter TargetName="LeadingContentArea" Property="Grid.Column" Value="0"/>
+                            <Setter TargetName="TabControlArea" Property="Grid.Row" Value="0"/>
+                            <Setter TargetName="TabControlArea" Property="Grid.Column" Value="1"/>
+                            <Setter TargetName="TrailingContentArea" Property="Grid.Row" Value="0"/>
+                            <Setter TargetName="TrailingContentArea" Property="Grid.Column" Value="2"/>
+                        </Trigger>
+                        <Trigger Property="LeadingContent" Value="{x:Null}">
+                            <Setter TargetName="LeadingContentArea" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="TrailingContent" Value="{x:Null}">
+                            <Setter TargetName="TrailingContentArea" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LeftAlignedTabItemStyle" TargetType="{x:Type TabItem}">
+        <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Base}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid>
+                        <Border
+                            x:Name="ContentBorder"
+                            Background="{DynamicResource LinearGradient.PrimaryPalette.Levels1to1a}"
+                            BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"
+                            BorderThickness="0,0,1,0"
+                            Height="20">
+                            <Border
+                                x:Name="InnerBorder"
+                                BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
+                                BorderThickness="0,1,0,0">
+                                <ContentPresenter
+                                    Margin="10,0,10,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    ContentSource="Header"/>
+                            </Border>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level1a}"/>
+                            <Setter TargetName="InnerBorder" Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Accent}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"/>
+                            <Setter TargetName="InnerBorder" Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Accent}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RightAlignedTabItemStyle" TargetType="{x:Type TabItem}">
+        <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Base}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid>
+                        <Border
+                            x:Name="ContentBorder"
+                            Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level1}"
+                            BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"
+                            BorderThickness="1,0,0,0"
+                            Height="20">
+                            <Border
+                                x:Name="InnerBorder"
+                                BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
+                                BorderThickness="0,1,0,0">
+                                <ContentPresenter
+                                    Margin="10,0,10,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    ContentSource="Header"/>
+                            </Border>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level1a}"/>
+                            <Setter TargetName="InnerBorder" Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Accent}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"/>
+                            <Setter TargetName="InnerBorder" Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Accent}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

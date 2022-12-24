@@ -1,0 +1,93 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Application -->
+    <s:String x:Key="S.App.Title">SPEA: Section Properties and Engineering Analysis</s:String>
+    <s:String x:Key="S.App.DockPanel.ProjectTree">Project Tree</s:String>
+    <s:String x:Key="S.App.DockPanel.SectionProperties">Section Properties</s:String>
+    
+    
+    <!-- Common | Placeholders -->
+    <s:String x:Key="S.Common.Placeholder.EmptyList">empty...</s:String>
+
+    <!-- Common | Validation Messages -->
+    <s:String x:Key="S.Common.ValidationText.NotEmptyField">Field is required.</s:String>
+    <s:String x:Key="S.Common.ValidationText.ValidFileName">Section name must be a valid Windows file name.</s:String>
+
+    <!-- Common | Exceptions -->
+    <s:String x:Key="S.Common.Exception.UnhandledEx.Title">Unhandled Exception</s:String>
+    <s:String x:Key="S.Common.Exception.UnhandledEx.Message">An unhandled exception has occured</s:String>
+    
+    
+    <!-- MainWindow | MainMenu -->
+    <s:String x:Key="S.MainWindow.Menu.File">File</s:String>
+    <s:String x:Key="S.MainWindow.Menu.File.New">New</s:String>
+    <s:String x:Key="S.MainWindow.Menu.File.Open">Open...</s:String>
+    <s:String x:Key="S.MainWindow.Menu.File.Save">Save</s:String>
+    <s:String x:Key="S.MainWindow.Menu.File.Close">Close</s:String>
+    <s:String x:Key="S.MainWindow.Menu.File.CloseAll">Close All</s:String>
+    <s:String x:Key="S.MainWindow.Menu.File.CloseOthers">Close Others</s:String>
+    <s:String x:Key="S.MainWindow.Menu.File.Exit">Quit</s:String>
+    <s:String x:Key="S.MainWindow.Menu.Edit">Edit</s:String>
+    <s:String x:Key="S.MainWindow.Menu.Edit.Undo">Undo</s:String>
+    <s:String x:Key="S.MainWindow.Menu.Edit.Redo">Redo</s:String>
+    <s:String x:Key="S.MainWindow.Menu.View">View</s:String>
+    <s:String x:Key="S.MainWindow.Menu.Help">Help</s:String>
+
+    
+    <!-- Window | ToolTips -->
+    <s:String x:Key="S.Window.Button.ToolTip.Minimize">Minimize</s:String>
+    <s:String x:Key="S.Window.Button.ToolTip.Maximize">Maximize</s:String>
+    <s:String x:Key="S.Window.Button.ToolTip.RestoreDown">Restore Down</s:String>
+    <s:String x:Key="S.Window.Button.ToolTip.Close">Close</s:String>
+
+    
+    <!-- AvalonDock | ToolTips -->
+    <s:String x:Key="S.AvalonDock.Button.ToolTip.AutoHide">Auto Hide</s:String>
+    <s:String x:Key="S.AvalonDock.Button.ToolTip.WindowPosition">Window Position</s:String>
+
+    <!-- AvalonDock | ContextMenu -->
+    <s:String x:Key="S.AvalonDock.Context.AnchorableContextMenu.Float">Float</s:String>
+    <s:String x:Key="S.AvalonDock.Context.AnchorableContextMenu.Dock">Dock</s:String>
+    <s:String x:Key="S.AvalonDock.Context.AnchorableContextMenu.DockAsDocument">Dock as Tabbed Document</s:String>
+    <s:String x:Key="S.AvalonDock.Context.AnchorableContextMenu.AutoHide">Auto Hide</s:String>
+    <s:String x:Key="S.AvalonDock.Context.AnchorableContextMenu.Close">Close</s:String>
+    <s:String x:Key="S.AvalonDock.Context.AnchorableContextMenu.Hide">Hide</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.Close">Close</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.CloseAllButThis">Close All But This</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.CloseAll">Close All</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.Float">Float</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.DockAsDocument">Dock as Tabbed Document</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.NewHorizontalTabGroup">New Horizontal Tab Group</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.NewVerticalTabGroup">New Vertical Tab Group</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.MoveToNextTabGroup">Move to Next Tab Group</s:String>
+    <s:String x:Key="S.AvalonDock.Context.DocumentContextMenu.MoveToPreviousTabGroup">Move to Previous Tab Group</s:String>
+
+    
+    <!-- Message Box -->
+    <s:String x:Key="S.MessageBox.SDocument.UnhandledEx">Unhandled Exception</s:String>
+    <s:String x:Key="S.MessageBox.SDocument.UnsavedChanges_1">There are unsaved changes in the document</s:String>
+    <s:String x:Key="S.MessageBox.SDocument.UnsavedChanges_2">Save changes before closing?</s:String>
+
+    
+    <!-- New Section Window -->
+    <s:String x:Key="S.NewSectionWindow.Window.Title">Create a new section</s:String>
+    <s:String x:Key="S.NewSectionWindow.TextBlock.CrossSectionType">Cross-Section Definition</s:String>
+    <s:String x:Key="S.NewSectionWindow.TextBox.Hint.NewCrossSection">Enter the name...</s:String>
+    <s:String x:Key="S.NewSectionWindow.Button.CreateButton.Text">Create</s:String>
+    <s:String x:Key="S.NewSectionWindow.Button.CancelButton.Text">Cancel</s:String>
+    <s:String x:Key="S.NewSectionWindow.CrossSectionDefinition_Metallic">metallic</s:String>
+    
+    <!-- New Section Window | Exceptions -->
+    <s:String x:Key="S.NewSectionWindow.Exception.UnknowCrossSectionDefinition.Message">Unknown cross-section definition.</s:String>
+
+    
+    <!-- Section Editor | Button | Viewport Settings -->
+    <s:String x:Key="S.SectionEditor.Button.ViewportSettings.PopupName">Viewport Settings</s:String>
+    <s:String x:Key="S.SectionEditor.Button.ViewportSettings.Grid">Grid</s:String>
+    <s:String x:Key="S.SectionEditor.Button.ViewportSettings.Checkbox.MajorGridlines">Major</s:String>
+    <s:String x:Key="S.SectionEditor.Button.ViewportSettings.Checkbox.MinorGridlines">Minor</s:String>
+
+</ResourceDictionary>

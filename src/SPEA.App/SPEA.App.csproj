@@ -1,0 +1,88 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+
+	<BaseIntermediateOutputPath></BaseIntermediateOutputPath>
+    <BaseOutputPath>..\..\bld\</BaseOutputPath>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <SignAssembly>False</SignAssembly>
+    <Configurations>Debug;Release</Configurations>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+	<Title>SPEA: Section Properties and Engineering Analysis</Title>
+    <Description>.NET/WPF driven solution for a cross-sectional engineering analysis</Description>
+    <Version>$(VersionPrefix)$(VersionSuffix)</Version>
+    <Authors>Dmitry Poberezhnyy</Authors>
+    <Company>Dmitry Poberezhnyy</Company>
+	<Copyright>Copyright $(Company) © 2022</Copyright>
+	<VersionPrefix>1.0.0.0</VersionPrefix>
+	<VersionSuffix>alpha</VersionSuffix>
+	<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+	<FileVersion>$(VersionPrefix)</FileVersion>
+    <RepositoryUrl>https://github.com/RindCode/SPEA</RepositoryUrl>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <AssemblyName>SPEA</AssemblyName>
+    
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+    <Page Remove="bin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Drawing\Shapes\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.3">
+      <GeneratePathProperty></GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SPEA.Core\SPEA.Core.csproj" />
+    <ProjectReference Include="..\SPEA.Materials\SPEA.Materials.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="rmdir /S /Q &quot;$(OutputPath)\ca-ES&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\cs-CZ&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\de&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\es&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\fr&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\hu&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\it&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\ja&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\ko&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\nl-BE&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\pl&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\pt&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\ro&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\ru&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\sv&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\zh-Hans&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\zh-Hant&quot;" />
+  </Target>
+
+</Project>

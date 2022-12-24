@@ -1,0 +1,40 @@
+﻿<UserControl
+    x:Class="SPEA.App.Views.UserControls.StatusBarView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctrl="clr-namespace:SPEA.App.Controls"
+    xmlns:exten="clr-namespace:SPEA.App.Extensions.AttachedProperties"
+    xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:SPEA.App"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
+    xmlns:vm="clr-namespace:SPEA.App.ViewModels"
+    xmlns:converter="clr-namespace:SPEA.App.Utils.Converters"
+    xmlns:validation="clr-namespace:SPEA.App.Utils.Validation"
+    xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
+    mc:Ignorable="d">
+    
+    <Grid>
+        <Border
+            Margin="1,0,1,1"
+            Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.Column="0"
+                    Margin="3,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="{Binding RelativeSource={RelativeSource AncestorType=ctrl:WindowBase, Mode=FindAncestor},
+                                   Path=DataContext.StatusBarManagerInstance.CurrentStatus}"/>
+            </Grid>
+        </Border>
+    </Grid>
+    
+</UserControl>

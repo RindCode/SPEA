@@ -1,0 +1,38 @@
+﻿<UserControl
+    x:Class="SPEA.App.Views.UserControls.ProjectTreeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctrl="clr-namespace:SPEA.App.Controls"
+    xmlns:exten="clr-namespace:SPEA.App.Extensions.AttachedProperties"
+    xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
+    xmlns:markupex="clr-namespace:SPEA.App.Extensions.Markup"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:SPEA.App"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
+    xmlns:vm="clr-namespace:SPEA.App.ViewModels"
+    xmlns:converter="clr-namespace:SPEA.App.Utils.Converters"
+    xmlns:validation="clr-namespace:SPEA.App.Utils.Validation"
+    xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
+    mc:Ignorable="d"
+    DataContext="{markupex:DISource Type=vm:ProjectTreeViewModel}">
+
+    <Grid>
+        <TreeView ItemsSource="{Binding CrossSectionsCollection}">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type vm:SDocumentViewModel}" ItemsSource="{Binding MaterialsCollection}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <!--<HierarchicalDataTemplate DataType="{x:Type materials:MaterialBase}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>-->
+            </TreeView.Resources>
+        </TreeView>
+    </Grid>
+    
+</UserControl>

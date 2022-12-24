@@ -1,0 +1,44 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Standard sizes and dimensions used within the application -->
+    <sys:Double x:Key="Element.Tiny.Height">8</sys:Double>
+    <CornerRadius x:Key="Element.Tiny.CornerRadius">1</CornerRadius>
+    <CornerRadius x:Key="Element.Tiny.FullCornerRadius">4</CornerRadius>
+    <sys:Double x:Key="Element.Tiny.IndividualCornerRadius">1</sys:Double>
+    <sys:Double x:Key="Element.Tiny.IndividualFullCornerRadius">2</sys:Double>
+
+    <sys:Double x:Key="Element.Small.Height">16</sys:Double>
+    <CornerRadius x:Key="Element.Small.CornerRadius">3</CornerRadius>
+    <CornerRadius x:Key="Element.Small.FullCornerRadius">8</CornerRadius>
+    <sys:Double x:Key="Element.Small.IndividualCornerRadius">3</sys:Double>
+    <sys:Double x:Key="Element.Small.IndividualFullCornerRadius">4</sys:Double>
+
+    <sys:Double x:Key="Element.Medium.Height">20</sys:Double>
+    <CornerRadius x:Key="Element.Medium.CornerRadius">4</CornerRadius>
+    <CornerRadius x:Key="Element.Medium.FullCornerRadius">10</CornerRadius>
+    <sys:Double x:Key="Element.Medium.IndividualCornerRadius">4</sys:Double>
+    <sys:Double x:Key="Element.Medium.IndividualFullCornerRadius">5</sys:Double>
+    
+    <sys:Double x:Key="Element.Increased.Height">24</sys:Double>
+    <CornerRadius x:Key="Element.Increased.CornerRadius">4</CornerRadius>
+    <CornerRadius x:Key="Element.Increased.FullCornerRadius">12</CornerRadius>
+    <sys:Double x:Key="Element.Increased.IndividualCornerRadius">4</sys:Double>
+    <sys:Double x:Key="Element.Increased.IndividualFullCornerRadius">6</sys:Double>
+
+    <sys:Double x:Key="Element.Large.Height">32</sys:Double>
+    <CornerRadius x:Key="Element.Large.CornerRadius">5</CornerRadius>
+    <CornerRadius x:Key="Element.Large.FullCornerRadius">16</CornerRadius>
+    <sys:Double x:Key="Element.Large.IndividualCornerRadius">5</sys:Double>
+    <sys:Double x:Key="Element.Large.IndividualFullCornerRadius">8</sys:Double>
+
+    <!-- Section Editor canvas grid -->
+    <Pen x:Key="Pen.SectionEditor.MinorGridColor" Brush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a.Inverted}" Thickness="1.2"/>
+    <GeometryDrawing x:Key="Geometry.SectionEditor.MinorGrid" Geometry="M 0 0 L 100 0 L 100 100 L 0 100 Z" Pen="{DynamicResource Pen.SectionEditor.MinorGridColor}"/>
+
+    <Pen x:Key="Pen.SectionEditor.MajorGridColor" Brush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a.Inverted}" Thickness="0.3"/>
+    <GeometryDrawing x:Key="Geometry.SectionEditor.MajorGrid" Geometry="M 0 0 L 100 0 L 100 100 L 0 100 Z" Pen="{DynamicResource Pen.SectionEditor.MajorGridColor}"/>
+
+</ResourceDictionary>

@@ -1,0 +1,201 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctrl="clr-namespace:SPEA.App.Controls"
+    xmlns:exten="clr-namespace:SPEA.App.Extensions.AttachedProperties"
+    xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Base}"/>
+        <Setter Property="exten:CornerRadiusExtension.CornerRadius" Value="{StaticResource Element.Small.CornerRadius}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level1a}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="ClickMode" Value="Press"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid>
+                        <Border
+                            x:Name="RootBorder"
+                            Margin="{TemplateBinding Margin}"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    x:Name="BackgroundBorder"
+                                    Grid.Column="0"
+                                    Margin="2,0,2,0"
+                                    Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                    Width="{StaticResource Element.Small.Height}"
+                                    Height="{StaticResource Element.Small.Height}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"/>
+                                <Border
+                                    x:Name="IconChecked"
+                                    Grid.Column="0"
+                                    Margin="1,0,1,0"
+                                    Padding="3"
+                                    Background="Transparent"
+                                    CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                    Width="{StaticResource Element.Small.Height}"
+                                    Height="{StaticResource Element.Small.Height}"
+                                    VerticalAlignment="Center"
+                                    Visibility="Hidden">
+                                    <ContentPresenter Content="{DynamicResource Path.Icon.Checkbox.Checked.WithDropShadow}"/>
+                                </Border>
+                                <Border
+                                    x:Name="IconIntermediate"
+                                    Grid.Column="0"
+                                    Margin="1,0,1,0"
+                                    Padding="3"
+                                    Background="Transparent"
+                                    CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                    Width="{StaticResource Element.Small.Height}"
+                                    Height="{StaticResource Element.Small.Height}"
+                                    VerticalAlignment="Center"
+                                    Visibility="Hidden">
+                                    <ContentPresenter Content="{DynamicResource Path.Icon.Checkbox.Intermediate.WithDropShadow}"/>
+                                </Border>
+                                <Border
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                                    <ContentPresenter
+                                        ContentSource="Content"
+                                        Focusable="False"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="IconChecked" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="IconIntermediate" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="IconChecked" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="IconIntermediate" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="IconChecked" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="IconIntermediate" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CheckBoxAccentColorStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBoxStyle}">
+        <Setter Property="exten:AccentColorExtension.AccentColor" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SteelBlue}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid>
+                        <Border
+                            x:Name="RootBorder"
+                            Margin="{TemplateBinding Margin}"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    x:Name="BackgroundBorder"
+                                    Grid.Column="0"
+                                    Margin="2,0,2,0"
+                                    Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                    Width="{StaticResource Element.Small.Height}"
+                                    Height="{StaticResource Element.Small.Height}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"/>
+                                <Border
+                                    x:Name="AccentBorder"
+                                    Grid.Column="0"
+                                    Margin="2,0,2,0"
+                                    Background="{TemplateBinding exten:AccentColorExtension.AccentColor}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                    Width="{StaticResource Element.Small.Height}"
+                                    Height="{StaticResource Element.Small.Height}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Visibility="Hidden"/>
+                                <Border
+                                    x:Name="IconChecked"
+                                    Grid.Column="0"
+                                    Margin="1,0,1,0"
+                                    Padding="3"
+                                    Background="Transparent"
+                                    CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                    Width="{StaticResource Element.Small.Height}"
+                                    Height="{StaticResource Element.Small.Height}"
+                                    VerticalAlignment="Center"
+                                    Visibility="Hidden">
+                                    <ContentPresenter Content="{DynamicResource Path.Icon.Checkbox.Checked.WithDropShadow}"/>
+                                </Border>
+                                <Border
+                                    x:Name="IconIntermediate"
+                                    Grid.Column="0"
+                                    Margin="1,0,1,0"
+                                    Padding="3"
+                                    Background="Transparent"
+                                    CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                    Width="{StaticResource Element.Small.Height}"
+                                    Height="{StaticResource Element.Small.Height}"
+                                    VerticalAlignment="Center"
+                                    Visibility="Hidden">
+                                    <ContentPresenter Content="{DynamicResource Path.Icon.Checkbox.Intermediate.WithDropShadow}"/>
+                                </Border>
+                                <Border
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                                    <ContentPresenter
+                                        ContentSource="Content"
+                                        Focusable="False"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="IconChecked" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="IconIntermediate" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="BackgroundBorder" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="AccentBorder" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="IconChecked" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="IconIntermediate" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="BackgroundBorder" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="AccentBorder" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="IconChecked" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="IconIntermediate" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

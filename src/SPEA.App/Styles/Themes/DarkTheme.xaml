@@ -1,0 +1,108 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Primary Colors Palette-->
+    <Color x:Key="Color.PrimaryPalette.Level0">#161616</Color>
+    <Color x:Key="Color.PrimaryPalette.Level0a">#191919</Color>
+    <Color x:Key="Color.PrimaryPalette.Level0b">#1B1B1B</Color>
+    <Color x:Key="Color.PrimaryPalette.Level1">#222222</Color>
+    <Color x:Key="Color.PrimaryPalette.Level1a">#292929</Color>
+    <Color x:Key="Color.PrimaryPalette.Level2">#343434</Color>
+    <Color x:Key="Color.PrimaryPalette.Level2a">#434343</Color>
+    <Color x:Key="Color.PrimaryPalette.Level3">#525252</Color>
+    <Color x:Key="Color.PrimaryPalette.Level4">#646464</Color>
+    
+    <!-- Accent Colors Palette -->
+    <Color x:Key="Color.AccentPalette.Red.Level0">#CA1C2A</Color>
+    <Color x:Key="Color.AccentPalette.Red.Level1">#E81123</Color>
+    <Color x:Key="Color.AccentPalette.Tomato">#FF6347</Color>
+    <Color x:Key="Color.AccentPalette.SteelBlue">#4682B4</Color>
+    <Color x:Key="Color.AccentPalette.DeepSkyBlue">#00BFFF</Color>
+
+    <!-- Primary Colors Gradients -->
+    <LinearGradientBrush
+        x:Key="LinearGradient.PrimaryPalette.Levels0to1"
+        StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level0a}" Offset="1"/>
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level1}" Offset="0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush
+        x:Key="LinearGradient.PrimaryPalette.Levels0to0a"
+        StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level0a}" Offset="1"/>
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level0b}" Offset="0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush
+        x:Key="LinearGradient.PrimaryPalette.Levels1to2"
+        StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level1}" Offset="1"/>
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level2}" Offset="0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush
+        x:Key="LinearGradient.PrimaryPalette.Levels1to1a"
+        StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level1}" Offset="1"/>
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level1a}" Offset="0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush
+        x:Key="LinearGradient.PrimaryPalette.Levels2to3"
+        StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level2}" Offset="1"/>
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level3}" Offset="0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush
+        x:Key="LinearGradient.PrimaryPalette.Levels2to2a"
+        StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level2}" Offset="1"/>
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level2a}" Offset="0"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush
+        x:Key="LinearGradient.PrimaryPalette.Levels3to4"
+        StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level3}" Offset="1"/>
+        <GradientStop Color="{StaticResource Color.PrimaryPalette.Level4}" Offset="0"/>
+    </LinearGradientBrush>
+
+    <!-- Accent Colors Gradients -->
+    <LinearGradientBrush
+        x:Key="LinearGradient.AccentPalette.Red"
+        StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.AccentPalette.Red.Level0}" Offset="1"/>
+        <GradientStop Color="{StaticResource Color.AccentPalette.Red.Level0}" Offset="0"/>
+    </LinearGradientBrush>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level0" Color="{StaticResource Color.PrimaryPalette.Level0}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level0a" Color="{StaticResource Color.PrimaryPalette.Level0a}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level0b" Color="{StaticResource Color.PrimaryPalette.Level0b}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level1" Color="{StaticResource Color.PrimaryPalette.Level1}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level1a" Color="{StaticResource Color.PrimaryPalette.Level1a}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level2" Color="{StaticResource Color.PrimaryPalette.Level2}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level2a" Color="{StaticResource Color.PrimaryPalette.Level2a}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level3" Color="{StaticResource Color.PrimaryPalette.Level3}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level4" Color="{StaticResource Color.PrimaryPalette.Level4}"/>
+
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level0a.Inverted" Color="#4A4A4A"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level1.Inverted" Color="#D9D9D9"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level2.Inverted" Color="#D9D9D9"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level3.Inverted" Color="#B5B5B5"/>
+
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.Red.Level0" Color="{StaticResource Color.AccentPalette.Red.Level0}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.Red.Level1" Color="{StaticResource Color.AccentPalette.Red.Level1}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.Tomato" Color="{StaticResource Color.AccentPalette.Tomato}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.SteelBlue" Color="{StaticResource Color.AccentPalette.SteelBlue}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.DeepSkyBlue" Color="{StaticResource Color.AccentPalette.DeepSkyBlue}"/>
+
+    <SolidColorBrush x:Key="Element.Foreground.Base" Color="#D2D2D2"/>
+    <SolidColorBrush x:Key="Element.Foreground.Accent" Color="#DDDDDD"/>
+    <SolidColorBrush x:Key="Element.Foreground.Shadowed" Color="#8B8B8B"/>
+    <SolidColorBrush x:Key="Element.Foreground.Inactive" Color="#6C6C6C"/>
+
+</ResourceDictionary>

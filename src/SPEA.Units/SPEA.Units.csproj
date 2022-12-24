@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net7.0-windows</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+	<BaseOutputPath>..\..\Build\</BaseOutputPath>
+	<BaseIntermediateOutputPath></BaseIntermediateOutputPath>
+	<Configurations>Debug;Release</Configurations>
+	<Title>SPEA: Section Properties and Engineering Analysis</Title>
+	<Version>$(VersionPrefix)$(VersionSuffix)</Version>
+	<Authors>Dmitry Poberezhnyy</Authors>
+	<Company>Dmitry Poberezhnyy</Company>
+	<Copyright>Copyright $(Company) © 2022</Copyright>
+	<RepositoryUrl>https://github.com/RindCode/SPEA</RepositoryUrl>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<NeutralLanguage>en</NeutralLanguage>
+	<VersionPrefix>1.0.0.0</VersionPrefix>
+	<VersionSuffix>alpha</VersionSuffix>
+	<FileVersion>$(VersionPrefix)</FileVersion>
+	<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

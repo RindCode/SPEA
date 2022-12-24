@@ -1,0 +1,515 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctrl="clr-namespace:SPEA.App.Controls"
+    xmlns:exten="clr-namespace:SPEA.App.Extensions.AttachedProperties"
+    xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:converter="clr-namespace:SPEA.App.Utils.Converters"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+
+    <Style x:Key="ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="IsThreeState" Value="False"/>
+        <Setter Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Base}"/>
+        <Setter Property="exten:AccentColorExtension.AccentColor" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SteelBlue}"/>
+        <Setter Property="exten:CornerRadiusExtension.CornerRadius" Value="{StaticResource Element.Medium.CornerRadius}"/>
+        <Setter Property="assist:IconAssist.Icon" Value="{x:Null}"/>
+        <Setter Property="assist:HintAssist.Hint" Value="{x:Null}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid>
+                        <Border
+                            Name="MainBorder"
+                            Width="{TemplateBinding Height}"
+                            Height="{TemplateBinding Height}"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                            <Grid
+                                Background="Transparent"
+                                Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter
+                                    Grid.Column="0"
+                                    Content="{TemplateBinding assist:IconAssist.Icon}"/>
+                                <ContentPresenter
+                                    Grid.Column="1"
+                                    Content="{TemplateBinding assist:HintAssist.Hint}"/>
+                                <ContentPresenter ContentSource="Content"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="{Binding (exten:AccentColorExtension.AccentColor), RelativeSource={RelativeSource Self}}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="MainBorder" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ToggleButtonPopupBoxNoBorderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Background" Value="{DynamicResource LinearGradient.PrimaryPalette.Levels2to2a}"/>
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="exten:CornerRadiusExtension.CornerRadius" Value="{StaticResource Element.Small.CornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusTopRight" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="assist:IconAssist.Icon" Value="{x:Null}"/>
+        <Setter Property="assist:HintAssist.Hint" Value="{x:Null}"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="ClickMode" Value="Release"/> <!-- Find out the problem with "Press" mode and click events (and apparently focus) -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid>
+                        <Border
+                            Name="MainBorder"
+                            Width="{TemplateBinding Height}"
+                            Height="{TemplateBinding Height}"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusTopRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopRight}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft}"
+                            CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                            <Grid Margin="0,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding assist:IconAssist.Icon}"/>
+                                <ContentPresenter
+                                    Grid.Column="1"
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding assist:HintAssist.Hint}"/>
+                                <ContentPresenter
+                                    x:Name="ArrowGlyph"
+                                    Grid.Column="2"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Width="{StaticResource Element.Tiny.Height}"
+                                    Height="{StaticResource Element.Tiny.Height}"
+                                    Content="{DynamicResource Path.Icon.ArrowDown.WithDropShadow}"/>
+                            </Grid>
+                        </Border>
+                        <ctrl:SPopup
+                            x:Name="PopupBox"
+                            Placement="Bottom"
+                            PlacementTarget="{Binding ElementName=MainBorder}"
+                            VerticalOffset="-2"
+                            HorizontalAlignment="Right"
+                            AllowsTransparency="True"
+                            PopupAnimation="None"
+                            StaysOpen="False"
+                            Focusable="False"
+                            IsOpen="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                            EnableSafeCloseBoundaries="True"
+                            SafeCloseDistance="50">
+                            <!-- This EventTrigger is a workaround to keep the PopUp position at the same place
+                            when the parent Window is moved or resized. Popup Reposition() and UpdatePosition()
+                            methods were made as internal and private, so we cannot call them directly.
+                            However, HorizontalOffset, VerticalOffset and PlacementRectangle DPs have OnOffsetChanged()
+                            callback, which it turn will call Reposition() method.
+                            -->
+                            <Popup.Style>
+                                <Style TargetType="ctrl:SPopup">
+                                    <Setter Property="StaysOpen" Value="False"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=DropDownBorder}" Value="True">
+                                            <Setter Property="StaysOpen" Value="False"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Popup.Style>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger
+                                    SourceObject="{Binding RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                                    EventName="LocationChanged">
+                                    <i:ChangePropertyAction
+                                        TargetName="PopupBox"
+                                        PropertyName="VerticalOffset"
+                                        Value="-1.999"/>
+                                    <i:ChangePropertyAction
+                                        TargetName="PopupBox"
+                                        PropertyName="VerticalOffset"
+                                        Value="-2"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <Grid
+                                x:Name="DropDown"
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                SnapsToDevicePixels="True">
+                                <Border
+                                    x:Name="DropDownBorder"
+                                    Margin="0,0,8,8"
+                                    Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
+                                    BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"
+                                    BorderThickness="1"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{StaticResource Element.Small.IndividualCornerRadius}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{StaticResource Element.Small.IndividualCornerRadius}">
+                                    <Border.Effect>
+                                        <DropShadowEffect
+                                            Color="{DynamicResource Color.PrimaryPalette.Level0a}"
+                                            BlurRadius="0"
+                                            ShadowDepth="4"
+                                            Opacity="1.0"
+                                            Direction="-45"/>
+                                    </Border.Effect>
+                                    <Grid>
+                                        <ContentPresenter Margin="8" ContentSource="Content"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </ctrl:SPopup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ArrowGlyph" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="ArrowGlyph" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleY="-1"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SteelBlue}"/>
+                            <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft" Value="0"/>
+                            <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight" Value="0"/>
+                        </Trigger>
+                        <!-- Solves the "re-open" problem with ToggleButton ClickMode=Release and Popup StaysOpen=False -->
+                        <!-- https://social.msdn.microsoft.com/Forums/en-US/f0502813-9c4f-4b45-bab8-91f98971e407 -->
+                        <Trigger SourceName="PopupBox" Property="IsOpen" Value="True">
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--<Style x:Key="ToggleButtonPopupBoxWithBorderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Background" Value="{DynamicResource LinearGradient.PrimaryPalette.Levels2to2a}"/>
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(TextElement.Foreground)}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="exten:CornerRadiusExtension.CornerRadius" Value="{StaticResource Element.Small.CornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusTopRight" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="assist:IconAssist.Icon" Value="{x:Null}"/>
+        <Setter Property="assist:HintAssist.Hint" Value="{x:Null}"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="ClickMode" Value="Press"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid>
+                        <Border
+                            x:Name="OuterBorder"
+                            Margin="0,0,0,0"
+                            BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level1a}"
+                            BorderThickness="0,0,0,1"
+                            CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusTopRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopRight}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft}">
+                            <Border
+                                x:Name="ContentBorder"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft}"
+                                exten:IndependentCornerRadiusExtension.CornerRadiusTopRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopRight}"
+                                exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight}"
+                                exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                                <Border
+                                    x:Name="InnerBorder"
+                                    Margin="0,-0.5,0,0"
+                                    BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"
+                                    BorderThickness="0,1,0,0"
+                                    CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusTopRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopRight}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft}">
+                                    <Grid Margin="4,0,4,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ContentPresenter
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding assist:IconAssist.Icon}"/>
+                                        <ContentPresenter
+                                            Grid.Column="1"
+                                            Margin="0,0,4,0"
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding assist:HintAssist.Hint}"/>
+                                        <ContentPresenter
+                                            x:Name="ArrowGlyph"
+                                            Grid.Column="2"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            RenderTransformOrigin="0.5,0.5"
+                                            Width="{StaticResource Element.Tiny.Height}"
+                                            Height="{StaticResource Element.Tiny.Height}"
+                                            Content="{DynamicResource Path.Icon.ArrowDown.WithDropShadow}"/>
+                                    </Grid>
+                                </Border>
+                            </Border>
+                        </Border>
+                        <Popup
+                            x:Name="PopupBox"
+                            Placement="Bottom"
+                            PlacementTarget="{Binding ElementName=OuterBorder}"
+                            VerticalOffset="-2"
+                            HorizontalAlignment="Right"
+                            AllowsTransparency="True"
+                            StaysOpen="False"
+                            PopupAnimation="None"
+                            IsOpen="{TemplateBinding IsChecked}">
+                            <Grid
+                                x:Name="DropDown"
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                SnapsToDevicePixels="True">
+                                <Border
+                                    x:Name="DropDownBorder"
+                                    Margin="0,0,8,8"
+                                    Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
+                                    BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"
+                                    BorderThickness="1"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{StaticResource Element.Small.IndividualCornerRadius}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{StaticResource Element.Small.IndividualCornerRadius}">
+                                    <Border.Effect>
+                                        <DropShadowEffect
+                                            Color="{DynamicResource Color.PrimaryPalette.Level0a}"
+                                            BlurRadius="0"
+                                            ShadowDepth="4"
+                                            Opacity="1.0"
+                                            Direction="-45"/>
+                                    </Border.Effect>
+                                    <Grid>
+                                        <ContentPresenter Margin="8" ContentSource="Content"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ArrowGlyph" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="ArrowGlyph" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleY="-1"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SteelBlue}"/>
+                            <Setter TargetName="OuterBorder" Property="BorderBrush" Value="Transparent"/>
+                            <Setter TargetName="InnerBorder" Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft" Value="0"/>
+                            <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight" Value="0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+    <!--<Style x:Key="SimpleToggleButtonStyle" TargetType="{x:Type ctrl:ExtendedToggleButton}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="IsThreeState" Value="False"/>
+        <Setter Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"/>
+        <Setter Property="exten:AccentColorExtension.AccentColor" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrl:ExtendedToggleButton}">
+                    <Border
+                        x:Name="MainBorder"
+                        Width="{TemplateBinding Width}"
+                        Height="{TemplateBinding Height}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}">
+                        <Grid x:Name="MainGrid">
+                            <StackPanel
+                                Margin="4"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal"
+                                SnapsToDevicePixels="True">
+                                <Grid>
+                                    <ContentPresenter
+                                        x:Name="IconUncheckedGeometry"
+                                        ContentSource="IconUnchecked">
+                                    </ContentPresenter>
+                                    <ContentPresenter
+                                        x:Name="IconCheckedGeometry"
+                                        ContentSource="IconChecked"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="IconCheckedGeometry" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="IconUncheckedGeometry" Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Background" Value="{Binding (exten:AccentColorExtension.AccentColor), RelativeSource={RelativeSource Self}}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="MainGrid" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    --><!--  Animated Switch Button (two-state) --><!--
+    <Style x:Key="AnimatedSwitchButtonStyle" TargetType="{x:Type ctrl:ExtendedToggleButton}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="IsThreeState" Value="False"/>
+        <Setter Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level1}"/>
+        <Setter Property="exten:AccentColorExtension.AccentColor" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrl:ExtendedToggleButton}">
+                    <Border
+                        x:Name="MainBorder"
+                        Width="44"
+                        Height="22"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}"
+                        SnapsToDevicePixels="True">
+                        <Grid x:Name="MainGrid">
+                            <Grid x:Name="IconsContainerGrid">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter
+                                    x:Name="IconCheckedGeometry"
+                                    Grid.Column="0"
+                                    Margin="4"
+                                    ContentSource="IconChecked"/>
+                                <ContentPresenter
+                                    x:Name="IconUncheckedGeometry"
+                                    Grid.Column="1"
+                                    Margin="4"
+                                    ContentSource="IconUnchecked"/>
+                            </Grid>
+                            <Border
+                                x:Name="SwitchKnob"
+                                Margin="22,2,2,2"
+                                HorizontalAlignment="Left"
+                                Width="{Binding ElementName=SwitchKnob, Path=ActualHeight}"
+                                Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
+                                CornerRadius="{TemplateBinding exten:CornerRadiusExtension.CornerRadius}">
+                            </Border>
+                        </Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ThicknessAnimationUsingKeyFrames
+                                            Storyboard.TargetName="SwitchKnob"
+                                            Storyboard.TargetProperty="Margin">
+                                            <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="24,2,2,2">
+                                                <EasingThicknessKeyFrame.EasingFunction>
+                                                    <QuarticEase EasingMode="EaseInOut"/>
+                                                </EasingThicknessKeyFrame.EasingFunction>
+                                            </EasingThicknessKeyFrame>
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <ThicknessAnimationUsingKeyFrames
+                                            Storyboard.TargetName="SwitchKnob"
+                                            Storyboard.TargetProperty="Margin">
+                                            <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="2,2,2,2">
+                                                <EasingThicknessKeyFrame.EasingFunction>
+                                                    <QuarticEase EasingMode="EaseInOut"/>
+                                                </EasingThicknessKeyFrame.EasingFunction>
+                                            </EasingThicknessKeyFrame>
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="SwitchKnob" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="SwitchKnob" Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+</ResourceDictionary>

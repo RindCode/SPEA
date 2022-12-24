@@ -1,0 +1,265 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:exten="clr-namespace:SPEA.App.Extensions.AttachedProperties">
+
+    <!--  Separator style  -->
+    <Style x:Key="MenuItemSeparatorStyle" TargetType="{x:Type Separator}">
+        <Setter Property="Height" Value="1"/>
+        <Setter Property="Margin" Value="0,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Separator}">
+                    <Border
+                        BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
+                        BorderThickness="1"
+                        SnapsToDevicePixels="False"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  Top Level MenuItem  -->
+    <Style x:Key="MenuItemTopLevelStyle" TargetType="MenuItem">
+        <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Base}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusTopRight" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft" Value="{StaticResource Element.Small.IndividualCornerRadius}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border
+                        x:Name="OuterBorder"
+                        BorderBrush="Transparent"
+                        BorderThickness="0,0,0,1"
+                        exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft}"
+                        exten:IndependentCornerRadiusExtension.CornerRadiusTopRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopRight}"
+                        exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight}"
+                        exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft}">
+                        <Border
+                            x:Name="ContentBorder"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="1"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusTopRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopRight}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight}"
+                            exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft}">
+                            <Grid x:Name="MenuGrid">
+                                <Border
+                                    x:Name="InnerBorder"
+                                    Grid.Column="1"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0,1,0,0"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopLeft}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusTopRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusTopRight}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight}"
+                                    exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft="{TemplateBinding exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft}">
+                                    <ContentPresenter
+                                        x:Name="MenuHeader"
+                                        Margin="8,1,8,1"
+                                        ContentSource="Header"/>
+                                </Border>
+                                <Popup
+                                    x:Name="SubMenuPopup"
+                                    AllowsTransparency="True"
+                                    HorizontalOffset="-1"
+                                    Focusable="False"
+                                    IsOpen="{Binding Path=IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Placement="Bottom">
+                                    <Grid>
+                                        <Border
+                                            x:Name="SubMenuBorder"
+                                            Margin="0,0,8,8"
+                                            Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"
+                                            BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"
+                                            BorderThickness="1">
+                                            <Border.Effect>
+                                                <DropShadowEffect
+                                                    Color="{DynamicResource Color.PrimaryPalette.Level0a}"
+                                                    BlurRadius="0"
+                                                    ShadowDepth="4"
+                                                    Opacity="1.0"
+                                                    Direction="-45"/>
+                                            </Border.Effect>
+                                            <Grid Grid.IsSharedSizeScope="True">
+                                                <StackPanel
+                                                    Margin="0"
+                                                    IsItemsHost="True"
+                                                    Orientation="Vertical"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource LinearGradient.PrimaryPalette.Levels2to2a}"/>
+                            <Setter TargetName="ContentBorder" Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"/>
+                            <Setter TargetName="OuterBorder" Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"/>
+                            <Setter TargetName="InnerBorder" Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level4}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Shadowed}"/>
+                        </Trigger>
+                        <Trigger SourceName="SubMenuPopup" Property="IsOpen" Value="True">
+                            <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomLeft" Value="0"/>
+                            <Setter Property="exten:IndependentCornerRadiusExtension.CornerRadiusBottomRight" Value="0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  Sub Level MenuItem  -->
+    <Style x:Key="MenuItemSubLevelStyle" TargetType="MenuItem">
+        <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Base}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border
+                        x:Name="MainBorder"
+                        Height="{StaticResource Element.Medium.Height}"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1">
+                        <Grid x:Name="MenuItemGrid" VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto"
+                                    MinWidth="25"
+                                    SharedSizeGroup="MenuItemIconColumnGroup"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemHeaderColumnGroup"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup"/>
+                                <ColumnDefinition Width="15" MinWidth="10"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--  ContentPresenter for an Icon if needed  -->
+                            <ContentPresenter
+                                x:Name="MenuItemIcon"
+                                Grid.Column="0"
+                                Margin="4,0,15,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                ContentSource="Icon"/>
+
+                            <!--  Checkmark replaces icon if checked  -->
+                            <Grid
+                                x:Name="MenuItemCheckmark"
+                                Grid.Column="0"
+                                Visibility="Hidden">
+                                <Path
+                                    x:Name="SubMenuCheckmarkPath"
+                                    Margin="4,0,6,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="{StaticResource Path.Icon.SubmenuCheckmark}"
+                                    Fill="{DynamicResource Element.Foreground.Shadowed}"/>
+                            </Grid>
+
+                            <!--  ContentPresenter for the text  -->
+                            <ContentPresenter
+                                x:Name="MenuItemHeader"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                ContentSource="Header"/>
+
+                            <!--  ContentPresenter for Input Gesture Text (IGT)  -->
+                            <ContentPresenter
+                                x:Name="MenuItemInputGestureText"
+                                Grid.Column="2"
+                                Margin="30,0,6,0"
+                                VerticalAlignment="Center"
+                                ContentSource="InputGestureText"/>
+
+                            <!--  SubMenu arrow  -->
+                            <Grid x:Name="MenuItemSubMenuArrow" Grid.Column="3">
+                                <Path
+                                    x:Name="MenuItemSubMenuArrowPath"
+                                    Margin="4,0,6,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Data="{StaticResource Path.Icon.SubmenuArrow}"
+                                    Fill="{DynamicResource Element.Foreground.Shadowed}"/>
+                            </Grid>
+
+                            <Popup
+                                x:Name="MenuItemSubMenuPopup"
+                                AllowsTransparency="True"
+                                Focusable="False"
+                                HorizontalOffset="0"
+                                IsOpen="{Binding Path=IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                Placement="Right">
+                                <Grid>
+                                    <Border
+                                        x:Name="MenuItemSubMenuBorder"
+                                        Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level3}"
+                                        BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"
+                                        BorderThickness="1">
+                                        <Border.Effect>
+                                            <DropShadowEffect
+                                                    Color="{DynamicResource Color.PrimaryPalette.Level0a}"
+                                                    BlurRadius="0"
+                                                    ShadowDepth="4"
+                                                    Opacity="1.0"
+                                                    Direction="-45"/>
+                                        </Border.Effect>
+                                        <Grid Grid.IsSharedSizeScope="True">
+                                            <StackPanel
+                                                Margin="0"
+                                                IsItemsHost="True"
+                                                Orientation="Vertical"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                            
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!--  Highlighted appearance  -->
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="MainBorder" Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Accent}"/>
+                        </Trigger>
+
+                        <!--  TopLevelItem : child menu item from the top level without any other child items  -->
+                        <Trigger Property="Role" Value="TopLevelItem">
+                            <Setter TargetName="MenuItemSubMenuArrow" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <!--  SubmenuHeader : child submenu item without any other child items  -->
+                        <Trigger Property="Role" Value="SubmenuHeader"/>
+
+                        <!--  SubmenuItem : child submenu item with other child items  -->
+                        <Trigger Property="Role" Value="SubmenuItem">
+                            <Setter TargetName="MenuItemSubMenuArrow" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <!--  If no icon present - collapse icon content  -->
+                        <Trigger Property="Icon" Value="{x:Null}">
+                            <Setter TargetName="MenuItemIcon" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <!--  If a panel contains checkmark  -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="MenuItemCheckmark" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="MenuItemIcon" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <!--  Enable/Disable appearance  -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Inactive}"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
