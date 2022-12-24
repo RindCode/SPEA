@@ -49,7 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Assets\icon.ico" />
     <None Remove="stylecop.json" />
   </ItemGroup>
 
@@ -86,10 +85,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SPEA.Core\SPEA.Core.csproj" />
     <ProjectReference Include="..\SPEA.Materials\SPEA.Materials.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Assets\icon.ico" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
