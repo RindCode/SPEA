@@ -2,6 +2,10 @@
 AvalonDock | Microsoft Public License | 2022
 https://github.com/Dirkster99/AvalonDock
 
+Used for:
+	Dock panels and layouts.
+
+
 Microsoft Public License (Ms-PL)
 
 This license governs use of the accompanying software. If you use the
@@ -61,6 +65,10 @@ directly on its contribution.
 Microsoft.Extensions.DependencyInjection | MIT License | 2022
 https://github.com/dotnet/runtime
 
+Used for:
+	Dependency Injection and service providers.
+
+
 The MIT License (MIT)
 
 Copyright (c) .NET Foundation and Contributors
@@ -90,6 +98,10 @@ SOFTWARE.
 ================================================================================
 CommunityToolkit.Mvvm | MIT License | 2022
 https://github.com/CommunityToolkit/dotnet
+
+Used for:
+	MVVM tools: RelayCommand, ObservableObject, etc.
+
 
 The MIT License (MIT)
 
@@ -121,6 +133,10 @@ SOFTWARE.
 XamlBehaviors | MIT License | 2022
 https://github.com/microsoft/XamlBehaviors
 
+Used for:
+	Bevahiors feature in markup.
+
+
 The MIT License (MIT)
 
 Copyright (c) .NET Foundation and Contributors
@@ -150,6 +166,10 @@ SOFTWARE.
 ================================================================================
 StyleCop | Microsoft Public License | 2022
 https://github.com/StyleCop/StyleCop
+
+Used for:
+	Style guidelines.
+
 
 Microsoft Public License (Ms-PL)
 
@@ -207,8 +227,12 @@ directly on its contribution.
 
 
 ================================================================================
-StyleCop | Boost Software License 1.0 | 2022
+Clipper2 | Boost Software License 1.0 | 2022
 https://github.com/AngusJohnson/Clipper2
+
+Used for:
+	Polygons clipping and boolean operations.
+
 
 Boost Software License - Version 1.0 - August 17th, 2003
 
@@ -240,6 +264,10 @@ DEALINGS IN THE SOFTWARE.
 SvgToXaml | BSD License (type not specified) | 2022
 https://github.com/BerndK/SvgToXaml
 
+Used for:
+	Converting .svg files into XAML paths.
+
+
 Copyright (c) 2015, Bernd Klaiber, bk@bkedv.de
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
@@ -259,6 +287,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ================================================================================
 Clipper2 | Boost Software License 1.0 | 2022
 https://github.com/AngusJohnson/Clipper2
+
+Used for:
+	Polygons clipping and boolean operations.
+
 
 Boost Software License - Version 1.0 - August 17th, 2003
 

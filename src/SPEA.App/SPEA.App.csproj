@@ -28,6 +28,8 @@
     <RepositoryUrl>https://github.com/RindCode/SPEA</RepositoryUrl>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AssemblyName>SPEA</AssemblyName>
+    <StartupObject>SPEA.App.SPEA_Application</StartupObject>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
     
   </PropertyGroup>
 
@@ -47,11 +49,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\icon.ico" />
     <None Remove="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -79,6 +86,10 @@
   <ItemGroup>
     <ProjectReference Include="..\SPEA.Core\SPEA.Core.csproj" />
     <ProjectReference Include="..\SPEA.Materials\SPEA.Materials.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\icon.ico" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
