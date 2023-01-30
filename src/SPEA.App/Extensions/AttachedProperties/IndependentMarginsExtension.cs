@@ -37,55 +37,6 @@ namespace SPEA.App.Extensions.AttachedProperties
                 new ValidateValueCallback(IsMarginValid));
 
         /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="GetMarginTop(DependencyObject)"/> getter
-        /// and <see cref="SetMarginTop(DependencyObject, double)"/> setter.
-        /// </summary>
-        public static readonly DependencyProperty MarginTopProperty =
-            DependencyProperty.RegisterAttached(
-                "MarginTop",
-                typeof(double),
-                typeof(IndependentMarginsExtension),
-                new FrameworkPropertyMetadata(
-                    default(double),
-                    FrameworkPropertyMetadataOptions.AffectsMeasure,
-                    new PropertyChangedCallback(OnMarginTopPropertyChanged)),
-                new ValidateValueCallback(IsMarginValid));
-
-        /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="GetMarginRight(DependencyObject)"/> getter
-        /// and <see cref="SetMarginRight(DependencyObject, double)"/> setter.
-        /// </summary>
-        public static readonly DependencyProperty MarginRightProperty =
-            DependencyProperty.RegisterAttached(
-                "MarginRight",
-                typeof(double),
-                typeof(IndependentMarginsExtension),
-                new FrameworkPropertyMetadata(
-                    default(double),
-                    FrameworkPropertyMetadataOptions.AffectsMeasure,
-                    new PropertyChangedCallback(OnMarginRightPropertyChanged)),
-                new ValidateValueCallback(IsMarginValid));
-
-        /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="GetMarginBottom(DependencyObject)"/> getter
-        /// and <see cref="SetMarginBottom(DependencyObject, double)"/> setter.
-        /// </summary>
-        public static readonly DependencyProperty MarginBottomProperty =
-            DependencyProperty.RegisterAttached(
-                "MarginBottom",
-                typeof(double),
-                typeof(IndependentMarginsExtension),
-                new FrameworkPropertyMetadata(
-                    default(double),
-                    FrameworkPropertyMetadataOptions.AffectsMeasure,
-                    new PropertyChangedCallback(OnMarginBottomPropertyChanged)),
-                new ValidateValueCallback(IsMarginValid));
-
-        #endregion Attached Properties
-
-        #region Attached Properties Methods
-
-        /// <summary>
         /// Gets the value of the left <see cref="FrameworkElement.Margin"/>.
         /// </summary>
         /// <param name="obj">Object the value is get from.</param>
@@ -104,6 +55,34 @@ namespace SPEA.App.Extensions.AttachedProperties
         {
             obj.SetValue(MarginLeftProperty, value);
         }
+
+        // Is called every time the margin value is changed to update the actual Margin property.
+        private static void OnMarginLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            FrameworkElement element = d as FrameworkElement;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var margin = element.Margin;
+                margin.Left = (double)e.NewValue;
+                element.Margin = margin;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="GetMarginTop(DependencyObject)"/> getter
+        /// and <see cref="SetMarginTop(DependencyObject, double)"/> setter.
+        /// </summary>
+        public static readonly DependencyProperty MarginTopProperty =
+            DependencyProperty.RegisterAttached(
+                "MarginTop",
+                typeof(double),
+                typeof(IndependentMarginsExtension),
+                new FrameworkPropertyMetadata(
+                    default(double),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    new PropertyChangedCallback(OnMarginTopPropertyChanged)),
+                new ValidateValueCallback(IsMarginValid));
 
         /// <summary>
         /// Gets the value of the top <see cref="FrameworkElement.Margin"/>.
@@ -125,6 +104,34 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(MarginTopProperty, value);
         }
 
+        // Is called every time the margin value is changed to update the actual Margin property.
+        private static void OnMarginTopPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            FrameworkElement element = d as FrameworkElement;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var margin = element.Margin;
+                margin.Top = (double)e.NewValue;
+                element.Margin = margin;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="GetMarginRight(DependencyObject)"/> getter
+        /// and <see cref="SetMarginRight(DependencyObject, double)"/> setter.
+        /// </summary>
+        public static readonly DependencyProperty MarginRightProperty =
+            DependencyProperty.RegisterAttached(
+                "MarginRight",
+                typeof(double),
+                typeof(IndependentMarginsExtension),
+                new FrameworkPropertyMetadata(
+                    default(double),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    new PropertyChangedCallback(OnMarginRightPropertyChanged)),
+                new ValidateValueCallback(IsMarginValid));
+
         /// <summary>
         /// Gets the value of the right <see cref="FrameworkElement.Margin"/>.
         /// </summary>
@@ -144,6 +151,34 @@ namespace SPEA.App.Extensions.AttachedProperties
         {
             obj.SetValue(MarginRightProperty, value);
         }
+
+        // Is called every time the margin value is changed to update the actual Margin property.
+        private static void OnMarginRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            FrameworkElement element = d as FrameworkElement;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var margin = element.Margin;
+                margin.Right = (double)e.NewValue;
+                element.Margin = margin;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="GetMarginBottom(DependencyObject)"/> getter
+        /// and <see cref="SetMarginBottom(DependencyObject, double)"/> setter.
+        /// </summary>
+        public static readonly DependencyProperty MarginBottomProperty =
+            DependencyProperty.RegisterAttached(
+                "MarginBottom",
+                typeof(double),
+                typeof(IndependentMarginsExtension),
+                new FrameworkPropertyMetadata(
+                    default(double),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    new PropertyChangedCallback(OnMarginBottomPropertyChanged)),
+                new ValidateValueCallback(IsMarginValid));
 
         /// <summary>
         /// Gets the value of the bottom <see cref="FrameworkElement.Margin"/>.
@@ -165,49 +200,6 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(MarginBottomProperty, value);
         }
 
-        #endregion Attached Properties Methods
-
-        #region Attached Properties Callbacks
-
-        // Is called every time the margin value is changed to update the actual Margin property.
-        private static void OnMarginLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            FrameworkElement element = d as FrameworkElement;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var margin = element.Margin;
-                margin.Left = (double)e.NewValue;
-                element.Margin = margin;
-            }
-        }
-
-        // Is called every time the margin value is changed to update the actual Margin property.
-        private static void OnMarginTopPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            FrameworkElement element = d as FrameworkElement;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var margin = element.Margin;
-                margin.Top = (double)e.NewValue;
-                element.Margin = margin;
-            }
-        }
-
-        // Is called every time the margin value is changed to update the actual Margin property.
-        private static void OnMarginRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            FrameworkElement element = d as FrameworkElement;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var margin = element.Margin;
-                margin.Right = (double)e.NewValue;
-                element.Margin = margin;
-            }
-        }
-
         // Is called every time the margin value is changed to update the actual Margin property.
         private static void OnMarginBottomPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -221,7 +213,7 @@ namespace SPEA.App.Extensions.AttachedProperties
             }
         }
 
-        #endregion Attached Properties Callbacks
+        #endregion Attached Properties
 
         #region Validation Methods
 

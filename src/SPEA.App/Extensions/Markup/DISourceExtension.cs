@@ -16,6 +16,8 @@ namespace SPEA.App.Extensions.Markup
     /// </summary>
     public class DISourceExtension : MarkupExtension
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets a view model resolver.
         /// </summary>
@@ -26,10 +28,16 @@ namespace SPEA.App.Extensions.Markup
         /// </summary>
         public Type Type { get; set; }
 
+        #endregion Properties
+
+        #region Methods
+
         /// <inheritdoc/>
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             return Resolver?.Invoke(Type);
         }
+
+        #endregion Methods
     }
 }

@@ -38,55 +38,6 @@ namespace SPEA.App.Extensions.AttachedProperties
                 new ValidateValueCallback(IsCornerRadiusValid));
 
         /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="GetCornerRadiusTopRight(DependencyObject)"/> getter
-        /// and <see cref="SetCornerRadiusTopRight(DependencyObject, double)"/> setter.
-        /// </summary>
-        public static readonly DependencyProperty CornerRadiusTopRightProperty =
-            DependencyProperty.RegisterAttached(
-                "CornerRadiusTopRight",
-                typeof(double),
-                typeof(IndependentCornerRadiusExtension),
-                new FrameworkPropertyMetadata(
-                    default(double),
-                    FrameworkPropertyMetadataOptions.AffectsMeasure,
-                    new PropertyChangedCallback(OnCornerRadiusTopRightPropertyChanged)),
-                new ValidateValueCallback(IsCornerRadiusValid));
-
-        /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="GetCornerRadiusBottomRight(DependencyObject)"/> getter
-        /// and <see cref="SetCornerRadiusBottomRight(DependencyObject, double)"/> setter.
-        /// </summary>
-        public static readonly DependencyProperty CornerRadiusBottomRightProperty =
-            DependencyProperty.RegisterAttached(
-                "CornerRadiusBottomRight",
-                typeof(double),
-                typeof(IndependentCornerRadiusExtension),
-                new FrameworkPropertyMetadata(
-                    default(double),
-                    FrameworkPropertyMetadataOptions.AffectsMeasure,
-                    new PropertyChangedCallback(OnCornerRadiusBottomRightPropertyChanged)),
-                new ValidateValueCallback(IsCornerRadiusValid));
-
-        /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="GetCornerRadiusBottomLeft(DependencyObject)"/> getter
-        /// and <see cref="SetCornerRadiusTopLeft(DependencyObject, double)"/> setter.
-        /// </summary>
-        public static readonly DependencyProperty CornerRadiusBottomLeftProperty =
-            DependencyProperty.RegisterAttached(
-                "CornerRadiusBottomLeft",
-                typeof(double),
-                typeof(IndependentCornerRadiusExtension),
-                new FrameworkPropertyMetadata(
-                    default(double),
-                    FrameworkPropertyMetadataOptions.AffectsMeasure,
-                    new PropertyChangedCallback(OnCornerRadiusBottomLeftPropertyChanged)),
-                new ValidateValueCallback(IsCornerRadiusValid));
-
-        #endregion Attached Properties
-
-        #region Attached Properties Methods
-
-        /// <summary>
         /// Gets the value of the top left <see cref="Border.CornerRadius"/>.
         /// </summary>
         /// <param name="obj">Object the value is get from.</param>
@@ -105,6 +56,34 @@ namespace SPEA.App.Extensions.AttachedProperties
         {
             obj.SetValue(CornerRadiusTopLeftProperty, value);
         }
+
+        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
+        private static void OnCornerRadiusTopLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Border element = d as Border;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var cr = element.CornerRadius;
+                cr.TopLeft = (double)e.NewValue;
+                element.CornerRadius = cr;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="GetCornerRadiusTopRight(DependencyObject)"/> getter
+        /// and <see cref="SetCornerRadiusTopRight(DependencyObject, double)"/> setter.
+        /// </summary>
+        public static readonly DependencyProperty CornerRadiusTopRightProperty =
+            DependencyProperty.RegisterAttached(
+                "CornerRadiusTopRight",
+                typeof(double),
+                typeof(IndependentCornerRadiusExtension),
+                new FrameworkPropertyMetadata(
+                    default(double),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    new PropertyChangedCallback(OnCornerRadiusTopRightPropertyChanged)),
+                new ValidateValueCallback(IsCornerRadiusValid));
 
         /// <summary>
         /// Gets the value of the top right <see cref="Border.CornerRadius"/>.
@@ -126,6 +105,34 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(CornerRadiusTopRightProperty, value);
         }
 
+        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
+        private static void OnCornerRadiusTopRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Border element = d as Border;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var cr = element.CornerRadius;
+                cr.TopRight = (double)e.NewValue;
+                element.CornerRadius = cr;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="GetCornerRadiusBottomRight(DependencyObject)"/> getter
+        /// and <see cref="SetCornerRadiusBottomRight(DependencyObject, double)"/> setter.
+        /// </summary>
+        public static readonly DependencyProperty CornerRadiusBottomRightProperty =
+            DependencyProperty.RegisterAttached(
+                "CornerRadiusBottomRight",
+                typeof(double),
+                typeof(IndependentCornerRadiusExtension),
+                new FrameworkPropertyMetadata(
+                    default(double),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    new PropertyChangedCallback(OnCornerRadiusBottomRightPropertyChanged)),
+                new ValidateValueCallback(IsCornerRadiusValid));
+
         /// <summary>
         /// Gets the value of the bottom right <see cref="Border.CornerRadius"/>.
         /// </summary>
@@ -145,6 +152,34 @@ namespace SPEA.App.Extensions.AttachedProperties
         {
             obj.SetValue(CornerRadiusBottomRightProperty, value);
         }
+
+        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
+        private static void OnCornerRadiusBottomRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Border element = d as Border;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var cr = element.CornerRadius;
+                cr.BottomRight = (double)e.NewValue;
+                element.CornerRadius = cr;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="GetCornerRadiusBottomLeft(DependencyObject)"/> getter
+        /// and <see cref="SetCornerRadiusTopLeft(DependencyObject, double)"/> setter.
+        /// </summary>
+        public static readonly DependencyProperty CornerRadiusBottomLeftProperty =
+            DependencyProperty.RegisterAttached(
+                "CornerRadiusBottomLeft",
+                typeof(double),
+                typeof(IndependentCornerRadiusExtension),
+                new FrameworkPropertyMetadata(
+                    default(double),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    new PropertyChangedCallback(OnCornerRadiusBottomLeftPropertyChanged)),
+                new ValidateValueCallback(IsCornerRadiusValid));
 
         /// <summary>
         /// Gets the value of the bottom left <see cref="Border.CornerRadius"/>.
@@ -166,49 +201,6 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(CornerRadiusBottomLeftProperty, value);
         }
 
-        #endregion Attached Properties Methods
-
-        #region Attached Properties Callbacks
-
-        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
-        private static void OnCornerRadiusTopLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Border element = d as Border;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var cr = element.CornerRadius;
-                cr.TopLeft = (double)e.NewValue;
-                element.CornerRadius = cr;
-            }
-        }
-
-        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
-        private static void OnCornerRadiusTopRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Border element = d as Border;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var cr = element.CornerRadius;
-                cr.TopRight = (double)e.NewValue;
-                element.CornerRadius = cr;
-            }
-        }
-
-        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
-        private static void OnCornerRadiusBottomRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Border element = d as Border;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var cr = element.CornerRadius;
-                cr.BottomRight = (double)e.NewValue;
-                element.CornerRadius = cr;
-            }
-        }
-
         // Is called every time the corner radius value is changed to update the actual CornerRadius property.
         private static void OnCornerRadiusBottomLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -222,7 +214,7 @@ namespace SPEA.App.Extensions.AttachedProperties
             }
         }
 
-        #endregion Attached Properties Callbacks
+        #endregion Attached Properties
 
         #region Validation Methods
 

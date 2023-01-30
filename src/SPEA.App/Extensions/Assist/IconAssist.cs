@@ -28,10 +28,6 @@ namespace SPEA.App.Extensions.Assist
                 typeof(IconAssist),
                 new PropertyMetadata(null));
 
-        #endregion Attached Properties
-
-        #region Attached Properties Methods
-
         /// <summary>
         /// Gets the value of <see cref="IconProperty"/>.
         /// </summary>
@@ -52,6 +48,6 @@ namespace SPEA.App.Extensions.Assist
             obj.SetValue(IconProperty, value);
         }
 
-        #endregion Attached Properties Methods
+        #endregion Attached Properties
     }
 }

@@ -18,8 +18,13 @@ namespace SPEA.App.Utils.Validation
     /// </summary>
     public class ValidFileNameRule : ValidationRule
     {
-        // Backing field for the validation error message.
+        #region Fields
+
         private readonly string _errorMessage = ResourcesHelper.GetApplicationResource<string>("S.Common.ValidationText.ValidFileName");
+
+        #endregion Fields
+
+        #region Methods
 
         /// <inheritdoc/>
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
@@ -36,5 +41,7 @@ namespace SPEA.App.Utils.Validation
 
             return ValidationResult.ValidResult;
         }
+
+        #endregion Methods
     }
 }

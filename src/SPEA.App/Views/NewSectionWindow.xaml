@@ -12,11 +12,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
     xmlns:vm="clr-namespace:SPEA.App.ViewModels"
-    xmlns:cmd="clr-namespace:SPEA.App.Commands"
+    xmlns:cmdchn="clr-namespace:SPEA.App.Commands.Chaining"
     xmlns:converter="clr-namespace:SPEA.App.Utils.Converters"
     xmlns:validation="clr-namespace:SPEA.App.Utils.Validation"
     xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
     mc:Ignorable="d"
+    assist:WindowAssist.CloseWindowCommand="{Binding CommandsManager[CloseWindow].Command}"
     Width="420"
     Height="200"
     ResizeMode="NoResize"
@@ -111,16 +112,16 @@
                         IsDefault="True"
                         IsEnabled="{Binding ElementName=DocumentNameTextBox, Mode=OneWay, Path=(Validation.HasError), Converter={StaticResource InverseBooleanConverter}}">
                         <Button.Command>
-                            <cmd:CommandGroup>
-                                <cmd:CommandGroup.Commands>
-                                    <cmd:CommandDescriptor
-                                        Command="{Binding Path=DataContext.AddNewDocumentCommand, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                            <cmdchn:CommandGroup>
+                                <cmdchn:CommandGroup.Commands>
+                                    <cmdchn:CommandDescriptor
+                                        Command="{Binding Path=DataContext.CommandsManager[CreateNewDocument].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                                         CommandParameter="{Binding ElementName=DocumentNameTextBox, Path=Text}"/>
-                                    <cmd:CommandDescriptor
-                                        Command="{Binding Path=DataContext.CloseWindowCommand, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                                    <cmdchn:CommandDescriptor
+                                        Command="{Binding Path=(assist:WindowAssist.CloseWindowCommand), RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"/>
-                                </cmd:CommandGroup.Commands>
-                            </cmd:CommandGroup>
+                                </cmdchn:CommandGroup.Commands>
+                            </cmdchn:CommandGroup>
                         </Button.Command>
                     </Button>
                     <Button
@@ -130,7 +131,7 @@
                         IsCancel="True"
                         Style="{DynamicResource RaisedButtonStyle_2}"
                         Content="{StaticResource S.NewSectionWindow.Button.CancelButton.Text}"
-                        Command="{Binding Path=DataContext.CloseWindowCommand, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                        Command="{Binding Path=DataContext.CommandsManager[CloseWindow].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"/>
                 </StackPanel>
             </Grid>

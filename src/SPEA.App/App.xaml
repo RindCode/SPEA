@@ -38,11 +38,11 @@
                 <ResourceDictionary Source="pack://application:,,,/Styles/TextBoxStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/ComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/CheckBoxStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/SectionEditorControlStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/SViewportControlStyle.xaml"/>
 
                 <!-- AvalonDock re-Styles -->
-                <!-- It is very stupid, but these resources MUST be ordered as below matching with the original one from AvalonDock Generic.xaml -->
-                <!-- All styles and templates within each resource dictionary MUST be listed in a similar manner -->
+                <!-- For some reason, these resources MUST be ordered as below matching with the original one from AvalonDock Generic.xaml -->
+                <!-- All styles and templates within each resource dictionary MUST be listed exactly in a similar manner -->
                 <ResourceDictionary Source="pack://application:,,,/Styles/AvalonDock/SPEA_ContextMenuExStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/AvalonDock/SPEA_LayoutDocumentPaneControlStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/AvalonDock/SPEA_LayoutAnchorablePaneControlStyle.xaml"/>

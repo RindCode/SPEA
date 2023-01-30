@@ -16,9 +16,13 @@ namespace SPEA.App.ViewModels.Interfaces
     public interface IChildViewModel<T>
         where T : ObservableObject
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets a parent view model.
         /// </summary>
         public T Owner { get; set; }
+
+        #endregion properties
     }
 }

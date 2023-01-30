@@ -10,7 +10,6 @@ namespace SPEA.App.Utils.Services
     using System.Windows;
 
     // TODO: This needs to be replaced with a better custom implementation, which should be more flexible.
-    //       We also need something for exceptions to show a stacktrace in the popup.
     // TODO: Create interface - something like IMessageBoxService?
 
     /// <summary>
@@ -18,6 +17,8 @@ namespace SPEA.App.Utils.Services
     /// </summary>
     public static class MessageBoxService
     {
+        #region Methods
+
         /// <summary>
         /// Displays a native message box with specified text, caption, and style.
         /// </summary>
@@ -103,5 +104,7 @@ namespace SPEA.App.Utils.Services
         {
             return Show(text, string.Empty, MessageBoxButton.OK, MessageBoxImage.None, MessageBoxResult.None, MessageBoxOptions.None);
         }
+
+        #endregion Methods
     }
 }

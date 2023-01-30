@@ -9,8 +9,8 @@ namespace SPEA.App.ViewModels
 {
     using System;
     using System.ComponentModel;
-    using System.Windows;
     using CommunityToolkit.Mvvm.Input;
+    using SPEA.App.Commands;
     using SPEA.App.Controllers;
 
     /// <summary>
@@ -20,11 +20,10 @@ namespace SPEA.App.ViewModels
     {
         #region Fields
 
-        // Controller for SDocuments.
-        private SDocumentsManager _sDocumentsManager;
-
-        // MainMenuViewModelInstance backing field.
-        private MainMenuViewModel _mainMenuViewModel;
+        private readonly SDocumentsManager _sDocumentsManager;
+        private readonly MainMenuViewModel _mainMenuViewModel;
+        private readonly ProjectTreeViewModel _projectTreeViewModel;
+        private readonly string _requestApplicationCloseCmd = "RequestApplicationClose";
 
         #endregion Fields
 
@@ -37,18 +36,26 @@ namespace SPEA.App.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
+        /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
         /// <param name="mainMenuViewModel">A reference to <see cref="MainMenuViewModel"/> instance.</param>
+        /// <param name="projectTreeViewModel">A reference to <see cref="ProjectTreeViewModel"/> instance.</param>
         public MainViewModel(
+            CommandsManager commandsManager,
             SDocumentsManager sDocumentsManager,
-            MainMenuViewModel mainMenuViewModel)
+            MainMenuViewModel mainMenuViewModel,
+            ProjectTreeViewModel projectTreeViewModel)
+            : base(commandsManager)
         {
             Current = this;
 
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
             _mainMenuViewModel = mainMenuViewModel ?? throw new ArgumentNullException(nameof(mainMenuViewModel));
+            _projectTreeViewModel = projectTreeViewModel ?? throw new ArgumentNullException(nameof(projectTreeViewModel));
 
-            RequestApplicationClose = new RelayCommand<CancelEventArgs>(ExecuteRequestApplicationClose);
+            CommandsManager.RegisterCommand(
+                _requestApplicationCloseCmd,
+                new RelayCommand<CancelEventArgs>(ExecuteRequestApplicationClose));
         }
 
         #endregion Constructors
@@ -61,25 +68,21 @@ namespace SPEA.App.ViewModels
         public static MainViewModel Current { get; private set; }
 
         /// <summary>
+        /// Gets SDocuments controller.
+        /// </summary>
+        public SDocumentsManager SDocumentsManagerInstance => _sDocumentsManager;
+
+        /// <summary>
         /// Gets main menu view model.
         /// </summary>
         public MainMenuViewModel MainMenuViewModelInstance => _mainMenuViewModel;
 
         /// <summary>
-        /// Gets SDocuments controller.
+        /// Gets project tree view model.
         /// </summary>
-        public SDocumentsManager SDocumentsManagerInstance => _sDocumentsManager;
+        public ProjectTreeViewModel ProjectTreeViewModelInstance => _projectTreeViewModel;
 
         #endregion Properties
-
-        #region Commands
-
-        /// <summary>
-        /// Gets a command which is invoked directly after <see cref="Window.Close"/> is called.
-        /// </summary>
-        public RelayCommand<CancelEventArgs> RequestApplicationClose { get; private set; }
-
-        #endregion Commands
 
         #region Commands Logic
 
@@ -88,19 +91,9 @@ namespace SPEA.App.ViewModels
         /// </summary>
         private void ExecuteRequestApplicationClose(CancelEventArgs e)
         {
-            // e.Cancel = false by default.
-            // Check if there are any unsaved changes among the opened documents.
-            var isCanceled = _sDocumentsManager.RemoveAllDocumentsWithConfirmation();
-            if (isCanceled)
-            {
-                e.Cancel = true;
-            }
+            // Blank.
         }
 
         #endregion Commands Logic
-
-        #region Methods
-
-        #endregion Methods
     }
 }

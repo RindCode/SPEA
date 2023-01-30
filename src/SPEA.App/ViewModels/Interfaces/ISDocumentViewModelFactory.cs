@@ -14,10 +14,6 @@ namespace SPEA.App.ViewModels.Interfaces
     /// </summary>
     public interface ISDocumentViewModelFactory
     {
-        #region Properties
-
-        #endregion Properties
-
         #region Methods
 
         /// <summary>

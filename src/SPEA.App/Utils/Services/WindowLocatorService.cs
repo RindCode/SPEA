@@ -18,13 +18,15 @@ namespace SPEA.App.Utils.Services
     /// </summary>
     public static class WindowLocatorService
     {
+        #region Methods
+
         /// <summary>
         /// Locates and returns a new instance of a window from the specified view model.
         /// </summary>
         /// <remarks>
         /// Each window has its own view model, and both of them should follow xxxWindow and xxxViewModel pattern,
-        /// where xxx is the actual name of either view or view model, in example MainWindowView and MainWindowViewModel.
-        /// That is, it's usually enough to provide a view model type as a generic parameter to located a window related to it.
+        /// where "xxx" is the actual name of either view or view model, in example MainWindowView and MainWindowViewModel.
+        /// That is, it's usually enough to provide a view model type as a generic parameter to locate a window related to it.
         /// However it's also possible to specify a view name directly is desired.
         /// </remarks>
         /// <typeparam name="T">A view model type used by a window which is searched for.</typeparam>
@@ -60,5 +62,7 @@ namespace SPEA.App.Utils.Services
 
             return (WindowBase)Assembly.GetExecutingAssembly().CreateInstance(windowType.FullName);
         }
+
+        #endregion Methods
     }
 }

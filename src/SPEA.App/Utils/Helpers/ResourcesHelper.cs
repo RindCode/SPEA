@@ -14,6 +14,8 @@ namespace SPEA.App.Utils.Helpers
     /// </summary>
     public static class ResourcesHelper
     {
+        #region Methods
+
         /// <summary>
         /// Returns the requested application scope resource.
         /// </summary>
@@ -24,5 +26,7 @@ namespace SPEA.App.Utils.Helpers
         {
             return (T)Application.Current.Resources[uri];
         }
+
+        #endregion Methods
     }
 }

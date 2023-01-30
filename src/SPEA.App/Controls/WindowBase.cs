@@ -26,6 +26,15 @@ namespace SPEA.App.Controls
                 typeof(WindowBase),
                 new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets <see cref="WindowBase"/> header content.
+        /// </summary>
+        public FrameworkElement HeaderContent
+        {
+            get { return (FrameworkElement)GetValue(HeaderContentProperty); }
+            set { SetValue(HeaderContentProperty, value); }
+        }
+
         #endregion Dependency Properties
 
         #region Constructors
@@ -40,18 +49,5 @@ namespace SPEA.App.Controls
         }
 
         #endregion Constructors
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets <see cref="WindowBase"/> header content.
-        /// </summary>
-        public FrameworkElement HeaderContent
-        {
-            get { return (FrameworkElement)GetValue(HeaderContentProperty); }
-            set { SetValue(HeaderContentProperty, value); }
-        }
-
-        #endregion Properties
     }
 }

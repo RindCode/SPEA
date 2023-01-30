@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Controls.SectionEditor
+namespace SPEA.App.Controls.SViewport
 {
     using System;
     using System.Windows;
@@ -19,9 +19,9 @@ namespace SPEA.App.Controls.SectionEditor
     /// as well as infinite panning and zooming.
     /// </summary>
     /// <remarks>
-    /// This panel acts an additional layer between the main control <see cref="SectionEditorControl"/> and
-    /// <see cref="SectionEditorItemsHostControl"/> which acts as a host for <see cref="SectionElementContainer"/> objects.
-    /// It must be wrapped by <see cref="ScrollViewer"/> inside <see cref="SectionEditorControl"/>
+    /// This panel acts an additional layer between the main control <see cref="SViewportControl"/> and
+    /// <see cref="SViewportItemsHostControl"/> (which in turn, acts as a host for <see cref="SElementContainer"/> objects).
+    /// It must be wrapped by <see cref="ScrollViewer"/> inside <see cref="SViewportControl"/>
     /// ControlTemplate with <see cref="ScrollViewer.CanContentScroll"/> property set to <see langword="true"/>.
     /// </remarks>
     public partial class InfinitePanel : ContentControl
@@ -40,7 +40,7 @@ namespace SPEA.App.Controls.SectionEditor
         private const string VerticalScrollBarPartName = "PART_VerticalScrollBar";
 
         // Holds the reference to the parent control.
-        private SectionEditorControl _parent = null;
+        private SViewportControl _parent = null;
 
         // Holds the reference to the underlying content.
         private FrameworkElement _content = null;
@@ -176,10 +176,10 @@ namespace SPEA.App.Controls.SectionEditor
         }
 
         /// <summary>
-        /// Internal initializer. Normally called from SectionEditorControl.
+        /// Internal initializer. Normally called from SViewportControl.
         /// </summary>
         /// <param name="obj">A reference to a parent control.</param>
-        internal void Initialize(SectionEditorControl obj)
+        internal void Initialize(SViewportControl obj)
         {
             _parent = obj;
         }

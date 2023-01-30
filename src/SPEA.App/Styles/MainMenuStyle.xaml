@@ -59,6 +59,7 @@
                                     <ContentPresenter
                                         x:Name="MenuHeader"
                                         Margin="8,1,8,1"
+                                        RecognizesAccessKey="True"
                                         ContentSource="Header"/>
                                 </Border>
                                 <Popup
@@ -202,11 +203,11 @@
                                         BorderThickness="1">
                                         <Border.Effect>
                                             <DropShadowEffect
-                                                    Color="{DynamicResource Color.PrimaryPalette.Level0a}"
-                                                    BlurRadius="0"
-                                                    ShadowDepth="4"
-                                                    Opacity="1.0"
-                                                    Direction="-45"/>
+                                                Color="{DynamicResource Color.PrimaryPalette.Level0a}"
+                                                BlurRadius="0"
+                                                ShadowDepth="4"
+                                                Opacity="1.0"
+                                                Direction="-45"/>
                                         </Border.Effect>
                                         <Grid Grid.IsSharedSizeScope="True">
                                             <StackPanel

@@ -30,9 +30,7 @@
                     Grid.Column="0"
                     Margin="3,0,0,0"
                     HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Text="{Binding RelativeSource={RelativeSource AncestorType=ctrl:WindowBase, Mode=FindAncestor},
-                                   Path=DataContext.StatusBarManagerInstance.CurrentStatus}"/>
+                    VerticalAlignment="Center"/>
             </Grid>
         </Border>
     </Grid>

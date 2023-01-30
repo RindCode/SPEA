@@ -43,10 +43,7 @@ namespace SPEA.App.ViewModels
         /// <summary>
         /// Gets a collection of <see cref="ISDocumentViewModel"/> documents.
         /// </summary>
-        public ObservableCollection<ISDocumentViewModel> CrossSectionsCollection
-        {
-            get => _sDocumentsManager.SDocumentsCollection;
-        }
+        public ObservableCollection<ISDocumentViewModel> CrossSectionsCollection => _sDocumentsManager.SDocumentsCollection;
 
         #endregion Properties
     }

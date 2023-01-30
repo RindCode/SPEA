@@ -35,10 +35,10 @@
     <sys:Double x:Key="Element.Large.IndividualFullCornerRadius">8</sys:Double>
 
     <!-- Section Editor canvas grid -->
-    <Pen x:Key="Pen.SectionEditor.MinorGridColor" Brush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a.Inverted}" Thickness="1.2"/>
-    <GeometryDrawing x:Key="Geometry.SectionEditor.MinorGrid" Geometry="M 0 0 L 100 0 L 100 100 L 0 100 Z" Pen="{DynamicResource Pen.SectionEditor.MinorGridColor}"/>
+    <Pen x:Key="Pen.SViewport.MinorGridColor" Brush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a.Inverted}" Thickness="1.2"/>
+    <GeometryDrawing x:Key="Geometry.SViewport.MinorGrid" Geometry="M 0 0 L 100 0 L 100 100 L 0 100 Z" Pen="{DynamicResource Pen.SViewport.MinorGridColor}"/>
 
-    <Pen x:Key="Pen.SectionEditor.MajorGridColor" Brush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a.Inverted}" Thickness="0.3"/>
-    <GeometryDrawing x:Key="Geometry.SectionEditor.MajorGrid" Geometry="M 0 0 L 100 0 L 100 100 L 0 100 Z" Pen="{DynamicResource Pen.SectionEditor.MajorGridColor}"/>
+    <Pen x:Key="Pen.SViewport.MajorGridColor" Brush="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a.Inverted}" Thickness="0.3"/>
+    <GeometryDrawing x:Key="Geometry.SViewport.MajorGrid" Geometry="M 0 0 L 100 0 L 100 100 L 0 100 Z" Pen="{DynamicResource Pen.SViewport.MajorGridColor}"/>
 
 </ResourceDictionary>

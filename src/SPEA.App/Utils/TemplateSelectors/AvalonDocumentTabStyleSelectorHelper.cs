@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Utils.Helpers
+namespace SPEA.App.Utils.TemplateSelectors
 {
     using System.Windows;
     using System.Windows.Controls;
@@ -16,10 +16,16 @@ namespace SPEA.App.Utils.Helpers
     /// </summary>
     public class AvalonDocumentTabStyleSelectorHelper : StyleSelector
     {
+        #region Preperties
+
         /// <summary>
         /// Gets or sets AvalonDock tabs style <see cref="DataTemplate"/>.
         /// </summary>
         public Style AvalonDocumentTabStyle { get; set; }
+
+        #endregion properties
+
+        #region Methods
 
         /// <inheritdoc/>
         public override Style SelectStyle(object item, DependencyObject container)
@@ -31,5 +37,7 @@ namespace SPEA.App.Utils.Helpers
 
             return base.SelectStyle(item, container);
         }
+
+        #endregion Methods
     }
 }

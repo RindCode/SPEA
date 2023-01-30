@@ -15,21 +15,16 @@ namespace SPEA.App.Controls
     /// </summary>
     public enum TabPanelHorizontalAlignment
     {
+        /// <summary>
+        /// Left-aligned tab panel.
+        /// </summary>
         Left = 0,
-        Center = 1,
-        Right = 2,
-    }
 
-    /// <summary>
-    /// Possible vertical aligmnets for <see cref="STabControl"/> control.
-    /// </summary>
-    ////[System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:Enumeration items should be documented", Justification = "Self-explanatory.")]
-    ////public enum TabPanelVerticalAlignment
-    ////{
-    ////    Top = 0,
-    ////    Center = 1,
-    ////    Bottom = 2,
-    ////}
+        /// <summary>
+        /// Right-aligned tab panel.
+        /// </summary>
+        Right = 1,
+    }
 
     /// <summary>
     /// Represent <see cref="TabControl"/> control with additional features.
@@ -49,14 +44,13 @@ namespace SPEA.App.Controls
                 new PropertyMetadata(HorizontalAlignment.Left));
 
         /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="TabsVerticalAlignment"/> property.
+        /// Gets or sets a horizontal alignment for contol's tabs.
         /// </summary>
-        ////public static readonly DependencyProperty TabsVerticalAlignmentProperty =
-        ////    DependencyProperty.Register(
-        ////        nameof(TabsVerticalAlignment),
-        ////        typeof(VerticalAlignment),
-        ////        typeof(ExtendedTabControl),
-        ////        new PropertyMetadata(VerticalAlignment.Top));
+        public HorizontalAlignment TabsHorizontalAlignment
+        {
+            get { return (HorizontalAlignment)GetValue(TabsHorizontalAlignmentProperty); }
+            set { SetValue(TabsHorizontalAlignmentProperty, value); }
+        }
 
         /// <summary>
         /// <see cref="DependencyProperty"/> for <see cref="LeadingContent"/> property.
@@ -69,38 +63,6 @@ namespace SPEA.App.Controls
                 new PropertyMetadata(null));
 
         /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="TrailingContent"/> property.
-        /// </summary>
-        public static readonly DependencyProperty TrailingContentProperty =
-            DependencyProperty.Register(
-                nameof(TrailingContent),
-                typeof(object),
-                typeof(STabControl),
-                new PropertyMetadata(null));
-
-        #endregion Dependency Properties
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets a horizontal alignment for contol's tabs.
-        /// </summary>
-        public HorizontalAlignment TabsHorizontalAlignment
-        {
-            get { return (HorizontalAlignment)GetValue(TabsHorizontalAlignmentProperty); }
-            set { SetValue(TabsHorizontalAlignmentProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets a vertical alignment for contol's tabs.
-        /// </summary>
-        ////public VerticalAlignment TabsVerticalAlignment
-        ////{
-        ////    get { return (VerticalAlignment)GetValue(TabsVerticalAlignmentProperty); }
-        ////    set { SetValue(TabsVerticalAlignmentProperty, value); }
-        ////}
-
-        /// <summary>
         /// Gets or sets leading content which will be placed to the left or above the tabs
         /// depending on control's orientation.
         /// </summary>
@@ -109,6 +71,16 @@ namespace SPEA.App.Controls
             get { return (object)GetValue(LeadingContentProperty); }
             set { SetValue(LeadingContentProperty, value); }
         }
+
+        /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="TrailingContent"/> property.
+        /// </summary>
+        public static readonly DependencyProperty TrailingContentProperty =
+            DependencyProperty.Register(
+                nameof(TrailingContent),
+                typeof(object),
+                typeof(STabControl),
+                new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets trailing content which will be placed to the right or below the tabs
@@ -120,6 +92,6 @@ namespace SPEA.App.Controls
             set { SetValue(TrailingContentProperty, value); }
         }
 
-        #endregion Properties
+        #endregion Dependency Properties
     }
 }

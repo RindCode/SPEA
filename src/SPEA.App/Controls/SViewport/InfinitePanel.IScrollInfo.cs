@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Controls.SectionEditor
+namespace SPEA.App.Controls.SViewport
 {
     using System.Windows;
     using System.Windows.Controls;
@@ -17,8 +17,9 @@ namespace SPEA.App.Controls.SectionEditor
     /// as well as infinite panning and zooming.
     /// </summary>
     /// <remarks>
-    /// This panel acts an additional layer between the main control <see cref="SectionEditorControl"/> and
-    /// shape objects arranged within. It must be wrapped by <see cref="ScrollViewer"/> inside <see cref="SectionEditorControl"/>
+    /// This panel acts an additional layer between the main control <see cref="SViewportControl"/> and
+    /// <see cref="SViewportItemsHostControl"/> (which in turn, acts as a host for <see cref="SElementContainer"/> objects).
+    /// It must be wrapped by <see cref="ScrollViewer"/> inside <see cref="SViewportControl"/>
     /// ControlTemplate with <see cref="ScrollViewer.CanContentScroll"/> property set to <see langword="true"/>.
     /// </remarks>
     public partial class InfinitePanel : IScrollInfo

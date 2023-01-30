@@ -146,10 +146,10 @@
                             EnableSafeCloseBoundaries="True"
                             SafeCloseDistance="50">
                             <!-- This EventTrigger is a workaround to keep the PopUp position at the same place
-                            when the parent Window is moved or resized. Popup Reposition() and UpdatePosition()
-                            methods were made as internal and private, so we cannot call them directly.
+                            when the parent Window is moved or resized. WPF Popup Reposition() and UpdatePosition()
+                            methods are implemented as internal and private, so we cannot call them directly.
                             However, HorizontalOffset, VerticalOffset and PlacementRectangle DPs have OnOffsetChanged()
-                            callback, which it turn will call Reposition() method.
+                            callback, which in turn will call Reposition() method.
                             -->
                             <Popup.Style>
                                 <Style TargetType="ctrl:SPopup">

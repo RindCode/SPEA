@@ -10,7 +10,7 @@ namespace SPEA.App.Views.UserControls
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
-    using SPEA.App.Controls.SectionEditor;
+    using SPEA.App.Controls.SViewport;
 
     /// <summary>
     /// Interaction logic for SectionEditorView.xaml.
@@ -26,7 +26,7 @@ namespace SPEA.App.Views.UserControls
             DependencyProperty.Register(
                 "PanningKey",
                 typeof(Key),
-                typeof(SectionEditorControl),
+                typeof(SViewportControl),
                 new PropertyMetadata(Key.None));
 
         #endregion Dependency Properties

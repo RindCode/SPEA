@@ -1,11 +1,11 @@
 ﻿// ==================================================================================================
-// <copyright file="SectionEditorItemsHostControl.cs" company="Dmitry Poberezhnyy">
+// <copyright file="SViewportItemsHostControl.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Controls.SectionEditor
+namespace SPEA.App.Controls.SViewport
 {
     using System;
     using System.Windows;
@@ -13,42 +13,41 @@ namespace SPEA.App.Controls.SectionEditor
     using SPEA.App.Utils.Extensions;
 
     /// <summary>
-    /// Represents an items host of <see cref="SectionEditorControl"/> which is derived from <see cref="ItemsControl"/>.
-    /// This control acts as an items host for <see cref="SectionElementContainer"/> objects.
+    /// Represents items host for <see cref="SElementContainer"/> objects.
     /// </summary>
-    public class SectionEditorItemsHostControl : Panel
+    public class SViewportItemsHostControl : Panel
     {
         /// <summary>
         /// Gets or sets the parent control.
         /// </summary>
-        internal SectionEditorControl ItemsOwner { get; set; }
+        internal SViewportControl ItemsOwner { get; set; }
 
         /// <summary>
         /// Gets or sets the left most element.
         /// </summary>
-        internal SectionElementContainer LeftMostElement { get; set; }
+        internal SElementContainer LeftMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the top most element.
         /// </summary>
-        internal SectionElementContainer TopMostElement { get; set; }
+        internal SElementContainer TopMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the right most element.
         /// </summary>
-        internal SectionElementContainer RightMostElement { get; set; }
+        internal SElementContainer RightMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the bottom most element.
         /// </summary>
-        internal SectionElementContainer BottomMostElement { get; set; }
+        internal SElementContainer BottomMostElement { get; set; }
 
         /// <inheritdoc/>
         protected override Size MeasureOverride(Size constraint)
         {
             foreach (UIElement child in InternalChildren)
             {
-                var container = child as SectionElementContainer;
+                var container = child as SElementContainer;
                 container?.Measure(constraint);
             }
 
@@ -65,7 +64,7 @@ namespace SPEA.App.Controls.SectionEditor
 
             foreach (UIElement child in InternalChildren)
             {
-                if (child is SectionElementContainer container)
+                if (child is SElementContainer container)
                 {
                     child.Arrange(new Rect(new Point(container.Left, container.Top), container.DesiredSize));
 

@@ -15,6 +15,8 @@ namespace SPEA.App.Utils.Extensions
     /// </summary>
     public static class FrameworkElementExtensions
     {
+        #region Methods
+
         /// <summary>
         /// Calculates the bounding box for a child element relatively to visual parent based on applied transforms.
         /// </summary>
@@ -34,5 +36,7 @@ namespace SPEA.App.Utils.Extensions
             var bounds = transform.TransformBounds(new Rect(0, 0, element.Width, element.Height));
             return bounds;
         }
+
+        #endregion Methods
     }
 }

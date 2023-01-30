@@ -1,19 +1,20 @@
 ﻿// ==================================================================================================
-// <copyright file="SectionElementContainer.cs" company="Dmitry Poberezhnyy">
+// <copyright file="SElementContainer.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Controls.SectionEditor
+namespace SPEA.App.Controls.SViewport
 {
     using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
-    /// Represents a UI container (basically - a bounding box) for a cross-section element.
+    /// Represents a UI container (basically - a bounding box) for an element
+    /// located inside of <see cref="SViewportItemsHostControl"/>.
     /// </summary>
-    public class SectionElementContainer : ContentControl
+    public class SElementContainer : ContentControl
     {
         #region Dependency Properties
 
@@ -24,56 +25,12 @@ namespace SPEA.App.Controls.SectionEditor
             DependencyProperty.Register(
                 "Left",
                 typeof(double),
-                typeof(SectionElementContainer),
+                typeof(SElementContainer),
                 new PropertyMetadata(0.0d));
 
         /// <summary>
-        /// DependencyProperty for <see cref="Top"/> property.
-        /// </summary>
-        public static readonly DependencyProperty TopProperty =
-            DependencyProperty.Register(
-                "Top",
-                typeof(double),
-                typeof(SectionElementContainer),
-                new PropertyMetadata(0.0d));
-
-        /// <summary>
-        /// DependencyProperty for <see cref="Right"/> property.
-        /// </summary>
-        public static readonly DependencyProperty RightProperty =
-            DependencyProperty.Register(
-                "Right",
-                typeof(double),
-                typeof(SectionElementContainer),
-                new PropertyMetadata(0.0d));
-
-        /// <summary>
-        /// DependencyProperty for <see cref="Bottom"/> property.
-        /// </summary>
-        public static readonly DependencyProperty BottomProperty =
-            DependencyProperty.Register(
-                "Bottom",
-                typeof(double),
-                typeof(SectionElementContainer),
-                new PropertyMetadata(0.0d));
-
-        /// <summary>
-        /// DependencyProperty for <see cref="BoundingBox"/> property.
-        /// </summary>
-        public static readonly DependencyProperty BoundingBoxProperty =
-            DependencyProperty.Register(
-                "BoundingBox",
-                typeof(Rect),
-                typeof(SectionElementContainer),
-                new PropertyMetadata(Rect.Empty));
-
-        #endregion Dependency Properties
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets a location of the left bound for the current <see cref="SectionElementContainer"/>
-        /// in <see cref="SectionEditorControl.ItemsHost"/> coordinates.
+        /// Gets or sets a location of the left bound for the current <see cref="SElementContainer"/>
+        /// in <see cref="SViewportControl.ItemsHost"/> coordinates.
         /// </summary>
         public double Left
         {
@@ -82,8 +39,18 @@ namespace SPEA.App.Controls.SectionEditor
         }
 
         /// <summary>
-        /// Gets or sets a location of the top bound for the current <see cref="SectionElementContainer"/>
-        /// in <see cref="SectionEditorControl.ItemsHost"/> coordinates.
+        /// DependencyProperty for <see cref="Top"/> property.
+        /// </summary>
+        public static readonly DependencyProperty TopProperty =
+            DependencyProperty.Register(
+                "Top",
+                typeof(double),
+                typeof(SElementContainer),
+                new PropertyMetadata(0.0d));
+
+        /// <summary>
+        /// Gets or sets a location of the top bound for the current <see cref="SElementContainer"/>
+        /// in <see cref="SViewportControl.ItemsHost"/> coordinates.
         /// </summary>
         public double Top
         {
@@ -92,8 +59,18 @@ namespace SPEA.App.Controls.SectionEditor
         }
 
         /// <summary>
-        /// Gets or sets a location of the right bound for the current <see cref="SectionElementContainer"/>
-        /// in <see cref="SectionEditorControl.ItemsHost"/> coordinates.
+        /// DependencyProperty for <see cref="Right"/> property.
+        /// </summary>
+        public static readonly DependencyProperty RightProperty =
+            DependencyProperty.Register(
+                "Right",
+                typeof(double),
+                typeof(SElementContainer),
+                new PropertyMetadata(0.0d));
+
+        /// <summary>
+        /// Gets or sets a location of the right bound for the current <see cref="SElementContainer"/>
+        /// in <see cref="SViewportControl.ItemsHost"/> coordinates.
         /// </summary>
         public double Right
         {
@@ -102,8 +79,18 @@ namespace SPEA.App.Controls.SectionEditor
         }
 
         /// <summary>
-        /// Gets or sets a location of the bottom bound for the current <see cref="SectionElementContainer"/>
-        /// in <see cref="SectionEditorControl.ItemsHost"/> coordinates.
+        /// DependencyProperty for <see cref="Bottom"/> property.
+        /// </summary>
+        public static readonly DependencyProperty BottomProperty =
+            DependencyProperty.Register(
+                "Bottom",
+                typeof(double),
+                typeof(SElementContainer),
+                new PropertyMetadata(0.0d));
+
+        /// <summary>
+        /// Gets or sets a location of the bottom bound for the current <see cref="SElementContainer"/>
+        /// in <see cref="SViewportControl.ItemsHost"/> coordinates.
         /// </summary>
         public double Bottom
         {
@@ -112,13 +99,27 @@ namespace SPEA.App.Controls.SectionEditor
         }
 
         /// <summary>
-        /// Gets or sets a bounding box for the current <see cref="SectionElementContainer"/>.
+        /// DependencyProperty for <see cref="BoundingBox"/> property.
+        /// </summary>
+        public static readonly DependencyProperty BoundingBoxProperty =
+            DependencyProperty.Register(
+                "BoundingBox",
+                typeof(Rect),
+                typeof(SElementContainer),
+                new PropertyMetadata(Rect.Empty));
+
+        /// <summary>
+        /// Gets or sets a bounding box for the current <see cref="SElementContainer"/>.
         /// </summary>
         public Rect BoundingBox
         {
             get { return (Rect)GetValue(BoundingBoxProperty); }
             set { SetValue(BoundingBoxProperty, value); }
         }
+
+        #endregion Dependency Properties
+
+        #region Properties
 
         #endregion Properties
     }

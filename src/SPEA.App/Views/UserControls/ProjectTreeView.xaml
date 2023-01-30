@@ -15,17 +15,18 @@
     xmlns:converter="clr-namespace:SPEA.App.Utils.Converters"
     xmlns:validation="clr-namespace:SPEA.App.Utils.Validation"
     xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
-    mc:Ignorable="d"
-    DataContext="{markupex:DISource Type=vm:ProjectTreeViewModel}">
+    mc:Ignorable="d">
 
     <Grid>
-        <TreeView ItemsSource="{Binding CrossSectionsCollection}">
+        <TreeView ItemsSource="{Binding Path=ItemsSource, RelativeSource={RelativeSource AncestorType=UserControl}}">
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type vm:SDocumentViewModel}" ItemsSource="{Binding MaterialsCollection}">
+                <!--<HierarchicalDataTemplate
+                    DataType="{x:Type vm:SDocumentViewModel}"
+                    ItemsSource="{Binding MaterialsCollection}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}"/>
                     </StackPanel>
-                </HierarchicalDataTemplate>
+                </HierarchicalDataTemplate>-->
                 <!--<HierarchicalDataTemplate DataType="{x:Type materials:MaterialBase}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}"/>

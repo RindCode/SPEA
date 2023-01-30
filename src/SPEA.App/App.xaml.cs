@@ -8,12 +8,10 @@
 namespace SPEA.App
 {
     using System;
-    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Threading;
     using Microsoft.Extensions.DependencyInjection;
     using SPEA.App.Extensions.Markup;
-    using SPEA.App.Utils.Services;
     using SPEA.App.ViewModels;
     using SPEA.App.Views;
 
@@ -42,7 +40,7 @@ namespace SPEA.App
         public static new SPEA_Application Current => (SPEA_Application)Application.Current;
 
         /// <summary>
-        /// Gets <see cref="IServiceProvider"/> for this application, containing view model services.
+        /// Gets <see cref="IServiceProvider"/> for this application, containing various app services.
         /// </summary>
         public IServiceProvider Services { get; private set; }
 

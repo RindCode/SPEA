@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Commands
+namespace SPEA.App.Commands.Chaining
 {
     using System.Windows;
 

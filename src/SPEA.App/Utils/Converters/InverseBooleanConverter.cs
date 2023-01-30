@@ -16,6 +16,8 @@ namespace SPEA.App.Utils.Converters
     /// </summary>
     public class InverseBooleanConverter : IValueConverter
     {
+        #region Methods
+
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -32,5 +34,7 @@ namespace SPEA.App.Utils.Converters
         {
             throw new NotImplementedException();
         }
+
+        #endregion Methods
     }
 }

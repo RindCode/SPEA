@@ -11,11 +11,11 @@ namespace SPEA.App.ViewModels
     using System.Collections.ObjectModel;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
+    using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.ViewModels.Interfaces;
     using SPEA.App.ViewModels.SElements;
     using SPEA.Core.CrossSection;
-    using SPEA.Core.Materials;
 
     /// <summary>
     /// A View Model for <see cref="CrossSectionBase"/> model.
@@ -25,17 +25,13 @@ namespace SPEA.App.ViewModels
     {
         #region Fields
 
-        // Controller for SDocuments.
-        private SDocumentsManager _sDocumentsManager;
-
-        // Holds the reference to the actual cross-section model.
+        private readonly CommandsManager _commandsManager;
+        private readonly SDocumentsManager _sDocumentsManager;
+        private readonly string _requestCloseDocumentCmd = "RequestCloseDocument";
+        private readonly string _requestSaveDocumenteCmd = "RequestSaveDocument";
         private CrossSectionBase _model;
-
-        // Indicates if changes were made and local save is required.
         private bool _isSaveRequired = false;
-
-        // Holds the display name of a cross-section. It can differ from the actual stored within the model.
-        private string _displayName;
+        private string _displayName = string.Empty;
 
         #endregion Fields
 
@@ -44,39 +40,65 @@ namespace SPEA.App.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="SDocumentViewModel"/> class.
         /// </summary>
+        /// <param name="commandsManager">A reference to <see cref="CommandsManager.CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
         /// <param name="model">A reference to the model instance.</param>
         public SDocumentViewModel(
+            CommandsManager commandsManager,
             SDocumentsManager sDocumentsManager,
             CrossSectionBase model)
         {
+            _commandsManager = commandsManager ?? throw new ArgumentNullException(nameof(commandsManager));
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
 
             // Set fields directly to bypass data changed events.
             _model = model ?? throw new ArgumentNullException(nameof(model));
             _displayName = model.Name ?? throw new ArgumentNullException(nameof(model.Name));
 
-            RequestCloseDocumentCommand = new RelayCommand(ExecuteRequestCloseDocument);
-            RequestSaveDocumentCommand = new RelayCommand(ExecuteRequestSaveDocument);
+            // Give commands their unique names related to underlying model ID.
+            _requestCloseDocumentCmd += $"_{_model.Id}";
+            _requestSaveDocumenteCmd += $"_{_model.Id}";
+
+            CommandsManager.RegisterCommand(_requestCloseDocumentCmd, new RelayCommand(ExecuteRequestCloseDocument));
+            CommandsManager.RegisterCommand(_requestSaveDocumenteCmd, new RelayCommand(ExecuteRequestSaveDocument));
         }
 
         #endregion Constructors
 
+        #region Destructor
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="SDocumentViewModel"/> class.
+        /// </summary>
+        ~SDocumentViewModel()
+        {
+            CommandsManager.UnregisterCommand(_requestCloseDocumentCmd);
+            CommandsManager.UnregisterCommand(_requestSaveDocumenteCmd);
+            Model.Dispose();
+        }
+
+        #endregion Destructor
+
         #region Events
 
-        /// <summary>
-        /// Occurs whenever the document is changed.
-        /// </summary>
-        public event EventHandler<EventArgs> DataChanged;
+        /////// <summary>
+        /////// Occurs whenever the document is changed.
+        /////// </summary>
+        ////public event EventHandler<EventArgs> DataChanged;
 
-        /// <summary>
-        /// Occurs whenever the document is saved.
-        /// </summary>
-        public event EventHandler<EventArgs> DataSaved;
+        /////// <summary>
+        /////// Occurs whenever the document is saved.
+        /////// </summary>
+        ////public event EventHandler<EventArgs> DataSaved;
 
         #endregion Events
 
         #region Properties
+
+        /// <summary>
+        /// Gets a commands manager reference.
+        /// </summary>
+        public CommandsManager CommandsManager => _commandsManager;
 
         /// <inheritdoc/>
         public CrossSectionBase Model
@@ -93,11 +115,6 @@ namespace SPEA.App.ViewModels
         /// </summary>
         public ObservableCollection<SElementViewModelBase> SElements { get; }
 
-        /////// <summary>
-        /////// Gets or sets a collection of cross-section materials.
-        /////// </summary>
-        ////public ObservableCollection<MaterialBase> MaterialsCollection { get; set; } = new ObservableCollection<MaterialBase>();
-
         /// <inheritdoc/>
         public string Name
         {
@@ -105,7 +122,7 @@ namespace SPEA.App.ViewModels
             set
             {
                 SetProperty(_model.Name, value, _model, (model, name) => model.Name = name);
-                OnDataChanged(this, EventArgs.Empty);
+                ////OnDataChanged(this, EventArgs.Empty);
             }
         }
 
@@ -133,31 +150,34 @@ namespace SPEA.App.ViewModels
 
         #region Commands
 
-        /// <inheritdoc/>
-        public RelayCommand RequestCloseDocumentCommand { get; private set; }
-
-        /// <inheritdoc/>
-        public RelayCommand RequestSaveDocumentCommand { get; private set; }
+        /// <summary>
+        /// Gets a command which requests the selected document to be closed
+        /// and removed from the list of active documents.
+        /// </summary>
+        /// <remarks>
+        /// Gets a command previously registered in <see cref="CommandsManager.CommandsManager"/>.
+        /// </remarks>
+        public RelayCommand RequestCloseDocumentCommand => (RelayCommand)CommandsManager.GetCommand(_requestCloseDocumentCmd);
 
         #endregion Commands
 
         #region Commands Logic
 
-        /// <summary>
-        /// Implements <see cref="RequestCloseDocumentCommand"/> command logic.
-        /// </summary>
+        /////// <summary>
+        /////// Implements <see cref="RequestCloseDocumentCommand"/> command logic.
+        /////// </summary>
         private void ExecuteRequestCloseDocument()
         {
-            _sDocumentsManager.CloseDocumentCommand.Execute(this);
+            _ = _sDocumentsManager.RemoveDocumentWithConfirmation(this);
         }
 
-        /// <summary>
-        /// Implements <see cref="RequestSaveDocumentCommand"/> command logic.
-        /// </summary>
+        /////// <summary>
+        /////// Implements <see cref="RequestSaveDocumentCommand"/> command logic.
+        /////// </summary>
         private void ExecuteRequestSaveDocument()
         {
-            // TODO: uncomment and implement
             _ = _sDocumentsManager.SaveDocumentWithDialog(this, string.Empty);
+
             IsSaveRequired = false;
             DisplayName = Name;
         }
@@ -166,34 +186,40 @@ namespace SPEA.App.ViewModels
 
         #region Methods
 
-        /// <summary>
-        /// Raises <see cref="DataChanged"/> event.
-        /// </summary>
-        /// <param name="sender">A reference to the object that raised the event.</param>
-        /// <param name="e">Event data.</param>
-        protected virtual void OnDataChanged(object sender, EventArgs e)
-        {
-            var handler = DataChanged;
-            handler?.Invoke(this, EventArgs.Empty);
+        ////private void SDocumentViewModel_DataChanged(object sender, PropertyChangedEventArgs e)
+        ////{
+        ////    IsSaveRequired = true;
+        ////    DisplayName = $"{Name}*";
+        ////}
 
-            IsSaveRequired = true;
-            DisplayName = $"{Name}*";
-        }
+        /////// <summary>
+        /////// Raises <see cref="DataChanged"/> event.
+        /////// </summary>
+        /////// <param name="sender">A reference to the object that raised the event.</param>
+        /////// <param name="e">Event data.</param>
+        ////protected virtual void OnDataChanged(object sender, EventArgs e)
+        ////{
+        ////    var handler = DataChanged;
+        ////    handler?.Invoke(this, EventArgs.Empty);
 
-        /// <summary>
-        /// Raises <see cref="DataSaved"/> event.
-        /// </summary>
-        /// <param name="sender">A reference to the object that raised the event.</param>
-        /// <param name="e">Event data.</param>
-        protected virtual void OnDataSaved(object sender, EventArgs e)
-        {
-            var handler = DataSaved;
-            handler?.Invoke(this, EventArgs.Empty);
+        ////    IsSaveRequired = true;
+        ////    DisplayName = $"{Name}*";
+        ////}
 
-            IsSaveRequired = false;
-            DisplayName = Name;
-        }
+        /////// <summary>
+        /////// Raises <see cref="DataSaved"/> event.
+        /////// </summary>
+        /////// <param name="sender">A reference to the object that raised the event.</param>
+        /////// <param name="e">Event data.</param>
+        ////protected virtual void OnDataSaved(object sender, EventArgs e)
+        ////{
+        ////    var handler = DataSaved;
+        ////    handler?.Invoke(this, EventArgs.Empty);
 
-        #endregion Methods
-    }
+        ////    IsSaveRequired = false;
+        ////    DisplayName = Name;
+        ////}
+
+    #endregion Methods
+}
 }

@@ -28,8 +28,6 @@
     <RepositoryUrl>https://github.com/RindCode/SPEA</RepositoryUrl>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AssemblyName>SPEA</AssemblyName>
-    <StartupObject>SPEA.App.SPEA_Application</StartupObject>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
     
   </PropertyGroup>
 
@@ -57,12 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="icon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Drawing\Shapes\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,8 +63,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.70.3">
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.71.1">
       <GeneratePathProperty></GeneratePathProperty>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />

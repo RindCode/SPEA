@@ -14,6 +14,8 @@ namespace SPEA.App.Utils.Services
     /// </summary>
     public static class WindowService
     {
+        #region Methods
+
         /// <summary>
         /// Show a simple window.
         /// </summary>
@@ -35,5 +37,7 @@ namespace SPEA.App.Utils.Services
         {
             WindowLocatorService.FindWindow<T>(viewName).ShowDialog();
         }
+
+        #endregion Methods
     }
 }

@@ -29,6 +29,15 @@ namespace SPEA.App.Controls
                 new PropertyMetadata(default(Path)));
 
         /// <summary>
+        /// Gets or sets an icon for checked state.
+        /// </summary>
+        public Path IconChecked
+        {
+            get { return (Path)GetValue(IconCheckedProperty); }
+            set { SetValue(IconCheckedProperty, value); }
+        }
+
+        /// <summary>
         /// <see cref="DependencyProperty"/> for <see cref="IconUnchecked"/>.
         /// </summary>
         public static readonly DependencyProperty IconUncheckedProperty =
@@ -37,19 +46,6 @@ namespace SPEA.App.Controls
                 typeof(Path),
                 typeof(SToggleButton),
                 new PropertyMetadata(default(Path)));
-
-        #endregion Dependency Properties
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets an icon for checked state.
-        /// </summary>
-        public Path IconChecked
-        {
-            get { return (Path)GetValue(IconCheckedProperty); }
-            set { SetValue(IconCheckedProperty, value); }
-        }
 
         /// <summary>
         /// Gets or sets an icon for unchecked state.
@@ -60,6 +56,6 @@ namespace SPEA.App.Controls
             set { SetValue(IconUncheckedProperty, value); }
         }
 
-        #endregion Properties
+        #endregion Dependency Properties
     }
 }

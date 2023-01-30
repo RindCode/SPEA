@@ -7,12 +7,9 @@
 
 namespace SPEA.App.Controls
 {
-    using System;
-    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
-    using System.Windows.Media;
 
     /// <summary>
     /// Represents an extended <see cref="Popup"/> control.
@@ -38,6 +35,16 @@ namespace SPEA.App.Controls
                 new PropertyMetadata(true));
 
         /// <summary>
+        /// Gets or sets a value indicating whether the popup is prevented from closing
+        /// if the mouse click is done within some safe area around the popup.
+        /// </summary>
+        public bool EnableSafeCloseBoundaries
+        {
+            get { return (bool)GetValue(EnableSafeCloseBoundariesProperty); }
+            set { SetValue(EnableSafeCloseBoundariesProperty, value); }
+        }
+
+        /// <summary>
         /// DependencyProperty for <see cref="SafeCloseDistance"/> property.
         /// </summary>
         public static readonly DependencyProperty SafeCloseDistanceProperty =
@@ -49,6 +56,32 @@ namespace SPEA.App.Controls
                     50d,
                     new PropertyChangedCallback(OnSafeCloseDistanceChanged),
                     new CoerceValueCallback(CoerceSafeCloseDistance)));
+
+        /// <summary>
+        /// Gets or sets the distance from the popup border to the edges of a virtual
+        /// rectangle around the popup. The popup will not be closed if clicked inside this
+        /// safe area with <see cref="EnableSafeCloseBoundaries"/> dependency property
+        /// set to <see langword="true"/>.
+        /// </summary>
+        public double SafeCloseDistance
+        {
+            get { return (double)GetValue(SafeCloseDistanceProperty); }
+            set { SetValue(SafeCloseDistanceProperty, value); }
+        }
+
+        // SafeCloseDistanceProperty PropertyChanged callback.
+        private static void OnSafeCloseDistanceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            d.CoerceValue(SafeCloseDistanceProperty);
+        }
+
+        // SafeCloseDistanceProperty CoerceValue callback.
+        private static object CoerceSafeCloseDistance(DependencyObject d, object value)
+        {
+            double currValue = (double)value;
+            currValue = currValue < 0 ? 0 : currValue;
+            return currValue;
+        }
 
         #endregion Dependency Properties
 
@@ -65,28 +98,6 @@ namespace SPEA.App.Controls
         #endregion Constructors
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the popup is prevented from closing
-        /// if the mouse click is done within some safe area around the popup.
-        /// </summary>
-        public bool EnableSafeCloseBoundaries
-        {
-            get { return (bool)GetValue(EnableSafeCloseBoundariesProperty); }
-            set { SetValue(EnableSafeCloseBoundariesProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the distance from the popup border to the edges of a virtual
-        /// rectangle around the popup. The popup will not be closed if clicked inside this
-        /// safe area with <see cref="EnableSafeCloseBoundaries"/> dependency property
-        /// set to <see langword="true"/>.
-        /// </summary>
-        public double SafeCloseDistance
-        {
-            get { return (double)GetValue(SafeCloseDistanceProperty); }
-            set { SetValue(SafeCloseDistanceProperty, value); }
-        }
 
         /// <summary>
         /// Gets a value indicating whether safe close area is "locked", which means the popup
@@ -139,20 +150,6 @@ namespace SPEA.App.Controls
             OnMouseMove_HandleSafeClose(e);
 
             e.Handled = true;
-        }
-
-        // SafeCloseDistanceProperty PropertyChanged callback.
-        private static void OnSafeCloseDistanceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            d.CoerceValue(SafeCloseDistanceProperty);
-        }
-
-        // SafeCloseDistanceProperty CoerceValue callback.
-        private static object CoerceSafeCloseDistance(DependencyObject d, object value)
-        {
-            double currValue = (double)value;
-            currValue = currValue < 0 ? 0 : currValue;
-            return currValue;
         }
 
         // Handles safe close on MouseMove event.

@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Utils.Helpers
+namespace SPEA.App.Utils.TemplateSelectors
 {
     using System.Windows;
     using System.Windows.Controls;
@@ -16,10 +16,16 @@ namespace SPEA.App.Utils.Helpers
     /// </summary>
     public class AvalonDocumentTemplateSelector : DataTemplateSelector
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets AvalonDock document <see cref="DataTemplate"/>.
         /// </summary>
         public DataTemplate AvalonDocumentDataTemplate { get; set; }
+
+        #endregion Properties
+
+        #region Methods
 
         /// <inheritdoc/>
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -31,5 +37,7 @@ namespace SPEA.App.Utils.Helpers
 
             return base.SelectTemplate(item, container);
         }
+
+        #endregion Methods
     }
 }

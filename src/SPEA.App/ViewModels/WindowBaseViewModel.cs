@@ -7,9 +7,11 @@
 
 namespace SPEA.App.ViewModels
 {
+    using System;
     using System.Windows;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
+    using SPEA.App.Commands;
 
     /// <summary>
     /// A base view model used by all application windows.
@@ -17,49 +19,51 @@ namespace SPEA.App.ViewModels
     /// </summary>
     public class WindowBaseViewModel : ObservableObject
     {
+        #region Fields
+
+        private readonly CommandsManager _commandsManager;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowBaseViewModel"/> class.
         /// </summary>
-        public WindowBaseViewModel()
+        /// <param name="commandsManager">A reference to <see cref="Commands.CommandsManager"/> instance.</param>
+        public WindowBaseViewModel(
+            CommandsManager commandsManager)
         {
-            // Commands.
-            MinimizeWindowCommand = new RelayCommand<Window>(ExecuteMinimizeWindow);
-            MaximizeWindowCommand = new RelayCommand<Window>(ExecuteMaximizeWindow);
-            RestoreWindowCommand = new RelayCommand<Window>(ExecuteRestoreWindow);
-            CloseWindowCommand = new RelayCommand<Window>(ExecuteCloseWindow);
+            _commandsManager = commandsManager ?? throw new ArgumentNullException(nameof(commandsManager));
+
+            _commandsManager.RegisterCommand(
+                "MinimizeWindow",
+                new RelayCommand<Window>(ExecuteMinimizeWindow),
+                new CommandMetadata(CommandsMetadataOptions.None));
+            _commandsManager.RegisterCommand(
+                "MaximizeWindow",
+                new RelayCommand<Window>(ExecuteMaximizeWindow),
+                new CommandMetadata(CommandsMetadataOptions.None));
+            _commandsManager.RegisterCommand(
+                "RestoreWindow",
+                new RelayCommand<Window>(ExecuteRestoreWindow),
+                new CommandMetadata(CommandsMetadataOptions.None));
+            _commandsManager.RegisterCommand(
+                "CloseWindow",
+                new RelayCommand<Window>(ExecuteCloseWindow),
+                new CommandMetadata(CommandsMetadataOptions.None));
         }
 
         #endregion Constructors
 
         #region Properties
 
+        /// <summary>
+        /// Gets a commands manager reference.
+        /// </summary>
+        public CommandsManager CommandsManager => _commandsManager;
+
         #endregion Properties
-
-        #region Commands
-
-        /// <summary>
-        /// Gets a command which minimizes the window.
-        /// </summary>
-        public RelayCommand<Window> MinimizeWindowCommand { get; private set; }
-
-        /// <summary>
-        /// Gets a command which maximizes the window.
-        /// </summary>
-        public RelayCommand<Window> MaximizeWindowCommand { get; private set; }
-
-        /// <summary>
-        /// Gets a command which restores the window.
-        /// </summary>
-        public RelayCommand<Window> RestoreWindowCommand { get; private set; }
-
-        /// <summary>
-        /// Gets a command which closes the window.
-        /// </summary>
-        public RelayCommand<Window> CloseWindowCommand { get; private set; }
-
-        #endregion Commands
 
         #region Commands Logic
 
@@ -88,9 +92,5 @@ namespace SPEA.App.ViewModels
         }
 
         #endregion Commands Logic
-
-        #region Methods
-
-        #endregion Methods
     }
 }

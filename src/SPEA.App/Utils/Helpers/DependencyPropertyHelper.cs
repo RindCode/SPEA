@@ -19,6 +19,8 @@ namespace SPEA.App.Utils.Helpers
     /// </remarks>
     public static class DependencyPropertyHelper
     {
+        #region Methods
+
         /// <summary>
         /// Finds a dependency property by the given name inside the object provided as a parameter.
         /// </summary>
@@ -43,5 +45,7 @@ namespace SPEA.App.Utils.Helpers
         {
             return FindDependencyProperty(target, dpname) != null;
         }
+
+        #endregion Methods
     }
 }

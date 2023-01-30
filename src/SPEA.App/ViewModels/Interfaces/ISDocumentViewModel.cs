@@ -7,7 +7,6 @@
 
 namespace SPEA.App.ViewModels.Interfaces
 {
-    using CommunityToolkit.Mvvm.Input;
     using SPEA.Core.CrossSection;
 
     /// <summary>
@@ -42,24 +41,5 @@ namespace SPEA.App.ViewModels.Interfaces
         public bool IsSaveRequired { get; }
 
         #endregion Properties
-
-        #region Commands
-
-        /// <summary>
-        /// Gets a command which requests the selected document to be closed
-        /// and removes from the list of active documents.
-        /// </summary>
-        public RelayCommand RequestCloseDocumentCommand { get; }
-
-        /// <summary>
-        /// Gets a command which requests the selected document to be saved.
-        /// </summary>
-        public RelayCommand RequestSaveDocumentCommand { get; }
-
-        #endregion Commands
-
-        #region Methods
-
-        #endregion Methods
     }
 }

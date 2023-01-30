@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Commands
+namespace SPEA.App.Commands.Chaining
 {
     using System;
     using System.Collections.Specialized;
@@ -32,10 +32,10 @@ namespace SPEA.App.Commands
     ///     &lt;cmd:CommandGroup>
     ///         &lt;cmd:CommandGroup.Commands&gt;
     ///             &lt;cmd:CommandDescriptor
-    ///                 Command = "{Binding Path=DataContext.SomeCommand, RelativeSource={RelativeSource AncestorType=ctrl:Window}}"
+    ///                 Command="{Binding Path=DataContext.SomeCommand, RelativeSource={RelativeSource AncestorType=ctrl:Window}}"
     ///                 CommandParameter="{Binding ElementName=SomeTexBox, Path=Text}"/>
     ///             &lt;cmd:CommandDescriptor
-    ///                 Command = "{Binding Path=DataContext.AnotherCommand, RelativeSource={RelativeSource AncestorType=ctrl:Window}}"
+    ///                 Command="{Binding Path=DataContext.AnotherCommand, RelativeSource={RelativeSource AncestorType=ctrl:Window}}"
     ///                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ctrl:Window}}"/>
     ///         &lt;/cmd:CommandGroup.Commands&gt;
     ///     &lt;/cmd:CommandGroup&gt;

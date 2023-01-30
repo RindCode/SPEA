@@ -10,6 +10,7 @@ namespace SPEA.App.ViewModels
     using System;
     using System.Collections.Generic;
     using CommunityToolkit.Mvvm.Input;
+    using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.Utils.Helpers;
     using SPEA.App.ViewModels.Interfaces;
@@ -22,23 +23,15 @@ namespace SPEA.App.ViewModels
     {
         #region Fields
 
-        // Controller for SDocuments.
-        private SDocumentsManager _sDocumentsManager;
-
-        // SDocuments factory.
-        private ISDocumentViewModelFactory _sDocumentViewModelFactory;
-
-        // SectionName backing field.
+        private readonly SDocumentsManager _sDocumentsManager;
+        private readonly ISDocumentViewModelFactory _sDocumentViewModelFactory;
+        private readonly string _createNewDocumentCmd = "CreateNewDocument";
         private string _sectionName = string.Empty;
-
-        // SectionDefinitions backing field.
+        private string _selectedSectionDefinition = string.Empty;
         private List<string> _sectionDefinitions = new List<string>()
         {
             ResourcesHelper.GetApplicationResource<string>("S.NewSectionWindow.CrossSectionDefinition_Metallic"),
         };
-
-        // SelectedSectionDefinition backing field.
-        private string _selectedSectionDefinition = string.Empty;
 
         #endregion Fields
 
@@ -47,16 +40,19 @@ namespace SPEA.App.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="NewSectionViewModel"/> class.
         /// </summary>
+        /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
         /// <param name="sDocumentViewModelFactory">A reference to <see cref="ISDocumentViewModelFactory"/> instance.</param>
         public NewSectionViewModel(
+            CommandsManager commandsManager,
             SDocumentsManager sDocumentsManager,
             ISDocumentViewModelFactory sDocumentViewModelFactory)
+            : base(commandsManager)
         {
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
             _sDocumentViewModelFactory = sDocumentViewModelFactory ?? throw new ArgumentNullException(nameof(sDocumentViewModelFactory));
 
-            AddNewDocumentCommand = new RelayCommand<string>(AddNewDocument);
+            CommandsManager.RegisterCommand(_createNewDocumentCmd, new RelayCommand<string>(CreateNewDocument));
         }
 
         #endregion Constructors
@@ -101,22 +97,14 @@ namespace SPEA.App.ViewModels
 
         #endregion Properties
 
-        #region Commands
-
-        /// <summary>
-        /// Gets a command which creates a new document instance.
-        /// </summary>
-        public RelayCommand<string> AddNewDocumentCommand { get; private set; }
-
-        #endregion Commands
-
         #region Commands Logic
 
         /// <summary>
-        /// Implements <see cref="AddNewDocumentCommand"/> command logic.
+        /// Creates a new <see cref="SDocumentViewModel"/> instance and adds it into
+        /// a collection of opened documents.
         /// </summary>
         /// <param name="name">A document name.</param>
-        public void AddNewDocument(string name)
+        private void CreateNewDocument(string name)
         {
             if (_selectedSectionDefinition == ResourcesHelper.GetApplicationResource<string>("S.NewSectionWindow.CrossSectionDefinition_Metallic"))
             {
@@ -132,9 +120,5 @@ namespace SPEA.App.ViewModels
         }
 
         #endregion Commands Logic
-
-        #region Methods
-
-        #endregion Methods
     }
 }

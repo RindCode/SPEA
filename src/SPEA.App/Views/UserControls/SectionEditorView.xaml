@@ -1,26 +1,27 @@
-﻿<UserControl x:Class="SPEA.App.Views.UserControls.SectionEditorView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:ctrl="clr-namespace:SPEA.App.Controls"
-             xmlns:ctrl_se="clr-namespace:SPEA.App.Controls.SectionEditor"
-             xmlns:local="clr-namespace:SPEA.App.Views.UserControls"
-             xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist">
+﻿<UserControl
+    x:Class="SPEA.App.Views.UserControls.SectionEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:ctrl="clr-namespace:SPEA.App.Controls"
+    xmlns:ctrl_svp="clr-namespace:SPEA.App.Controls.SViewport"
+    xmlns:local="clr-namespace:SPEA.App.Views.UserControls"
+    xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist">
 
     <UserControl.InputBindings>
         
     </UserControl.InputBindings>
     
     <Grid>
-        <ctrl_se:SectionEditorControl
+        <ctrl_svp:SViewportControl
             x:Name="SectionEditorViewport"
             Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level0b}"
             BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level1a}"
             BorderThickness="0"
-            Style="{StaticResource SectionEditorControlStyle}">
+            Style="{StaticResource SViewportControlStyle}">
             <!--<Rectangle Width="400" Height="200" Fill="Tomato" Opacity="0.5"/>-->
-        </ctrl_se:SectionEditorControl>
+        </ctrl_svp:SViewportControl>
         <Canvas>
             <Grid
                 x:Name="TopRightButtonGroup"

@@ -7,6 +7,7 @@
 
 namespace SPEA.App.ViewModels.Factories
 {
+    using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.ViewModels.Interfaces;
     using SPEA.Core.CrossSection;
@@ -19,19 +20,23 @@ namespace SPEA.App.ViewModels.Factories
     {
         #region Fields
 
-        private SDocumentsManager _sDocumentsManager;
+        private readonly CommandsManager _commandsManager;
+        private readonly SDocumentsManager _sDocumentsManager;
 
         #endregion Fields
 
         #region Constructors
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SDocumentViewModelFactory"/> class.
         /// </summary>
+        /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
-        public SDocumentViewModelFactory(SDocumentsManager sDocumentsManager)
+        public SDocumentViewModelFactory(
+            CommandsManager commandsManager,
+            SDocumentsManager sDocumentsManager)
         {
+            _commandsManager = commandsManager;
             _sDocumentsManager = sDocumentsManager;
         }
 
@@ -42,7 +47,7 @@ namespace SPEA.App.ViewModels.Factories
         /// <inheritdoc/>
         public ISDocumentViewModel Create(CrossSectionBase model)
         {
-            return new SDocumentViewModel(_sDocumentsManager, model);
+            return new SDocumentViewModel(_commandsManager, _sDocumentsManager, model);
         }
 
         #endregion Methods
