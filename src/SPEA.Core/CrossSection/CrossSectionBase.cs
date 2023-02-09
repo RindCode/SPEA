@@ -8,7 +8,7 @@
 namespace SPEA.Core.CrossSection
 {
     using System;
-    using SPEA.Geometry;
+    using SPEA.Geometry.Core;
 
     /// <summary>
     /// A base class of a built-up cross-section model.
@@ -18,17 +18,10 @@ namespace SPEA.Core.CrossSection
     {
         #region Fields
 
-        // Holds the unique ID which is automatically set on creation.
         private readonly Guid _id;
-
-        // To detect redundant calls in IDisposable.
         private bool _disposedValue;
-
-        // Holds the actual cross-section name.
         private string _name;
-
-        // Holds the reference to the cross-section geometry data.
-        private SGeometryData _geometry = new SGeometryData();
+        private SGeometry _geometry = SGeometry.Empty;
 
         #endregion Fields
 
@@ -119,7 +112,7 @@ namespace SPEA.Core.CrossSection
         /// <summary>
         /// Gets the cross-section geometry data.
         /// </summary>
-        public SGeometryData Geometry => _geometry;
+        public SGeometry Geometry => _geometry;
 
         #endregion Properties
 

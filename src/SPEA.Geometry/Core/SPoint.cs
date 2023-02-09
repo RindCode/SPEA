@@ -5,21 +5,16 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Geometry.Base
+namespace SPEA.Geometry.Core
 {
     /// <summary>
-    /// Represents a point primitive.
+    /// Represents a simple point in 2D space.
     /// </summary>
-    /// <remarks>
-    /// <see cref="SPoint"/> is not derived from <see cref="SObject"/> since it represents the most
-    /// basic entity type and any <see cref="SObject"/> is actually a set of <see cref="SPoint"/> objects.
-    /// </remarks>
     public readonly struct SPoint
     {
         #region Fields
 
         private readonly double _x;
-
         private readonly double _y;
 
         #endregion Fields

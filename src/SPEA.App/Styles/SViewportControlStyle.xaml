@@ -51,7 +51,6 @@
                                 Focusable="False">
                                 <ctrl_svp:SViewportItemsHostControl
                                     x:Name="PART_ItemsHost"
-                                    Width="3000" Height="1500"
                                     Background="SteelBlue" Opacity="0.3"
                                     IsItemsHost="True"/>
                             </ctrl_svp:InfinitePanel>

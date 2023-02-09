@@ -1,61 +1,50 @@
 ﻿// ==================================================================================================
-// <copyright file="SGeometryData.cs" company="Dmitry Poberezhnyy">
+// <copyright file="SGeometry.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Geometry
+namespace SPEA.Geometry.Core
 {
-    using SPEA.Geometry.Base;
-
     /// <summary>
-    /// Represents <see cref="SObject"/> points data.
+    /// Represents points data stored as a sequence of <see cref="SPoint"/> objects.
     /// </summary>
-    /// <remarks>
-    /// This class provides an abstraction layer between <see cref="SObject"/>
-    /// and the actual representation of an element geometry.
-    /// </remarks>
-    public sealed class SGeometryData
+    public readonly struct SGeometry
     {
         #region Fields
 
-        private readonly SPoint[] _data;
+        private readonly SPoint[] _data = Array.Empty<SPoint>();
 
         #endregion Fields
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SGeometryData"/> class.
+        /// Initializes a new instance of the <see cref="SGeometry"/> struct.
         /// </summary>
-        public SGeometryData()
+        public SGeometry()
         {
-            _data = new SPoint[0];
+            // Blank.
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SGeometryData"/> class.
+        /// Initializes a new instance of the <see cref="SGeometry"/> struct.
         /// </summary>
         /// <param name="data">Geometry data as an array of <see cref="SPoint"/>.</param>
         /// <exception cref="ArgumentNullException">When <paramref name="data"/> is <see langword="null"/>.</exception>
-        public SGeometryData(SPoint[] data)
+        public SGeometry(params SPoint[] data)
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
-
-            _data = data;
+            _data = data ?? throw new ArgumentNullException(nameof(data));
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SGeometryData"/> class.
+        /// Initializes a new instance of the <see cref="SGeometry"/> struct.
         /// </summary>
         /// <param name="data">Geometry data as an array of <see cref="SPoint"/>.</param>
         /// <exception cref="ArgumentNullException">When <paramref name="data"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">When <paramref name="data"/> length is zero or not even.</exception>
-        public SGeometryData(double[] data)
+        public SGeometry(params double[] data)
         {
             if (data == null)
             {
@@ -85,6 +74,15 @@ namespace SPEA.Geometry
         #region Properties
 
         /// <summary>
+        /// Gets a new <see cref="SGeometry"/> instance with empty data.
+        /// </summary>
+        /// <remarks>
+        /// This property can be used when a new <see cref="SObject"/> needs to be created with no
+        /// geometric data associated with it to avoid unnecessary memory allocations.
+        /// </remarks>
+        public static SGeometry Empty => EmptyGeometry.GetEmpty();
+
+        /// <summary>
         /// Gets the actual raw data as a sequence of coordinates.
         /// </summary>
         public SPoint[] Data => _data;
@@ -98,15 +96,16 @@ namespace SPEA.Geometry
         /// with coordinates stored as X and Y pairs: x1, y1, x2, y2, ..., xn, yn.
         /// The returned array will be twice the length of the <see cref="Data"/> array.
         /// </summary>
+        /// <param name="points">Array of <see cref="SPoint"/> objects.</param>
         /// <returns><see cref="double"/> array of coordinate pairs.</returns>
-        public double[] AsDoubleArray()
+        public static double[] AsDoubleArray(SPoint[] points)
         {
-            int len = Data.Length * 2;
+            int len = points.Length * 2;
             var arr = new double[len];
-            for (int i = 0; i < Data.Length; i++)
+            for (int i = 0; i < points.Length; i++)
             {
-                var x = Data[i].X;
-                var y = Data[i].Y;
+                var x = points[i].X;
+                var y = points[i].Y;
                 arr[2 * i] = x;
                 arr[(2 * i) + 1] = y;
             }
@@ -115,5 +114,24 @@ namespace SPEA.Geometry
         }
 
         #endregion Methods
+
+        #region Classes
+
+        // Stores empty data.
+        private static class EmptyGeometry
+        {
+            private static readonly SGeometry _empty = new SGeometry(Array.Empty<SPoint>());
+
+            /// <summary>
+            /// Returns an empty geometry.
+            /// </summary>
+            /// <returns>An empty <see cref="SGeometry"/>.</returns>
+            internal static SGeometry GetEmpty()
+            {
+                return _empty;
+            }
+        }
+
+        #endregion Classes
     }
 }

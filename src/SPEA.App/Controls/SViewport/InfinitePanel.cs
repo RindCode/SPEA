@@ -39,28 +39,16 @@ namespace SPEA.App.Controls.SViewport
         private const string HorizontalScrollBarPartName = "PART_HorizontalScrollBar";
         private const string VerticalScrollBarPartName = "PART_VerticalScrollBar";
 
-        // Holds the reference to the parent control.
-        private SViewportControl _parent = null;
-
-        // Holds the reference to the underlying content.
-        private FrameworkElement _content = null;
-
-        // Extent size.
-        private Size _extent = new Size(0, 0);
-
-        // Viewport offset size.
-        private Size _offset = new Size(0, 0);
-
-        // Viewport size.
-        private Size _viewport = new Size(0, 0);
-
-        // Scroll and Zoom factors which defines scroll (panning) and zoom speed (step) respectively.
-        private double _scrollFactor = 0.05d;
-        private double _zoomFactor = 1.0d;
-
-        // Basic viewport transformations.
         private readonly TranslateTransform _translateTransform = new TranslateTransform();
         private readonly ScaleTransform _scaleTransform = new ScaleTransform();
+
+        private SViewportControl _parent = null;
+        private FrameworkElement _content = null;
+        private Size _extent = new Size(0, 0);
+        private Size _offset = new Size(0, 0);
+        private Size _viewport = new Size(0, 0);
+        private double _scrollFactor = 0.05d;
+        private double _zoomFactor = 1.0d;
 
         // Scrollbars references to handle their events. Their PART_ names are defined within ControlTemplate.
         // TODO: kinda bad workaround.

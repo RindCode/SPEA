@@ -21,7 +21,7 @@ namespace SPEA.App.ViewModels
         #region Fields
 
         // Controller for SDocuments.
-        private SDocumentsManager _sDocumentsManager;
+        private readonly SDocumentsManager _sDocumentsManager;
 
         #endregion Fields
 

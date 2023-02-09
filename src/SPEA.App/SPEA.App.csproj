@@ -47,10 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="stylecop.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
@@ -64,7 +60,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
-    <PackageReference Include="Dirkster.AvalonDock" Version="4.71.1">
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.71.2">
       <GeneratePathProperty></GeneratePathProperty>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />

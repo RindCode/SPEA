@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	<TargetFramework>net7.0-windows</TargetFramework>
@@ -21,18 +21,8 @@
 	<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-
   <ItemGroup>
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
+    <None Remove="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,15 +36,11 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SPEA.Geometry\SPEA.Geometry.csproj" />
   </ItemGroup>
 
 </Project>

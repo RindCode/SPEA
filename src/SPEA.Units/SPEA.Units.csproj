@@ -4,7 +4,7 @@
 	<TargetFramework>net7.0-windows</TargetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<BaseOutputPath>..\..\Build\</BaseOutputPath>
+	<BaseOutputPath>..\..\bld\</BaseOutputPath>
 	<BaseIntermediateOutputPath></BaseIntermediateOutputPath>
 	<Configurations>Debug;Release</Configurations>
 	<Title>SPEA: Section Properties and Engineering Analysis</Title>
@@ -28,10 +28,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="stylecop.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />

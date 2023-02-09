@@ -217,8 +217,7 @@
                                             MajorGridEnabled="True"
                                             MinorGridEnabled="True"
                                             Background="Transparent"
-                                            Style="{StaticResource SViewportControlStyle}">
-                                        </ctrl_svp:SViewportControl>
+                                            Style="{StaticResource SViewportControlStyle}"/>
                                         <Canvas x:Name="SectionEditorViewportOverlay">
                                             <Grid
                                                 Canvas.Top="5"
