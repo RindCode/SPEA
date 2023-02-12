@@ -7,12 +7,14 @@
 
 namespace SPEA.App.ViewModels.Interfaces
 {
+    using System;
     using CommunityToolkit.Mvvm.ComponentModel;
 
     /// <summary>
     /// Provides a contract to specify a parent view model.
     /// </summary>
     /// <typeparam name="T">Parent view model type.</typeparam>
+    [Obsolete("Will be removed in future updates. Do not use it.")]
     public interface IChildViewModel<T>
         where T : ObservableObject
     {

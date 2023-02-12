@@ -156,7 +156,7 @@ namespace SPEA.App.Controls
         private void OnMouseMove_HandleSafeClose(MouseEventArgs e)
         {
             // If popup is already open, but safe close is not requested.
-            // Also we don nothing if there is no child UIElement.
+            // Also we do nothing if there is no child UIElement.
             if (!IsOpen || !EnableSafeCloseBoundaries || Child == null)
             {
                 return;

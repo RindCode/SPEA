@@ -9,44 +9,23 @@ namespace SPEA.App.ViewModels.SElements
 {
     using System;
     using CommunityToolkit.Mvvm.ComponentModel;
-    using SPEA.App.ViewModels;
-    using SPEA.App.ViewModels.Interfaces;
 
     /// <summary>
     /// Represents a base class for all cross-section elements view models.
     /// </summary>
-    public abstract class SElementViewModelBase : ObservableObject, IDisposable, IChildViewModel<MainViewModel>
+    public abstract class SElementViewModelBase : ObservableObject, IDisposable
     {
         #region Fields
 
-        // To detect redundant calls in IDisposable.
         private bool _disposedValue;
-
-        // Hold the coordinate for the top-most bound of the S-element bounding box.
         private double _top;
-
-        // Hold the coordinate for the left-most bound of the S-element bounding box.
         private double _left;
-
-        // Holds the width of the S-element bounding box.
         private double _width;
-
-        // Holds the heigh of the S-element bounding box.
         private double _height;
 
         #endregion Fields
 
         #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SElementViewModelBase"/> class.
-        /// </summary>
-        /// <param name="owner">A reference to a parent view model.</param>
-        public SElementViewModelBase(MainViewModel owner)
-            : this()
-        {
-            Owner = owner;
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SElementViewModelBase"/> class.
@@ -102,9 +81,6 @@ namespace SPEA.App.ViewModels.SElements
 
         #region Properties
 
-        /// <inheritdoc/>
-        public MainViewModel Owner { get; set; }
-
         /// <summary>
         /// Gets or sets the top-most bound of the S-element bounding box.
         /// </summary>
@@ -154,14 +130,6 @@ namespace SPEA.App.ViewModels.SElements
         }
 
         #endregion Properties
-
-        #region Commands
-
-        #endregion Commands
-
-        #region Commands Logic
-
-        #endregion Commands Logic
 
         #region Methods
 

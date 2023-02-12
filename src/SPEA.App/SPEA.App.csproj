@@ -51,10 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Drawing\Shapes\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 

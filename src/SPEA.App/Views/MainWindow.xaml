@@ -14,6 +14,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
     xmlns:vm="clr-namespace:SPEA.App.ViewModels"
+    xmlns:vm_se="clr-namespace:SPEA.App.ViewModels.SElements"
     xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -217,7 +218,17 @@
                                             MajorGridEnabled="True"
                                             MinorGridEnabled="True"
                                             Background="Transparent"
-                                            Style="{StaticResource SViewportControlStyle}"/>
+                                            Style="{StaticResource SViewportControlStyle}">
+                                            <ctrl_svp:SViewportControl.Resources>
+                                                <DataTemplate DataType="{x:Type vm_se:SPolygonViewModel}">
+                                                    <Polygon
+                                                        Stroke="Aquamarine"
+                                                        Fill="Tomato"
+                                                        StrokeThickness="2">
+                                                    </Polygon>
+                                                </DataTemplate>
+                                            </ctrl_svp:SViewportControl.Resources>
+                                        </ctrl_svp:SViewportControl>
                                         <Canvas x:Name="SectionEditorViewportOverlay">
                                             <Grid
                                                 Canvas.Top="5"

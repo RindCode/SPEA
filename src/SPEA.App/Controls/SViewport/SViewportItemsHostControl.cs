@@ -96,7 +96,7 @@ namespace SPEA.App.Controls.SViewport
                     }
                 }
             }
-
+            
             return finalSize;
         }
     }

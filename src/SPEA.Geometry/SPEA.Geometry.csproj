@@ -48,4 +48,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SPEA.Numerics\SPEA.Numerics.csproj" />
+  </ItemGroup>
+
 </Project>

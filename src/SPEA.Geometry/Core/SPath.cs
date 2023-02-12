@@ -40,5 +40,14 @@ namespace SPEA.Geometry.Core
         }
 
         #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the array containing <see cref="SPath"/> coordinates.
+        /// </summary>
+        public SVector[] Segments => _segments;
+
+        #endregion properties
     }
 }

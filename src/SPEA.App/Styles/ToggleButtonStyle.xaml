@@ -145,7 +145,8 @@
                             IsOpen="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                             EnableSafeCloseBoundaries="True"
                             SafeCloseDistance="50">
-                            <!-- This EventTrigger is a workaround to keep the PopUp position at the same place
+                            <!--
+                            This EventTrigger is a workaround to keep the PopUp position at the same place
                             when the parent Window is moved or resized. WPF Popup Reposition() and UpdatePosition()
                             methods are implemented as internal and private, so we cannot call them directly.
                             However, HorizontalOffset, VerticalOffset and PlacementRectangle DPs have OnOffsetChanged()
