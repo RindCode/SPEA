@@ -7,10 +7,12 @@
 
 namespace SPEA.Geometry.Core
 {
+    using SPEA.Geometry.Transform;
+
     /// <summary>
     /// Represents a simple point in 2D space.
     /// </summary>
-    public readonly struct SPoint
+    public readonly struct SPoint : IEquatable<SPoint>
     {
         #region Fields
 
@@ -20,6 +22,15 @@ namespace SPEA.Geometry.Core
         #endregion Fields
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SPoint"/> struct.
+        /// </summary>
+        public SPoint()
+            : this(0, 0)
+        {
+            // Blank.
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SPoint"/> struct.
@@ -43,16 +54,6 @@ namespace SPEA.Geometry.Core
             _y = y;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SPoint"/> struct.
-        /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Is thrown when any of the parameters is out of its valid range.</exception>
-        public SPoint()
-            : this(0, 0)
-        {
-            // Blank.
-        }
-
         #endregion Constructors
 
         #region Properties
@@ -68,5 +69,114 @@ namespace SPEA.Geometry.Core
         public double Y => _y;
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Creates a new <see cref="SPoint"/> as a sum of coordinates of given points.
+        /// </summary>
+        /// <param name="left">The first point.</param>
+        /// <param name="right">The second point.</param>
+        /// <returns>A new <see cref="SPoint"/>.</returns>
+        public static SPoint operator +(SPoint left, SPoint right) => Add(left, right);
+
+        /// <summary>
+        /// Creates a new <see cref="SPoint"/> as a difference of coordinates of given points.
+        /// </summary>
+        /// <param name="left">The first point.</param>
+        /// <param name="right">The second point.</param>
+        /// <returns>A new <see cref="SPoint"/>.</returns>
+        public static SPoint operator -(SPoint left, SPoint right) => Substract(left, right);
+
+        /// <summary>
+        /// Compares two <see cref="SPoint"/> objects.
+        /// </summary>
+        /// <remarks>
+        /// The result specifies whether the <see cref="SPoint"/> coordinates are equal.
+        /// </remarks>
+        /// <param name="left">The first point.</param>
+        /// <param name="right">The second point.</param>
+        /// <returns><see langword="true"/> if points are equal, otherwise <see langword="false"/>.</returns>
+        public static bool operator ==(SPoint left, SPoint right) => left.Equals(right);
+
+        /// <summary>
+        /// Compares two <see cref="SPoint"/> objects.
+        /// </summary>
+        /// <remarks>
+        /// The result specifies whether the <see cref="SPoint"/> coordinates are not equal.
+        /// </remarks>
+        /// <param name="left">The first point.</param>
+        /// <param name="right">The second point.</param>
+        /// <returns><see langword="true"/> if points are not equal, otherwise <see langword="false"/>.</returns>
+        public static bool operator !=(SPoint left, SPoint right) => !(left == right);
+
+        /// <summary>
+        /// Creates a new <see cref="SPoint"/> as a sum of coordinates of given points.
+        /// </summary>
+        /// <param name="left">The first point.</param>
+        /// <param name="right">The second point.</param>
+        /// <returns>A new <see cref="SPoint"/>.</returns>
+        public static SPoint Add(SPoint left, SPoint right) => new SPoint(unchecked(left.X + right.X), unchecked(left.Y + right.Y));
+
+        /// <summary>
+        /// Creates a new <see cref="SPoint"/> as a difference of coordinates of given points.
+        /// </summary>
+        /// <param name="left">The first point.</param>
+        /// <param name="right">The second point.</param>
+        /// <returns>A new <see cref="SPoint"/>.</returns>
+        public static SPoint Substract(SPoint left, SPoint right) => new SPoint(unchecked(left.X - right.X), unchecked(left.Y - right.Y));
+
+        /// <summary>
+        /// Creates a new <see cref="SPoint"/> by applying a given
+        /// affine transformation to the current <see cref="SPoint"/>.
+        /// </summary>
+        /// <param name="tr">An affine transformation to be applied.</param>
+        /// <returns>A new transformed <see cref="SPoint"/>.</returns>
+        public SPoint Transform(AffineTransform tr)
+        {
+            if (tr.IsIdentity)
+            {
+                return this;
+            }
+
+            var x = (tr.M11 * _x) + (tr.M12 * _y) + tr.OffsetX;
+            var y = (tr.M12 * _x) + (tr.M22 * _y) + tr.OffsetY;
+
+            return new SPoint(x, y);
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(SPoint other)
+        {
+            return EqualsInternal(this, other);
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return obj is SPoint point && Equals(point);
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Always throws <see cref="NotImplementedException"/>.
+        /// </remarks>
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        // Performs an equality check.
+        private static bool EqualsInternal(SPoint left, SPoint right)
+        {
+            if (left.X == right.X && left.Y == right.Y)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion Methods
     }
 }

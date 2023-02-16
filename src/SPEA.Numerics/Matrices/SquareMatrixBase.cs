@@ -24,16 +24,11 @@ namespace SPEA.Numerics.Matrices
         /// Initializes a new instance of the <see cref="SquareMatrixBase"/> class.
         /// </summary>
         /// <param name="dimension">The square matrix dimension (dim = rows = columns).</param>
-        protected SquareMatrixBase(int dimension)
-            : this(dimension, dimension)
+        /// <param name="order">The order type.</param>
+        protected SquareMatrixBase(int dimension, MatrixDataOrderType order = MatrixDataOrderType.ColumMajor)
+            : base(dimension, dimension, order)
         {
             _dimension = dimension;
-        }
-
-        private SquareMatrixBase(int rows, int columns)
-            : base(rows, columns)
-        {
-            // Blank.
         }
 
         #endregion Constructors

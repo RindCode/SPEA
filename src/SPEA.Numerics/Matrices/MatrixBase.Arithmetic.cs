@@ -1,23 +1,24 @@
 ﻿// ==================================================================================================
-// <copyright file="RotateTransform.cs" company="Dmitry Poberezhnyy">
+// <copyright file="MatrixBase.Arithmetic.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Geometry.Transform
+namespace SPEA.Numerics.Matrices
 {
-    public class RotateTransform : GeneralTransform
+    /// <summary>
+    /// Specifies the supported ordering schemes.
+    /// </summary>
+    public abstract partial class MatrixBase : IEquatable<MatrixBase>
     {
-        public RotateTransform(double angle)
-            : this(angle, 0.0, 0.0)
-        {
+        #region Methods
 
-        }
+        ////public MatrixBase Add(MatrixBase other)
+        ////{
 
-        public RotateTransform(double angle, double centerX, double centerY)
-        {
+        ////}
 
-        }
+        #endregion Methods
     }
 }

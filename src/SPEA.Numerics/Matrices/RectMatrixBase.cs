@@ -7,9 +7,6 @@
 
 namespace SPEA.Numerics.Matrices
 {
-    using System.Numerics;
-    using SPEA.Numerics.Matrices.Storage;
-
     /// <summary>
     /// Represents a base class for rectangular matrices.
     /// </summary>

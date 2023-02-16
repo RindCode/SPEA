@@ -23,6 +23,15 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="SVector"/> struct.
         /// </summary>
+        public SVector()
+            : this(default(SPoint))
+        {
+            // Blank.
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SVector"/> struct.
+        /// </summary>
         /// <param name="x">X-coordinate of the terminal point.</param>
         /// <param name="y">Y-coordinate of the terminal point.</param>
         public SVector(double x, double y)
@@ -45,6 +54,26 @@ namespace SPEA.Geometry.Core
         #region Properties
 
         /// <summary>
+        /// Gets a new zero vector.
+        /// </summary>
+        public static SVector Zero => new SVector(0.0, 0.0);
+
+        /// <summary>
+        /// Gets a new (1.0, 1.0) vector.
+        /// </summary>
+        public static SVector One => new SVector(1.0, 1.0);
+
+        /// <summary>
+        /// Gets a new (1.0, 0.0) vector.
+        /// </summary>
+        public static SVector UnitX => new SVector(1.0, 0.0);
+
+        /// <summary>
+        /// Gets a new (0.0, 1.0) vector.
+        /// </summary>
+        public static SVector UnitY => new SVector(0.0, 1.0);
+
+        /// <summary>
         /// Gets the X component of the terminal point.
         /// </summary>
         public double X => _p.X;
@@ -57,12 +86,12 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Gets the vector squared length.
         /// </summary>
-        public double SquaredLength => (_p.X * _p.X) + (_p.Y * _p.Y);
+        public double LengthSquared => (_p.X * _p.X) + (_p.Y * _p.Y);
 
         /// <summary>
         /// Gets the vector length.
         /// </summary>
-        public double Length => Math.Sqrt(SquaredLength);
+        public double Length => Math.Sqrt(LengthSquared);
 
         #endregion Properties
 

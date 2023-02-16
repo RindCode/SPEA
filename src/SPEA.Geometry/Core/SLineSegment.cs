@@ -8,21 +8,28 @@
 namespace SPEA.Geometry.Core
 {
     /// <summary>
-    /// Represents a straight line segment.
+    /// Represents a straight line segment defined by two <see cref="SPoint"/> points.
     /// </summary>
     public readonly struct SLineSegment
     {
+        #region Fields
+
+        private readonly SPoint _p0;
+        private readonly SPoint _p1;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SLineSegment"/> struct.
         /// </summary>
-        /// <param name="start">Line start point.</param>
-        /// <param name="end">Line end point.</param>
-        public SLineSegment(SPoint start, SPoint end)
+        /// <param name="p0">The line start point.</param>
+        /// <param name="p1">The line end point.</param>
+        public SLineSegment(SPoint p0, SPoint p1)
         {
-            StartPoint = start;
-            EndPoint = end;
+            _p0 = p0;
+            _p1 = p1;
         }
 
         #endregion Constructors
@@ -30,14 +37,14 @@ namespace SPEA.Geometry.Core
         #region Properties
 
         /// <summary>
-        /// Gets the line start point.
+        /// Gets the line p0 point.
         /// </summary>
-        public SPoint StartPoint { get; }
+        public SPoint P0 => _p0;
 
         /// <summary>
-        /// Gets the line end point.
+        /// Gets the line p1 point.
         /// </summary>
-        public SPoint EndPoint { get; }
+        public SPoint P1 => _p1;
 
         #endregion Properties
     }

@@ -151,34 +151,34 @@ namespace SPEA.Numerics.Matrices.Storage
         }
 
         // Performs an equality complete check.
-        private static bool EqualsInternal(StorageBase A, StorageBase B)
+        private static bool EqualsInternal(StorageBase left, StorageBase right)
         {
-            if (A == null)
+            if (left == null)
             {
-                throw new ArgumentNullException(nameof(A));
+                throw new ArgumentNullException(nameof(left));
             }
 
-            if (B == null)
+            if (right == null)
             {
-                throw new ArgumentNullException(nameof(B));
+                throw new ArgumentNullException(nameof(right));
             }
 
-            if (A.RowCount != B.RowCount)
+            if (left.RowCount != right.RowCount)
             {
                 return false;
             }
 
-            if (A.ColumnCount != B.ColumnCount)
+            if (left.ColumnCount != right.ColumnCount)
             {
                 return false;
             }
 
             // The order doesn't matter, we check all elements.
-            for (int r = 0; r < A.RowCount; r++)
+            for (int r = 0; r < left.RowCount; r++)
             {
-                for (int c = 0; c < A.ColumnCount; c++)
+                for (int c = 0; c < left.ColumnCount; c++)
                 {
-                    if (!A[r, c].Equals(B[r, c]))
+                    if (!left[r, c].Equals(right[r, c]))
                     {
                         return false;
                     }

@@ -7,6 +7,8 @@
 
 namespace SPEA.Geometry.Core
 {
+    using SPEA.Geometry.Transform;
+
     /// <summary>
     /// Represents the base class for various geometric entities.
     /// </summary>
@@ -14,7 +16,7 @@ namespace SPEA.Geometry.Core
     {
         #region Fields
 
-        private SPoint _origin = default;
+        ////private SPoint _origin = default;
 
         #endregion Fields
 
@@ -28,42 +30,129 @@ namespace SPEA.Geometry.Core
             // Blank.
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SObject"/> class.
-        /// </summary>
-        /// <param name="x">The X-coordinate of the origin.</param>
-        /// <param name="y">The Y-coordinate of the origin.</param>
-        protected SObject(double x, double y)
-        {
-            _origin = new SPoint(x, y);
-        }
+        /////// <summary>
+        /////// Initializes a new instance of the <see cref="SObject"/> class.
+        /////// </summary>
+        /////// <param name="x">The X-coordinate of the origin.</param>
+        /////// <param name="y">The Y-coordinate of the origin.</param>
+        ////protected SObject(double x, double y)
+        ////{
+        ////    ////_origin = new SPoint(x, y);
+        ////}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SObject"/> class.
-        /// </summary>
-        /// <param name="origin">Location of the origin.</param>
-        protected SObject(SPoint origin)
-            : this(origin.X, origin.Y)
-        {
-            // Blank.
-        }
+        /////// <summary>
+        /////// Initializes a new instance of the <see cref="SObject"/> class.
+        /////// </summary>
+        /////// <param name="origin">Location of the origin.</param>
+        ////protected SObject(SPoint origin)
+        ////    : this(origin.X, origin.Y)
+        ////{
+        ////    // Blank.
+        ////}
 
         #endregion Constructors
 
         #region Properties
 
+        /////// <summary>
+        /////// Gets or sets the origin location.
+        /////// </summary>
+        ////public SPoint Origin
+        ////{
+        ////    get => _origin;
+        ////    set => _origin = value;
+        ////}
+
         /// <summary>
-        /// Gets or sets the origin location.
+        /// Gets or sets a value of the origin location.
         /// </summary>
-        public SPoint Origin
-        {
-            get => _origin;
-            set => _origin = value;
-        }
+        public abstract SPoint Origin { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="SObject"/> can be treated as empty.
+        /// </summary>
+        public abstract bool IsEmpty { get; }
 
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Tests a collection for <see langword="null"/> elements.
+        /// </summary>
+        /// <typeparam name="T">Collection type.</typeparam>
+        /// <param name="collection">A collection to be tested.</param>
+        /// <returns><see langword="true"/> if at least one <see langword="null"/> element found, otherwise <see langword="false"/>.</returns>
+        public static bool HasNullElements<T>(IEnumerable<T> collection)
+            where T : class
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            foreach (var item in collection)
+            {
+                if (item == null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Tests a collection for non-empty elements.
+        /// </summary>
+        /// <param name="collection">A collection of <see cref="SObject"/> to be tested.</param>
+        /// <returns><see langword="true"/> if at least one non-empty element found, otherwise <see langword="false"/>.</returns>
+        public static bool HasNonEmptyElements(SObject[] collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            foreach (var item in collection)
+            {
+                if (item != null && !item.IsEmpty)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Tests a collection for empty elements.
+        /// </summary>
+        /// <param name="collection">A collection of <see cref="SObject"/> to be tested.</param>
+        /// <returns><see langword="true"/> if at least one empty element found, otherwise <see langword="false"/>.</returns>
+        public static bool HasEmptyElements(SObject[] collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            foreach (var item in collection)
+            {
+                if (item != null && item.IsEmpty)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Applies an affine transformation to the <see cref="SObject"/>.
+        /// </summary>
+        /// <param name="transform">An affine transformation to be applied.</param>
+        public abstract void ApplyTransformation(AffineTransform transform);
 
         #endregion Methods
     }

@@ -10,7 +10,6 @@ namespace SPEA.Numerics.Matrices.Storage
     /// <summary>
     /// Represents a row-major matrix storage type.
     /// </summary>
-    /// <typeparam name="T">Matrix data type.</typeparam>
     public sealed class RowMajorStorage : StorageBase
     {
         #region Fields

@@ -7,8 +7,6 @@
 
 namespace SPEA.Numerics.Matrices
 {
-    using System.Numerics;
-
     /// <summary>
     /// Represents a square matrix.
     /// </summary>

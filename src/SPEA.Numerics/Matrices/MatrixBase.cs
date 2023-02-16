@@ -29,9 +29,8 @@ namespace SPEA.Numerics.Matrices
     /// <summary>
     /// Represents a base class for matrices of an arbitrary size.
     /// </summary>
-    public abstract class MatrixBase : IEquatable<MatrixBase>
+    public abstract partial class MatrixBase : IEquatable<MatrixBase>
     {
-
         #region Fields
 
         private readonly StorageBase _storage;
@@ -184,24 +183,24 @@ namespace SPEA.Numerics.Matrices
         }
 
         // Performs an equality complete check.
-        private static bool EqualsInternal(MatrixBase A, MatrixBase B)
+        private static bool EqualsInternal(MatrixBase left, MatrixBase right)
         {
-            if (A == null)
+            if (left == null)
             {
-                throw new ArgumentNullException(nameof(A));
+                throw new ArgumentNullException(nameof(left));
             }
 
-            if (B == null)
+            if (right == null)
             {
-                throw new ArgumentNullException(nameof(B));
+                throw new ArgumentNullException(nameof(right));
             }
 
-            if (A.OrderType != B.OrderType)
+            if (left.OrderType != right.OrderType)
             {
                 return false;
             }
 
-            if (!A.Storage.Equals(B.Storage))
+            if (!left.Storage.Equals(right.Storage))
             {
                 return false;
             }

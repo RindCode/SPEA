@@ -28,7 +28,7 @@ namespace SPEA.App.Commands
     /// </remarks>
     public class CommandsManager
     {
-        // Based on the the idea:
+        // Based on the the idea (MIT license at the time of writing this):
         // https://github.com/MarcArmbruster/WpfCommandAggregator
 
         #region Fields
