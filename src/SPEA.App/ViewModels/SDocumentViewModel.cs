@@ -51,7 +51,6 @@ namespace SPEA.App.ViewModels
             _commandsManager = commandsManager ?? throw new ArgumentNullException(nameof(commandsManager));
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
 
-            // Set fields directly to bypass data changed events.
             _model = model ?? throw new ArgumentNullException(nameof(model));
             _displayName = model.Name ?? throw new ArgumentNullException(nameof(model.Name));
 

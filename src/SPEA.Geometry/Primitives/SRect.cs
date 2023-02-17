@@ -12,10 +12,12 @@ namespace SPEA.Geometry.Primitives
     /// <summary>
     /// Represents a rectangle <see cref="SObject"/> primitive.
     /// </summary>
-    public sealed class SRect : SPolygon
+    public sealed class SRect : SPolygonBase
     {
         #region Fields
 
+        private readonly SLinearRing _shell;
+        private readonly SLinearRing[] _holes;
         private double _width;
         private double _height;
 
@@ -53,9 +55,25 @@ namespace SPEA.Geometry.Primitives
                 throw new ArgumentOutOfRangeException(nameof(height), "Width cannot be zero.");
             }
 
-            Origin = new SPoint(x, y);
-            Width = width;
-            Height = height;
+            _width = width;
+            _height = height;
+            _holes = Array.Empty<SLinearRing>();
+
+            var geom = BuildGeometry(width, height);
+            geom.Translate(x, y);
+            _shell = geom;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SRect"/> class.
+        /// </summary>
+        /// <param name="origin">The origin location.</param>
+        /// <param name="width">The width of the rectangle.</param>
+        /// <param name="height">The height of the rectangle.</param>
+        public SRect(SPoint origin, double width, double height)
+            : this(origin.X, origin.Y, width, height)
+        {
+            // Blank.
         }
 
         /// <summary>
@@ -79,21 +97,13 @@ namespace SPEA.Geometry.Primitives
                 throw new ArgumentOutOfRangeException(nameof(height), "Height cannot be zero.");
             }
 
-            Origin = origin;
-            Width = width;
-            Height = height;
-        }
+            _width = width;
+            _height = height;
+            _holes = Array.Empty<SLinearRing>();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SRect"/> class.
-        /// </summary>
-        /// <param name="origin">The origin location.</param>
-        /// <param name="width">The width of the rectangle.</param>
-        /// <param name="height">The height of the rectangle.</param>
-        public SRect(SPoint origin, double width, double height)
-            : this(origin.X, origin.Y, width, height)
-        {
-            // Blank.
+            var geom = BuildGeometry(width, height);
+            geom.Translate(origin.X, origin.Y);
+            _shell = geom;
         }
 
         /// <summary>
@@ -111,6 +121,12 @@ namespace SPEA.Geometry.Primitives
         #endregion Constructors
 
         #region Properties
+
+        /// <inheritdoc/>
+        public override SLinearRing Shell => _shell;
+
+        /// <inheritdoc/>
+        public override SLinearRing[] Holes => _holes;
 
         /// <summary>
         /// Gets or sets the rectangle width.
@@ -135,14 +151,17 @@ namespace SPEA.Geometry.Primitives
         #region Methods
 
         // Generates a rectangle geometry using its width and height.
-        private static SGeometry BuildGeometry(double width, double height)
+        private static SLinearRing BuildGeometry(double width, double height)
         {
             var p0 = new SPoint(0, 0);
             var p1 = new SPoint(0 + width, 0);
             var p2 = new SPoint(0 + width, 0 + height);
             var p3 = new SPoint(0, 0 + height);
 
-            return new SGeometry(p0, p1, p2, p3);
+            var points = new SPoint[4] { p0, p1, p2, p3 };
+            var geom = new SLinearRing(points);
+
+            return geom;
         }
 
         #endregion Methods

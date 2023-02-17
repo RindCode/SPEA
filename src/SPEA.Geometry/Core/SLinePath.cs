@@ -29,6 +29,7 @@ namespace SPEA.Geometry.Core
         public SLinePath()
         {
             _points = Array.Empty<SPoint>();
+            _origin = default(SPoint);
         }
 
         /// <summary>
@@ -39,10 +40,7 @@ namespace SPEA.Geometry.Core
         /// <exception cref="ArgumentOutOfRangeException">Is thrown when <paramref name="points"/> has invalid number of elements.</exception>
         public SLinePath(IList<SPoint> points)
         {
-            if (points == null)
-            {
-                throw new ArgumentNullException(nameof(points));
-            }
+            ArgumentNullException.ThrowIfNull(points);
 
             if (points.Count == 1)
             {
@@ -50,56 +48,8 @@ namespace SPEA.Geometry.Core
             }
 
             _points = points.ToArray();
-            _origin = points[0];
+            _origin = points.Count > 0 ? points[0] : default(SPoint);
         }
-
-        /////// <summary>
-        /////// Initializes a new instance of the <see cref="SLinePath"/> class.
-        /////// </summary>
-        /////// <param name="points">A sequence of line points.</param>
-        ////public SLinePath(params SPoint[] points)
-        ////{
-        ////    if (points == null)
-        ////    {
-        ////        throw new ArgumentNullException(nameof(points));
-        ////    }
-
-        ////    if (points.Length == 1)
-        ////    {
-        ////        throw new ArgumentOutOfRangeException("The array must contain zero or more than one element.");
-        ////    }
-
-        ////    _points = points;
-        ////}
-
-        /////// <summary>
-        /////// Initializes a new instance of the <see cref="SLinePath"/> class.
-        /////// </summary>
-        /////// <param name="points">A sequence of line points defined as coordinates pairs: x0, y0, x1, y1, ..., xn, yn.</param>
-        ////public SLinePath(params double[] points)
-        ////{
-        ////    if (points == null)
-        ////    {
-        ////        throw new ArgumentNullException(nameof(points));
-        ////    }
-
-        ////    if (points.Length != 0 || points.Length % 2 != 0)
-        ////    {
-        ////        throw new ArgumentOutOfRangeException("Coordinates array cannot have zero or odd (not even) length.", nameof(points));
-        ////    }
-
-        ////    int len = points.Length / 2;
-        ////    var arr = new SPoint[len];
-        ////    for (int i = 0; i < len; i++)
-        ////    {
-        ////        var x = points[2 * i];
-        ////        var y = points[(2 * i) + 1];
-        ////        var p = new SPoint(x, y);
-        ////        arr[i] = p;
-        ////    }
-
-        ////    _points = arr;
-        ////}
 
         #endregion Constructors
 
@@ -113,7 +63,18 @@ namespace SPEA.Geometry.Core
         /// <inheritdoc/>
         public override SPoint Origin
         {
-            get => _origin;
+            get
+            {
+                if (IsEmpty)
+                {
+                    _origin = default(SPoint);
+                    return _origin;
+                }
+
+                _origin = _points[0];
+                return _origin;
+            }
+
             set
             {
                 if (_origin == value)
@@ -123,10 +84,10 @@ namespace SPEA.Geometry.Core
 
                 var dx = value.X - _origin.X;
                 var dy = value.Y - _origin.Y;
-                var transform = new TranslateTransform(dx, dy);
+                var transform = new TranslationTransformation(dx, dy);
                 ApplyTransformation(transform);
 
-                _origin = Points[0];  // TODO: Use this instead of value to avoid precision errors? How close are they?
+                _origin = _points[0];  // TODO: Use this instead of value to avoid precision errors? How close are they?
             }
         }
 
@@ -148,7 +109,7 @@ namespace SPEA.Geometry.Core
                     return false;
                 }
 
-                return Points[0] == Points[^1];
+                return _points[0] == _points[^1];
             }
         }
 
@@ -167,8 +128,10 @@ namespace SPEA.Geometry.Core
         #region Methods
 
         /// <inheritdoc/>
-        public override void ApplyTransformation(AffineTransform transform)
+        public override void ApplyTransformation(AffineTransformation transform)
         {
+            ArgumentNullException.ThrowIfNull(transform);
+
             if (transform.IsIdentity)
             {
                 return;

@@ -73,7 +73,6 @@ namespace SPEA.App.Controllers
             set
             {
                 SetProperty(ref _selectedDocument, value);
-                Debug.WriteLine($"selected={value}");
             }
         }
 

@@ -8,7 +8,8 @@
 namespace SPEA.Core.CrossSection
 {
     using System;
-    using SPEA.Geometry.Core;
+    using SPEA.Core.Geometry;
+    using SPEA.Geometry.Primitives;
 
     /// <summary>
     /// A base class of a built-up cross-section model.
@@ -19,9 +20,9 @@ namespace SPEA.Core.CrossSection
         #region Fields
 
         private readonly Guid _id;
+        private readonly CrossSectionGeometry _geometry;
         private bool _disposedValue;
         private string _name;
-        private SGeometry _geometry = SGeometry.Empty;
 
         #endregion Fields
 
@@ -44,18 +45,21 @@ namespace SPEA.Core.CrossSection
         {
             _id = Guid.NewGuid();
             _name = string.IsNullOrEmpty(name) ? _id.ToString() : name;
+            _geometry = new CrossSectionGeometry();
         }
 
         #endregion Constructors
 
         #region Destructors
 
-        ////// Override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        ////~CrossSectionBase()
-        ////{
-        ////    // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        ////    Dispose(disposing: false);
-        ////}
+        /*
+        // Override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        ~CrossSectionBase()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: false);
+        }
+        */
 
         #endregion Destructors
 
@@ -112,7 +116,7 @@ namespace SPEA.Core.CrossSection
         /// <summary>
         /// Gets the cross-section geometry data.
         /// </summary>
-        public SGeometry Geometry => _geometry;
+        public CrossSectionGeometry Geometry => _geometry;
 
         #endregion Properties
 

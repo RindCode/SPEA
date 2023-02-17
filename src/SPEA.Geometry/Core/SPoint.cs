@@ -126,25 +126,6 @@ namespace SPEA.Geometry.Core
         /// <returns>A new <see cref="SPoint"/>.</returns>
         public static SPoint Substract(SPoint left, SPoint right) => new SPoint(unchecked(left.X - right.X), unchecked(left.Y - right.Y));
 
-        /// <summary>
-        /// Creates a new <see cref="SPoint"/> by applying a given
-        /// affine transformation to the current <see cref="SPoint"/>.
-        /// </summary>
-        /// <param name="tr">An affine transformation to be applied.</param>
-        /// <returns>A new transformed <see cref="SPoint"/>.</returns>
-        public SPoint Transform(AffineTransform tr)
-        {
-            if (tr.IsIdentity)
-            {
-                return this;
-            }
-
-            var x = (tr.M11 * _x) + (tr.M12 * _y) + tr.OffsetX;
-            var y = (tr.M12 * _x) + (tr.M22 * _y) + tr.OffsetY;
-
-            return new SPoint(x, y);
-        }
-
         /// <inheritdoc/>
         public bool Equals(SPoint other)
         {
@@ -164,6 +145,27 @@ namespace SPEA.Geometry.Core
         public override int GetHashCode()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="SPoint"/> by applying a given
+        /// affine transformation to the current <see cref="SPoint"/>.
+        /// </summary>
+        /// <param name="tr">An affine transformation to be applied.</param>
+        /// <returns>A new transformed <see cref="SPoint"/>.</returns>
+        public SPoint Transform(AffineTransformation tr)
+        {
+            ////ArgumentNullException.ThrowIfNull(tr);
+
+            if (tr.IsIdentity)
+            {
+                return this;
+            }
+
+            var x = (tr.M11 * _x) + (tr.M12 * _y) + tr.OffsetX;
+            var y = (tr.M12 * _x) + (tr.M22 * _y) + tr.OffsetY;
+
+            return new SPoint(x, y);
         }
 
         // Performs an equality check.

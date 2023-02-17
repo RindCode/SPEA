@@ -14,8 +14,6 @@ namespace SPEA.Numerics.Matrices
     {
         #region Fields
 
-        ////private StorageBase<T> _storage;
-
         #endregion Fields
 
         #region Constructors
@@ -50,31 +48,9 @@ namespace SPEA.Numerics.Matrices
 
         #region Properties
 
-        /////// <inheritdoc/>
-        ////protected override StorageBase<T> Storage
-        ////{
-        ////    get => _storage;
-        ////    init
-        ////    {
-        ////        _storage = value;
-        ////    }
-        ////}
-
         #endregion Properties
 
         #region Methods
-
-        /////// <inheritdoc/>
-        ////public override T At(int row, int column)
-        ////{
-        ////    return Storage.At(row, column);
-        ////}
-
-        /////// <inheritdoc/>
-        ////public override void At(int row, int column, T value)
-        ////{
-        ////    Storage.At(row, column, value);
-        ////}
 
         #endregion Methods
     }

@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="TransformBase.cs" company="Dmitry Poberezhnyy">
+// <copyright file="TransformationBase.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -12,7 +12,7 @@ namespace SPEA.Geometry.Transform
     /// <summary>
     /// Represents a base class for any transformations.
     /// </summary>
-    public abstract class TransformBase
+    public abstract class TransformationBase
     {
         /// <summary>
         /// Gets the current transformation matrix.

@@ -16,52 +16,15 @@ namespace SPEA.Geometry.Core
     {
         #region Fields
 
-        ////private SPoint _origin = default;
+        private readonly AppliedTransformations _appliedTransformations = new AppliedTransformations();
 
         #endregion Fields
 
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SObject"/> class.
-        /// </summary>
-        protected SObject()
-        {
-            // Blank.
-        }
-
-        /////// <summary>
-        /////// Initializes a new instance of the <see cref="SObject"/> class.
-        /////// </summary>
-        /////// <param name="x">The X-coordinate of the origin.</param>
-        /////// <param name="y">The Y-coordinate of the origin.</param>
-        ////protected SObject(double x, double y)
-        ////{
-        ////    ////_origin = new SPoint(x, y);
-        ////}
-
-        /////// <summary>
-        /////// Initializes a new instance of the <see cref="SObject"/> class.
-        /////// </summary>
-        /////// <param name="origin">Location of the origin.</param>
-        ////protected SObject(SPoint origin)
-        ////    : this(origin.X, origin.Y)
-        ////{
-        ////    // Blank.
-        ////}
-
         #endregion Constructors
 
         #region Properties
-
-        /////// <summary>
-        /////// Gets or sets the origin location.
-        /////// </summary>
-        ////public SPoint Origin
-        ////{
-        ////    get => _origin;
-        ////    set => _origin = value;
-        ////}
 
         /// <summary>
         /// Gets or sets a value of the origin location.
@@ -73,6 +36,11 @@ namespace SPEA.Geometry.Core
         /// </summary>
         public abstract bool IsEmpty { get; }
 
+        /// <summary>
+        /// Gets an object that wraps all applied transformations.
+        /// </summary>
+        public AppliedTransformations AppliedTransformations => _appliedTransformations;
+
         #endregion Properties
 
         #region Methods
@@ -80,16 +48,13 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Tests a collection for <see langword="null"/> elements.
         /// </summary>
-        /// <typeparam name="T">Collection type.</typeparam>
+        /// <typeparam name="T">Items type.</typeparam>
         /// <param name="collection">A collection to be tested.</param>
         /// <returns><see langword="true"/> if at least one <see langword="null"/> element found, otherwise <see langword="false"/>.</returns>
         public static bool HasNullElements<T>(IEnumerable<T> collection)
             where T : class
         {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
+            ArgumentNullException.ThrowIfNull(collection);
 
             foreach (var item in collection)
             {
@@ -109,10 +74,7 @@ namespace SPEA.Geometry.Core
         /// <returns><see langword="true"/> if at least one non-empty element found, otherwise <see langword="false"/>.</returns>
         public static bool HasNonEmptyElements(SObject[] collection)
         {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
+            ArgumentNullException.ThrowIfNull(collection);
 
             foreach (var item in collection)
             {
@@ -132,10 +94,7 @@ namespace SPEA.Geometry.Core
         /// <returns><see langword="true"/> if at least one empty element found, otherwise <see langword="false"/>.</returns>
         public static bool HasEmptyElements(SObject[] collection)
         {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
+            ArgumentNullException.ThrowIfNull(collection);
 
             foreach (var item in collection)
             {
@@ -152,7 +111,19 @@ namespace SPEA.Geometry.Core
         /// Applies an affine transformation to the <see cref="SObject"/>.
         /// </summary>
         /// <param name="transform">An affine transformation to be applied.</param>
-        public abstract void ApplyTransformation(AffineTransform transform);
+        public abstract void ApplyTransformation(AffineTransformation transform);
+
+        /// <summary>
+        /// Translates the current <see cref="SObject"/>.
+        /// </summary>
+        /// <param name="x">The displacement along the X axis.</param>
+        /// <param name="y">The displacement along the Y axis.</param>
+        public void Translate(double x, double y)
+        {
+            var transform = new TranslationTransformation(x, y);
+            AppliedTransformations.Translate = transform;
+            ApplyTransformation(transform);
+        }
 
         #endregion Methods
     }
