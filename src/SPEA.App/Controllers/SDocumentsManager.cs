@@ -17,11 +17,11 @@ namespace SPEA.App.Controllers
     using SPEA.App.Commands;
     using SPEA.App.Utils.Helpers;
     using SPEA.App.Utils.Services;
-    using SPEA.App.ViewModels.Interfaces;
+    using SPEA.App.ViewModels;
 
     /// <summary>
     /// A conroller that provides a centralized entry point for handling requests
-    /// for a <see cref="ISDocumentViewModel"/> collection and its managing.
+    /// for a <see cref="SDocumentViewModel"/> collection and its managing.
     /// </summary>
     public class SDocumentsManager : ObservableObject
     {
@@ -31,7 +31,7 @@ namespace SPEA.App.Controllers
         private readonly string _closeDocumentCmd = "CloseDocument";
         private readonly string _closeAllDocumentsCmd = "CloseAllDocuments";
         private readonly string _closeOthersCmd = "CloseOthers";
-        private ISDocumentViewModel _selectedDocument;
+        private SDocumentViewModel _selectedDocument;
 
         #endregion Fields
 
@@ -62,12 +62,12 @@ namespace SPEA.App.Controllers
         /// <summary>
         /// Gets a collection of created cross-sections.
         /// </summary>
-        public ObservableCollection<ISDocumentViewModel> SDocumentsCollection { get; private set; } = new ObservableCollection<ISDocumentViewModel>();
+        public ObservableCollection<SDocumentViewModel> SDocumentsCollection { get; private set; } = new ObservableCollection<SDocumentViewModel>();
 
         /// <summary>
         /// Gets or sets currently active document.
         /// </summary>
-        public ISDocumentViewModel SelectedDocument
+        public SDocumentViewModel SelectedDocument
         {
             get => _selectedDocument;
             set
@@ -84,7 +84,7 @@ namespace SPEA.App.Controllers
         /// Adds a section document into the collection.
         /// </summary>
         /// <param name="doc">A document to be added.</param>
-        public void AddDocument(ISDocumentViewModel doc)
+        public void AddDocument(SDocumentViewModel doc)
         {
             if (doc == null)
             {
@@ -101,20 +101,21 @@ namespace SPEA.App.Controllers
         /// and updates the current (active) document index.
         /// The method does not check the document for unsaved changes.
         /// </summary>
-        /// <param name="doc">A document to be added.</param>
-        public void RemoveDocument(ISDocumentViewModel doc)
+        /// <param name="doc">A document to be removed.</param>
+        public void RemoveDocument(SDocumentViewModel doc)
         {
             if (doc == null)
             {
                 throw new ArgumentNullException(nameof(doc));
             }
 
-            ////var index = SDocumentsCollection?.IndexOf(doc);
             var removed = SDocumentsCollection?.Remove(doc);
             if (removed.HasValue && removed.Value == false)
             {
                 throw new InvalidOperationException($"Unable to remove the document. Name={doc.Name}");
             }
+
+            doc.Dispose();
 
             SelectedDocument = SDocumentsCollection.Count == 0 ? null : SDocumentsCollection[^1];
 
@@ -129,16 +130,16 @@ namespace SPEA.App.Controllers
         /// The method will check the document for unsaved changes prior removing.
         /// If there are unsaved changes, a confirmation dialog will appear.
         /// </remarks>
-        /// <param name="doc">The document to be removed.</param>
+        /// <param name="doc">A document to be removed.</param>
         /// <returns>The confirmation result as the instance of <see cref="MessageBoxResult"/>.</returns>
-        public MessageBoxResult RemoveDocumentWithConfirmation(ISDocumentViewModel doc)
+        public MessageBoxResult RemoveDocumentWithConfirmation(SDocumentViewModel doc)
         {
             if (doc == null)
             {
                 throw new ArgumentNullException(nameof(doc));
             }
 
-            if (doc.IsSaveRequired)
+            if (doc.IsDirty)
             {
                 var message = $"{ResourcesHelper.GetApplicationResource<string>("S.MessageBox.SDocument.UnsavedChanges_1")} \"{doc.Name}\"\n\n" +
                               $"{ResourcesHelper.GetApplicationResource<string>("S.MessageBox.SDocument.UnsavedChanges_2")}";
@@ -172,7 +173,7 @@ namespace SPEA.App.Controllers
         /// <param name="doc">Document to be saved.</param>
         /// <param name="filepath">File path the document will be saved with.</param>
         /// <returns>Returns <see langword="true"/> if saved successfully, otherwise - <see langword="false"/>.</returns>
-        public bool SaveDocument(ISDocumentViewModel doc, string filepath)
+        public bool SaveDocument(SDocumentViewModel doc, string filepath)
         {
             // TODO: implementation
             return true;
@@ -184,7 +185,7 @@ namespace SPEA.App.Controllers
         /// <param name="doc">Document to be saved.</param>
         /// <param name="filename">The document name.</param>
         /// <returns>Returns <see langword="true"/> if saved successfully, otherwise - <see langword="false"/>.</returns>
-        public bool SaveDocumentWithDialog(ISDocumentViewModel doc, string filename)
+        public bool SaveDocumentWithDialog(SDocumentViewModel doc, string filename)
         {
             // TODO: implementation
             return SaveDocument(doc, filename);

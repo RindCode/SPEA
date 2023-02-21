@@ -23,7 +23,7 @@
             <!--<Rectangle Width="400" Height="200" Fill="Tomato" Opacity="0.5"/>-->
         </ctrl_svp:SViewportControl>
         <Canvas>
-            <Grid
+            <!--<Grid
                 x:Name="TopRightButtonGroup"
                 Canvas.Top="5"
                 Canvas.Left="5">
@@ -65,7 +65,7 @@
                         </StackPanel>
                     </Grid>
                 </ToggleButton>
-            </Grid>
+            </Grid>-->
             <!--<Grid
                 Canvas.Top="30"
                 Canvas.Left="5">

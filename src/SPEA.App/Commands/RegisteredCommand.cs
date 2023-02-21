@@ -8,11 +8,12 @@
 namespace SPEA.App.Commands
 {
     using System.Windows.Input;
+    using CommunityToolkit.Mvvm.ComponentModel;
 
     /// <summary>
     /// Encapsulates a registered command with some additional data.
     /// </summary>
-    public class RegisteredCommand
+    public class RegisteredCommand : ObservableObject
     {
         #region Fields
 

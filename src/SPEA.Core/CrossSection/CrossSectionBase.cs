@@ -8,8 +8,8 @@
 namespace SPEA.Core.CrossSection
 {
     using System;
+    using System.Diagnostics;
     using SPEA.Core.Geometry;
-    using SPEA.Geometry.Primitives;
 
     /// <summary>
     /// A base class of a built-up cross-section model.
@@ -21,7 +21,7 @@ namespace SPEA.Core.CrossSection
 
         private readonly Guid _id;
         private readonly CrossSectionGeometry _geometry;
-        private bool _disposedValue;
+        private bool _disposed;
         private string _name;
 
         #endregion Fields
@@ -79,7 +79,7 @@ namespace SPEA.Core.CrossSection
         /// <param name="disposing">Designates whether the method was called from Dispose() or not.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposedValue)
+            if (!_disposed)
             {
                 if (disposing)
                 {
@@ -88,7 +88,7 @@ namespace SPEA.Core.CrossSection
 
                 // Free unmanaged resources (unmanaged objects) and override finalizer
                 // Set large fields to null
-                _disposedValue = true;
+                _disposed = true;
             }
         }
 

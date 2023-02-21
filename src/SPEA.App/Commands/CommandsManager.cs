@@ -10,6 +10,7 @@ namespace SPEA.App.Commands
     using System;
     using System.Collections.Generic;
     using System.Windows.Input;
+    using CommunityToolkit.Mvvm.ComponentModel;
 
     /// <summary>
     /// Represents a centralized entry point to operate application commands.
@@ -26,7 +27,7 @@ namespace SPEA.App.Commands
     /// must be used to access the actual command reference.
     /// </example>
     /// </remarks>
-    public class CommandsManager
+    public class CommandsManager : ObservableObject
     {
         // Based on the the idea (MIT license at the time of writing this):
         // https://github.com/MarcArmbruster/WpfCommandAggregator
@@ -197,7 +198,11 @@ namespace SPEA.App.Commands
         // Removes a command from a dictionary of registered commands.
         private void RemoveCommand(string name)
         {
-            _ = _registeredCommands.Remove(name);
+            var removed = _registeredCommands.Remove(name);
+            if (removed == false)
+            {
+                throw new InvalidOperationException($"Unable to remove the command: {name}");
+            }
         }
 
         // Removes all registered commands from the internal dictionary.

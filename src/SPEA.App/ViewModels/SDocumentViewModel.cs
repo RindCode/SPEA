@@ -13,15 +13,14 @@ namespace SPEA.App.ViewModels
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
-    using SPEA.App.ViewModels.Interfaces;
     using SPEA.App.ViewModels.SElements;
     using SPEA.Core.CrossSection;
 
     /// <summary>
-    /// A View Model for <see cref="CrossSectionBase"/> model.
+    /// A base view model class for <see cref="CrossSectionBase"/> model.
     /// Represents a single document of a build-up cross-section and all data stored within.
     /// </summary>
-    public class SDocumentViewModel : ObservableObject, ISDocumentViewModel
+    public abstract class SDocumentViewModel : ObservableObject, IDisposable
     {
         #region Fields
 
@@ -29,8 +28,9 @@ namespace SPEA.App.ViewModels
         private readonly SDocumentsManager _sDocumentsManager;
         private readonly string _requestCloseDocumentCmd = "RequestCloseDocument";
         private readonly string _requestSaveDocumenteCmd = "RequestSaveDocument";
+        private bool _disposed;
         private CrossSectionBase _model;
-        private bool _isSaveRequired = false;
+        private bool _isDirty = false;
         private string _displayName = string.Empty;
 
         #endregion Fields
@@ -66,17 +66,50 @@ namespace SPEA.App.ViewModels
 
         #region Destructor
 
-        /// <summary>
-        /// Finalizes an instance of the <see cref="SDocumentViewModel"/> class.
-        /// </summary>
+        /*
+        // Override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
         ~SDocumentViewModel()
         {
-            CommandsManager.UnregisterCommand(_requestCloseDocumentCmd);
-            CommandsManager.UnregisterCommand(_requestSaveDocumenteCmd);
-            Model.Dispose();
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: false);
         }
+        */
 
         #endregion Destructor
+
+        #region IDisposable
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Implements Dispose pattern.
+        /// </summary>
+        /// <param name="disposing">Designates whether the method was called from Dispose() or not.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed state (managed objects)
+                    CommandsManager.UnregisterCommand(_requestCloseDocumentCmd);
+                    CommandsManager.UnregisterCommand(_requestSaveDocumenteCmd);
+                    Model?.Dispose();
+                }
+
+                // Free unmanaged resources (unmanaged objects) and override finalizer
+                // Set large fields to null
+                _disposed = true;
+            }
+        }
+
+        #endregion IDisposable
 
         #region Events
 
@@ -99,8 +132,10 @@ namespace SPEA.App.ViewModels
         /// </summary>
         public CommandsManager CommandsManager => _commandsManager;
 
-        /// <inheritdoc/>
-        public CrossSectionBase Model
+        /// <summary>
+        /// Gets a cross-section model.
+        /// </summary>
+        public virtual CrossSectionBase Model
         {
             get => _model;
             private set
@@ -114,7 +149,9 @@ namespace SPEA.App.ViewModels
         /// </summary>
         public ObservableCollection<SElementViewModelBase> SElements { get; }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets or sets a cross-section name.
+        /// </summary>
         public string Name
         {
             get => _model.Name;
@@ -125,7 +162,9 @@ namespace SPEA.App.ViewModels
             }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets a cross-section display name.
+        /// </summary>
         public string DisplayName
         {
             get => _displayName;
@@ -135,13 +174,15 @@ namespace SPEA.App.ViewModels
             }
         }
 
-        /// <inheritdoc/>
-        public bool IsSaveRequired
+        /// <summary>
+        /// Gets a value indicating whether the data was modified and needs to be saved.
+        /// </summary>
+        public bool IsDirty
         {
-            get => _isSaveRequired;
+            get => _isDirty;
             private set
             {
-                SetProperty(ref _isSaveRequired, value);
+                SetProperty(ref _isDirty, value);
             }
         }
 
@@ -156,7 +197,7 @@ namespace SPEA.App.ViewModels
         /// <remarks>
         /// Gets a command previously registered in <see cref="CommandsManager.CommandsManager"/>.
         /// </remarks>
-        public RelayCommand RequestCloseDocumentCommand => (RelayCommand)CommandsManager.GetCommand(_requestCloseDocumentCmd);
+        public RelayCommand RequestCloseDocumentCommand => CommandsManager.GetCommand(_requestCloseDocumentCmd) as RelayCommand;
 
         #endregion Commands
 
@@ -177,7 +218,7 @@ namespace SPEA.App.ViewModels
         {
             _ = _sDocumentsManager.SaveDocumentWithDialog(this, string.Empty);
 
-            IsSaveRequired = false;
+            IsDirty = false;
             DisplayName = Name;
         }
 
@@ -187,7 +228,7 @@ namespace SPEA.App.ViewModels
 
         ////private void SDocumentViewModel_DataChanged(object sender, PropertyChangedEventArgs e)
         ////{
-        ////    IsSaveRequired = true;
+        ////    IsDirty = true;
         ////    DisplayName = $"{Name}*";
         ////}
 
@@ -201,7 +242,7 @@ namespace SPEA.App.ViewModels
         ////    var handler = DataChanged;
         ////    handler?.Invoke(this, EventArgs.Empty);
 
-        ////    IsSaveRequired = true;
+        ////    IsDirty = true;
         ////    DisplayName = $"{Name}*";
         ////}
 
@@ -215,7 +256,7 @@ namespace SPEA.App.ViewModels
         ////    var handler = DataSaved;
         ////    handler?.Invoke(this, EventArgs.Empty);
 
-        ////    IsSaveRequired = false;
+        ////    IsDirty = false;
         ////    DisplayName = Name;
         ////}
 

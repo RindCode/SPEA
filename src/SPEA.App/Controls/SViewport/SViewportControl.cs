@@ -8,7 +8,9 @@
 namespace SPEA.App.Controls.SViewport
 {
     using System;
+    using System.Collections.Generic;
     using System.Windows;
+    using System.Windows.Automation.Peers;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
 
@@ -146,10 +148,10 @@ namespace SPEA.App.Controls.SViewport
 
         #region Properties
 
-        /// <summary>
-        /// Gets the items host control.
-        /// </summary>
-        internal SViewportItemsHostControl ItemsHost => _itemsHost;
+        /////// <summary>
+        /////// Gets the items host control.
+        /////// </summary>
+        ////internal SViewportItemsHostControl ItemsHost => _itemsHost;
 
         /////// <summary>
         /////// Gets or sets the value of a minor grid spacing.

@@ -21,7 +21,7 @@ namespace SPEA.App.Utils.TemplateSelectors
         /// <summary>
         /// Gets or sets AvalonDock document <see cref="DataTemplate"/>.
         /// </summary>
-        public DataTemplate AvalonDocumentDataTemplate { get; set; }
+        public DataTemplate AvalonDocumentMetallicDataTemplate { get; set; }
 
         #endregion Properties
 
@@ -30,9 +30,9 @@ namespace SPEA.App.Utils.TemplateSelectors
         /// <inheritdoc/>
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is SDocumentViewModel)
+            if (item is SDocumentMetallicViewModel)
             {
-                return AvalonDocumentDataTemplate;
+                return AvalonDocumentMetallicDataTemplate;
             }
 
             return base.SelectTemplate(item, container);

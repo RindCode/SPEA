@@ -19,10 +19,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     mc:Ignorable="d"
-    assist:WindowAssist.MinimizeWindowCommand="{Binding CommandsManager[MinimizeWindow].Command}"
-    assist:WindowAssist.MaximizeWindowCommand="{Binding CommandsManager[MaximizeWindow].Command}"
-    assist:WindowAssist.RestoreWindowCommand="{Binding CommandsManager[RestoreWindow].Command}"
-    assist:WindowAssist.CloseWindowCommand="{Binding CommandsManager[CloseWindow].Command}"
+    assist:WindowAssist.MinimizeWindowCommand="{Binding CommandsManager[MinimizeWindow].Command, Mode=OneTime}"
+    assist:WindowAssist.MaximizeWindowCommand="{Binding CommandsManager[MaximizeWindow].Command, Mode=OneTime}"
+    assist:WindowAssist.RestoreWindowCommand="{Binding CommandsManager[RestoreWindow].Command, Mode=OneTime}"
+    assist:WindowAssist.CloseWindowCommand="{Binding CommandsManager[CloseWindow].Command, Mode=OneTime}"
     d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
     Title="{StaticResource S.App.Title}"
     Padding="1"
@@ -202,7 +202,8 @@
                                 <Style TargetType="{x:Type avalondock:LayoutItem}">
                                     <Setter Property="Title" Value="{Binding Model.DisplayName, Mode=OneWay}"/>
                                     <Setter Property="CanFloat" Value="True"/>
-                                    <Setter Property="CloseCommand" Value="{Binding Model.RequestCloseDocumentCommand}"/>
+                                    <Setter Property="CanClose" Value="True"/>
+                                    <Setter Property="CloseCommand" Value="{Binding Model.RequestCloseDocumentCommand, Mode=OneTime}"/>
                                 </Style>
                             </temselectors:AvalonDocumentTabStyleSelectorHelper.AvalonDocumentTabStyle>
                         </temselectors:AvalonDocumentTabStyleSelectorHelper>
@@ -210,8 +211,8 @@
 
                     <avalondock:DockingManager.LayoutItemTemplateSelector>
                         <temselectors:AvalonDocumentTemplateSelector>
-                            <temselectors:AvalonDocumentTemplateSelector.AvalonDocumentDataTemplate>
-                                <DataTemplate DataType="{x:Type vm:SDocumentViewModel}">
+                            <temselectors:AvalonDocumentTemplateSelector.AvalonDocumentMetallicDataTemplate>
+                                <DataTemplate DataType="{x:Type vm:SDocumentMetallicViewModel}">
                                     <Grid>
                                         <ctrl_svp:SViewportControl
                                             x:Name="SectionEditorViewport"
@@ -219,7 +220,7 @@
                                             MinorGridEnabled="True"
                                             Background="Transparent"
                                             Style="{StaticResource SViewportControlStyle}">
-                                            <ctrl_svp:SViewportControl.Resources>
+                                            <!--<ctrl_svp:SViewportControl.Resources>
                                                 <DataTemplate DataType="{x:Type vm_se:SPolygonViewModel}">
                                                     <Polygon
                                                         Stroke="Aquamarine"
@@ -227,9 +228,9 @@
                                                         StrokeThickness="2">
                                                     </Polygon>
                                                 </DataTemplate>
-                                            </ctrl_svp:SViewportControl.Resources>
+                                            </ctrl_svp:SViewportControl.Resources>-->
                                         </ctrl_svp:SViewportControl>
-                                        <Canvas x:Name="SectionEditorViewportOverlay">
+                                        <!--<Canvas x:Name="SectionEditorViewportOverlay">
                                             <Grid
                                                 Canvas.Top="5"
                                                 Canvas.Left="5">
@@ -272,10 +273,10 @@
                                                     </Grid>
                                                 </ToggleButton>
                                             </Grid>
-                                        </Canvas>
+                                        </Canvas>-->
                                     </Grid>
                                 </DataTemplate>
-                            </temselectors:AvalonDocumentTemplateSelector.AvalonDocumentDataTemplate>
+                            </temselectors:AvalonDocumentTemplateSelector.AvalonDocumentMetallicDataTemplate>
                         </temselectors:AvalonDocumentTemplateSelector>
                     </avalondock:DockingManager.LayoutItemTemplateSelector>
 

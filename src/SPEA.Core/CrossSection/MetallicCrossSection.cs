@@ -12,6 +12,14 @@ namespace SPEA.Core.CrossSection
     /// </summary>
     public class MetallicCrossSection : CrossSectionBase
     {
+        #region Fields
+
+        private bool _disposed;
+
+        #endregion Fields
+
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MetallicCrossSection"/> class.
         /// </summary>
@@ -30,5 +38,42 @@ namespace SPEA.Core.CrossSection
         {
             // Blank
         }
+
+        #endregion Constructors
+
+        #region Destructors
+
+        /*
+        // Override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        ~MetallicCrossSection()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: false);
+        }
+        */
+
+        #endregion Destructors
+
+        #region IDisposable
+
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed state (managed objects)
+                }
+
+                // Free unmanaged resources (unmanaged objects) and override finalizer
+                // Set large fields to null
+                _disposed = true;
+            }
+
+            base.Dispose(disposing);
+        }
+
+        #endregion IDisposable
     }
 }

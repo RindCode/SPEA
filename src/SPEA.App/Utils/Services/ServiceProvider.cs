@@ -13,8 +13,6 @@ namespace SPEA.App.Utils.Services
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.ViewModels;
-    using SPEA.App.ViewModels.Factories;
-    using SPEA.App.ViewModels.Interfaces;
 
     /// <summary>
     /// Application service collection for Dependency Injection purposes.
@@ -43,9 +41,6 @@ namespace SPEA.App.Utils.Services
             services.AddSingleton<MainMenuViewModel>();
             services.AddSingleton<ProjectTreeViewModel>();
             services.AddTransient<NewSectionViewModel>();
-
-            // Factories | View Models
-            services.AddTransient<ISDocumentViewModelFactory, SDocumentViewModelFactory>();
 
             return services.BuildServiceProvider();
         }

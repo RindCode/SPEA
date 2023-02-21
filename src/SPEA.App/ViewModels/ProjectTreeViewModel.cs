@@ -11,7 +11,6 @@ namespace SPEA.App.ViewModels
     using System.Collections.ObjectModel;
     using CommunityToolkit.Mvvm.ComponentModel;
     using SPEA.App.Controllers;
-    using SPEA.App.ViewModels.Interfaces;
 
     /// <summary>
     /// A view model used by Project Tree user control.
@@ -41,9 +40,9 @@ namespace SPEA.App.ViewModels
         #region Properties
 
         /// <summary>
-        /// Gets a collection of <see cref="ISDocumentViewModel"/> documents.
+        /// Gets a collection of <see cref="Interfaces.SDocumentViewModel"/> documents.
         /// </summary>
-        public ObservableCollection<ISDocumentViewModel> CrossSectionsCollection => _sDocumentsManager.SDocumentsCollection;
+        public ObservableCollection<SDocumentViewModel> CrossSectionsCollection => _sDocumentsManager.SDocumentsCollection;
 
         #endregion Properties
     }

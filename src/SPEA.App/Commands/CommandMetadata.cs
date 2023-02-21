@@ -8,6 +8,7 @@
 namespace SPEA.App.Commands
 {
     using System;
+    using CommunityToolkit.Mvvm.ComponentModel;
 
     /// <summary>
     /// Represens flags which can be used inside <see cref="CommandMetadata"/>
@@ -30,7 +31,7 @@ namespace SPEA.App.Commands
     /// <summary>
     /// Represents metadata container for commands registered with <see cref="CommandsManager"/>.
     /// </summary>
-    public class CommandMetadata
+    public class CommandMetadata : ObservableObject
     {
         #region Fields
 

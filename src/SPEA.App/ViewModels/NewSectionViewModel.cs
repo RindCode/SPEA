@@ -24,7 +24,6 @@ namespace SPEA.App.ViewModels
         #region Fields
 
         private readonly SDocumentsManager _sDocumentsManager;
-        private readonly ISDocumentViewModelFactory _sDocumentViewModelFactory;
         private readonly string _createNewDocumentCmd = "CreateNewDocument";
         private string _sectionName = string.Empty;
         private string _selectedSectionDefinition = string.Empty;
@@ -42,15 +41,12 @@ namespace SPEA.App.ViewModels
         /// </summary>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
-        /// <param name="sDocumentViewModelFactory">A reference to <see cref="ISDocumentViewModelFactory"/> instance.</param>
         public NewSectionViewModel(
             CommandsManager commandsManager,
-            SDocumentsManager sDocumentsManager,
-            ISDocumentViewModelFactory sDocumentViewModelFactory)
+            SDocumentsManager sDocumentsManager)
             : base(commandsManager)
         {
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
-            _sDocumentViewModelFactory = sDocumentViewModelFactory ?? throw new ArgumentNullException(nameof(sDocumentViewModelFactory));
 
             CommandsManager.RegisterCommand(_createNewDocumentCmd, new RelayCommand<string>(CreateNewDocument));
         }
@@ -109,7 +105,7 @@ namespace SPEA.App.ViewModels
             if (_selectedSectionDefinition == ResourcesHelper.GetApplicationResource<string>("S.NewSectionWindow.CrossSectionDefinition_Metallic"))
             {
                 var cs = CrossSection.Create<MetallicCrossSection>(name);
-                var vm = _sDocumentViewModelFactory.Create(cs);
+                var vm = new SDocumentMetallicViewModel(CommandsManager, _sDocumentsManager, cs);  // TODO: Factory to avoid VM creation here?
                 _sDocumentsManager.AddDocument(vm);
             }
             else

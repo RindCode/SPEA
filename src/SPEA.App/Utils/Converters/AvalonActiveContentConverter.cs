@@ -9,10 +9,10 @@ namespace SPEA.App.Utils.Converters
 {
     using System;
     using System.Windows.Data;
-    using SPEA.App.ViewModels.Interfaces;
+    using SPEA.App.ViewModels;
 
     /// <summary>
-    /// Converts a given object into <see cref="ISDocumentViewModel"/>.
+    /// Converts a given object into <see cref="SDocumentViewModel"/>.
     /// </summary>
     public class AvalonActiveContentConverter : IValueConverter
     {
@@ -21,7 +21,7 @@ namespace SPEA.App.Utils.Converters
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is ISDocumentViewModel)
+            if (value is SDocumentViewModel)
             {
                 return value;
             }
@@ -32,7 +32,7 @@ namespace SPEA.App.Utils.Converters
         /// <inheritdoc/>
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is ISDocumentViewModel)
+            if (value is SDocumentViewModel)
             {
                 return value;
             }
