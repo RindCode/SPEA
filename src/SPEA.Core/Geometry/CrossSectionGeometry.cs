@@ -27,8 +27,14 @@ namespace SPEA.Core.Geometry
             _clipped = new SObjectCollection<SPolygonBase>();
         }
 
+        /// <summary>
+        /// Gets a collection of added (non-clipped) polygons.
+        /// </summary>
         public SObjectCollection<SPolygonBase> Actual => _actual;
 
+        /// <summary>
+        /// Gets a collection of clipped polygons.
+        /// </summary>
         public SObjectCollection<SPolygonBase> Clipped => _clipped;
     }
 }

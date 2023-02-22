@@ -13,7 +13,6 @@ namespace SPEA.App.ViewModels
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.Utils.Helpers;
-    using SPEA.App.ViewModels.Interfaces;
     using SPEA.Core.CrossSection;
 
     /// <summary>
@@ -24,7 +23,7 @@ namespace SPEA.App.ViewModels
         #region Fields
 
         private readonly SDocumentsManager _sDocumentsManager;
-        private readonly string _createNewDocumentCmd = "CreateNewDocument";
+        private readonly string _createNewDocumentCmd = "NewSectionWindow.Create";
         private string _sectionName = string.Empty;
         private string _selectedSectionDefinition = string.Empty;
         private List<string> _sectionDefinitions = new List<string>()
@@ -48,7 +47,7 @@ namespace SPEA.App.ViewModels
         {
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
 
-            CommandsManager.RegisterCommand(_createNewDocumentCmd, new RelayCommand<string>(CreateNewDocument));
+            CommandsManager.RegisterCommand(_createNewDocumentCmd, new RelayCommand(CreateNewDocument));
         }
 
         #endregion Constructors
@@ -99,12 +98,11 @@ namespace SPEA.App.ViewModels
         /// Creates a new <see cref="SDocumentViewModel"/> instance and adds it into
         /// a collection of opened documents.
         /// </summary>
-        /// <param name="name">A document name.</param>
-        private void CreateNewDocument(string name)
+        private void CreateNewDocument()
         {
             if (_selectedSectionDefinition == ResourcesHelper.GetApplicationResource<string>("S.NewSectionWindow.CrossSectionDefinition_Metallic"))
             {
-                var cs = CrossSection.Create<MetallicCrossSection>(name);
+                var cs = CrossSection.Create<MetallicCrossSection>(SectionName);
                 var vm = new SDocumentMetallicViewModel(CommandsManager, _sDocumentsManager, cs);  // TODO: Factory to avoid VM creation here?
                 _sDocumentsManager.AddDocument(vm);
             }

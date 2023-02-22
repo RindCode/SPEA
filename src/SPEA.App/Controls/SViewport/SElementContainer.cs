@@ -14,8 +14,16 @@ namespace SPEA.App.Controls.SViewport
     /// Represents a UI container (basically - a bounding box) for an element
     /// located inside of <see cref="SViewportItemsHostControl"/>.
     /// </summary>
+    [TemplatePart(Name = ContentPresenterName, Type = typeof(ContentPresenter))]
     public class SElementContainer : ContentControl
     {
+        #region Fields
+
+        // Must be defined in ControlTemplate.
+        private const string ContentPresenterName = "PART_ContentPresenter";
+
+        #endregion Fields
+
         #region Dependency Properties
 
         /// <summary>
@@ -34,8 +42,8 @@ namespace SPEA.App.Controls.SViewport
         /// </summary>
         public double Left
         {
-            get { return (double)GetValue(BoundingBoxProperty); }
-            set { SetValue(BoundingBoxProperty, value); }
+            get { return (double)GetValue(LeftProperty); }
+            set { SetValue(LeftProperty, value); }
         }
 
         /// <summary>

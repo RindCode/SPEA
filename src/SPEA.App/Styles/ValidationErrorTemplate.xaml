@@ -7,7 +7,7 @@
     xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
     xmlns:converters="clr-namespace:SPEA.App.Utils.Converters">
 
-    <ControlTemplate x:Key="TextBoxValidationErrorTemplate">
+    <ControlTemplate x:Key="TextBoxValidationErrorTemplateWithDesc">
         <StackPanel Orientation="Vertical">
             <Border>
                 <AdornedElementPlaceholder x:Name="Placeholder">
@@ -79,6 +79,20 @@
                 </MultiDataTrigger.Setters>
             </MultiDataTrigger>
         </ControlTemplate.Triggers>-->
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="TextBoxValidationErrorTemplateBorderOnly">
+        <StackPanel Orientation="Vertical">
+            <Border>
+                <AdornedElementPlaceholder x:Name="Placeholder">
+                    <Border
+                        Margin="0,2,0,3"
+                        BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.Tomato}"
+                        BorderThickness="1"
+                        CornerRadius="{Binding ElementName=Placeholder, Path=AdornedElement.(exten:CornerRadiusExtension.CornerRadius)}"/>
+                </AdornedElementPlaceholder>
+            </Border>
+        </StackPanel>
     </ControlTemplate>
 
 </ResourceDictionary>

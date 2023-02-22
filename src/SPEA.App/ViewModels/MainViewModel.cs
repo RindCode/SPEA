@@ -23,6 +23,7 @@ namespace SPEA.App.ViewModels
         private readonly SDocumentsManager _sDocumentsManager;
         private readonly MainMenuViewModel _mainMenuViewModel;
         private readonly ProjectTreeViewModel _projectTreeViewModel;
+        private readonly AddGeometryViewModel _addGeometryViewModel;
         private readonly string _requestApplicationCloseCmd = "RequestApplicationClose";
 
         #endregion Fields
@@ -40,11 +41,13 @@ namespace SPEA.App.ViewModels
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
         /// <param name="mainMenuViewModel">A reference to <see cref="MainMenuViewModel"/> instance.</param>
         /// <param name="projectTreeViewModel">A reference to <see cref="ProjectTreeViewModel"/> instance.</param>
+        /// <param name="addGeometryViewModel">A reference to <see cref="AddGeometryViewModel"/> instance.</param>
         public MainViewModel(
             CommandsManager commandsManager,
             SDocumentsManager sDocumentsManager,
             MainMenuViewModel mainMenuViewModel,
-            ProjectTreeViewModel projectTreeViewModel)
+            ProjectTreeViewModel projectTreeViewModel,
+            AddGeometryViewModel addGeometryViewModel)
             : base(commandsManager)
         {
             Current = this;
@@ -52,6 +55,7 @@ namespace SPEA.App.ViewModels
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
             _mainMenuViewModel = mainMenuViewModel ?? throw new ArgumentNullException(nameof(mainMenuViewModel));
             _projectTreeViewModel = projectTreeViewModel ?? throw new ArgumentNullException(nameof(projectTreeViewModel));
+            _addGeometryViewModel = addGeometryViewModel ?? throw new ArgumentNullException(nameof(addGeometryViewModel));
 
             CommandsManager.RegisterCommand(
                 _requestApplicationCloseCmd,
@@ -81,6 +85,11 @@ namespace SPEA.App.ViewModels
         /// Gets project tree view model.
         /// </summary>
         public ProjectTreeViewModel ProjectTreeViewModelInstance => _projectTreeViewModel;
+
+        /// <summary>
+        /// Gets project tree view model.
+        /// </summary>
+        public AddGeometryViewModel AddGeometryViewModelInstance => _addGeometryViewModel;
 
         #endregion Properties
 

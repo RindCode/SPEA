@@ -8,8 +8,8 @@
 namespace SPEA.Core.CrossSection
 {
     using System;
-    using System.Diagnostics;
     using SPEA.Core.Geometry;
+    using SPEA.Geometry.Core;
 
     /// <summary>
     /// A base class of a built-up cross-section model.
@@ -19,7 +19,7 @@ namespace SPEA.Core.CrossSection
     {
         #region Fields
 
-        private readonly Guid _id;
+        private readonly Guid _guid;
         private readonly CrossSectionGeometry _geometry;
         private bool _disposed;
         private string _name;
@@ -43,8 +43,8 @@ namespace SPEA.Core.CrossSection
         /// <param name="name">Section name.</param>
         protected CrossSectionBase(string name)
         {
-            _id = Guid.NewGuid();
-            _name = string.IsNullOrEmpty(name) ? _id.ToString() : name;
+            _guid = Guid.NewGuid();
+            _name = string.IsNullOrEmpty(name) ? _guid.ToString() : name;
             _geometry = new CrossSectionGeometry();
         }
 
@@ -99,13 +99,13 @@ namespace SPEA.Core.CrossSection
         /// <summary>
         /// Gets the unique ID of this section.
         /// </summary>
-        public Guid Id => _id;
+        public Guid Guid => _guid;
 
         /// <summary>
         /// Gets or sets cross-section name.
         /// </summary>
         /// <remarks>
-        /// If a name was not provided in a constructor, it will be automatically set to <see cref="Id"/>.
+        /// If a name was not provided in a constructor, it will be automatically set to <see cref="Guid"/>.
         /// </remarks>
         public string Name
         {
@@ -121,6 +121,15 @@ namespace SPEA.Core.CrossSection
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Adds a <see cref="SPolygonBase"/> object into the geometry collection.
+        /// </summary>
+        /// <param name="polygon">A polygon object to be added.</param>
+        public void AddPolygon(SPolygonBase polygon)
+        {
+            Geometry.Actual.Items.Add(polygon);
+        }
 
         #endregion Methods
     }

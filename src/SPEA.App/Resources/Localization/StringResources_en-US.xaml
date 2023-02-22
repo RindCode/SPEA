@@ -6,6 +6,8 @@
     <!-- Application -->
     <s:String x:Key="S.App.Title">SPEA: Section Properties and Engineering Analysis</s:String>
     <s:String x:Key="S.App.DockPanel.ProjectTree">Project Tree</s:String>
+    <s:String x:Key="S.App.DockPanel.EntityInfo">Entity Info</s:String>
+    <s:String x:Key="S.App.DockPanel.AddGeometry">Geometry</s:String>
     <s:String x:Key="S.App.DockPanel.SectionProperties">Section Properties</s:String>
     
     
@@ -15,6 +17,8 @@
     <!-- Common | Validation Messages -->
     <s:String x:Key="S.Common.ValidationText.NotEmptyField">Field is required.</s:String>
     <s:String x:Key="S.Common.ValidationText.ValidFileName">Section name must be a valid Windows file name.</s:String>
+    <s:String x:Key="S.Common.ValidationText.PositiveNumber">The number must be positive.</s:String>
+    <s:String x:Key="S.Common.ValidationText.StringContainsOnlyDigits">The given string is not a valid number.</s:String>
 
     <!-- Common | Exceptions -->
     <s:String x:Key="S.Common.Exception.UnhandledEx.Title">Unhandled Exception</s:String>
@@ -79,11 +83,18 @@
     <s:String x:Key="S.NewSectionWindow.Button.CreateButton.Text">Create</s:String>
     <s:String x:Key="S.NewSectionWindow.Button.CancelButton.Text">Cancel</s:String>
     <s:String x:Key="S.NewSectionWindow.CrossSectionDefinition_Metallic">metallic</s:String>
-    
-    <!-- New Section Window | Exceptions -->
     <s:String x:Key="S.NewSectionWindow.Exception.UnknowCrossSectionDefinition.Message">Unknown cross-section definition.</s:String>
 
-    
+
+    <!-- Add Rectangle Primitive Window -->
+    <s:String x:Key="S.AddPrimitiveRectangle.Window.Title">Add a rectangle element</s:String>
+    <s:String x:Key="S.AddPrimitiveRectangle.TextBlock.Width">Width:</s:String>
+    <s:String x:Key="S.AddPrimitiveRectangle.TextBlock.Height">Height:</s:String>
+    <s:String x:Key="S.AddPrimitiveRectangle.TextBox.Hint.Width">width...</s:String>
+    <s:String x:Key="S.AddPrimitiveRectangle.TextBox.Hint.Height">height...</s:String>
+    <s:String x:Key="S.AddPrimitiveRectangle.Button.AddButton.Text">Add</s:String>
+    <s:String x:Key="S.AddPrimitiveRectangle.Button.CancelButton.Text">Cancel</s:String>
+
     <!-- Section Editor | Button | Viewport Settings -->
     <s:String x:Key="S.SectionEditor.Button.ViewportSettings.PopupName">Viewport Settings</s:String>
     <s:String x:Key="S.SectionEditor.Button.ViewportSettings.Grid">Grid</s:String>

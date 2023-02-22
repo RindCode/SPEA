@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="NotEmptyFieldRule.cs" company="Dmitry Poberezhnyy">
+// <copyright file="StringContainsOnlyDigitsRule.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -13,14 +13,13 @@ namespace SPEA.App.Utils.Validation
     using SPEA.App.Utils.Helpers;
 
     /// <summary>
-    /// Implements a <see cref="ValidationRule"/> to check if a given string
-    /// is not null, empty or contains only whitespaces.
+    /// Implements a <see cref="ValidationRule"/> to check if a given string contains only digits.
     /// </summary>
-    public class NotEmptyFieldRule : ValidationRule
+    public class StringContainsOnlyDigitsRule : ValidationRule
     {
         #region Fields
 
-        private readonly string _errorMessage = ResourcesHelper.GetApplicationResource<string>("S.Common.ValidationText.NotEmptyField");
+        private readonly string _errorMessage = ResourcesHelper.GetApplicationResource<string>("S.Common.ValidationText.StringContainsOnlyDigits");
 
         #endregion Fields
 
@@ -31,7 +30,7 @@ namespace SPEA.App.Utils.Validation
         {
             var str = Convert.ToString(value);
 
-            if (string.IsNullOrWhiteSpace(str))
+            if (string.IsNullOrEmpty(str) || !double.TryParse(str, out _))
             {
                 return new ValidationResult(false, _errorMessage);
             }

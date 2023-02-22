@@ -7,7 +7,6 @@
 
 namespace SPEA.App.ViewModels
 {
-    using System;
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.Core.CrossSection;

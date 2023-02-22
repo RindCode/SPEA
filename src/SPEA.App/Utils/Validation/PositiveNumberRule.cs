@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="NotEmptyFieldRule.cs" company="Dmitry Poberezhnyy">
+// <copyright file="PositiveNumberRule.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -13,14 +13,13 @@ namespace SPEA.App.Utils.Validation
     using SPEA.App.Utils.Helpers;
 
     /// <summary>
-    /// Implements a <see cref="ValidationRule"/> to check if a given string
-    /// is not null, empty or contains only whitespaces.
+    /// Implements a <see cref="ValidationRule"/> to check if a given number is positive.
     /// </summary>
-    public class NotEmptyFieldRule : ValidationRule
+    public class PositiveNumberRule : ValidationRule
     {
         #region Fields
 
-        private readonly string _errorMessage = ResourcesHelper.GetApplicationResource<string>("S.Common.ValidationText.NotEmptyField");
+        private readonly string _errorMessage = ResourcesHelper.GetApplicationResource<string>("S.Common.ValidationText.PositiveNumber");
 
         #endregion Fields
 
@@ -29,9 +28,9 @@ namespace SPEA.App.Utils.Validation
         /// <inheritdoc/>
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            var str = Convert.ToString(value);
+            var number = Convert.ToDouble(value);  // = 0.0 if value == null
 
-            if (string.IsNullOrWhiteSpace(str))
+            if (number <= 0)
             {
                 return new ValidationResult(false, _errorMessage);
             }

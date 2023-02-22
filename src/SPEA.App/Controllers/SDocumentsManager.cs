@@ -76,6 +76,16 @@ namespace SPEA.App.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the internal collection contains at least one element.
+        /// </summary>
+        public bool HasItems => SDocumentsCollection?.Count > 0;
+
+        /// <summary>
+        /// Gets a value indicating whether the internal collection is empty.
+        /// </summary>
+        public bool IsEmpty => SDocumentsCollection?.Count == 0;
+
         #endregion Properties
 
         #region Methods
@@ -118,7 +128,6 @@ namespace SPEA.App.Controllers
             doc.Dispose();
 
             SelectedDocument = SDocumentsCollection.Count == 0 ? null : SDocumentsCollection[^1];
-
             InvalidateCommandsCanExecute();
         }
 

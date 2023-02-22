@@ -9,12 +9,15 @@ namespace SPEA.App.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Windows.Shapes;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.ViewModels.SElements;
     using SPEA.Core.CrossSection;
+    using SPEA.Geometry.Core;
+    using SPEA.Geometry.Primitives;
 
     /// <summary>
     /// A base view model class for <see cref="CrossSectionBase"/> model.
@@ -28,6 +31,7 @@ namespace SPEA.App.ViewModels
         private readonly SDocumentsManager _sDocumentsManager;
         private readonly string _requestCloseDocumentCmd = "RequestCloseDocument";
         private readonly string _requestSaveDocumenteCmd = "RequestSaveDocument";
+        private readonly ObservableCollection<SElementViewModelBase> _sElements;
         private bool _disposed;
         private CrossSectionBase _model;
         private bool _isDirty = false;
@@ -53,13 +57,19 @@ namespace SPEA.App.ViewModels
 
             _model = model ?? throw new ArgumentNullException(nameof(model));
             _displayName = model.Name ?? throw new ArgumentNullException(nameof(model.Name));
+            _sElements = new ObservableCollection<SElementViewModelBase>();
 
-            // Give commands their unique names related to underlying model ID.
-            _requestCloseDocumentCmd += $"_{_model.Id}";
-            _requestSaveDocumenteCmd += $"_{_model.Id}";
+            // Give commands their unique names related to this model ID.
+            _requestCloseDocumentCmd += $"_{_model.Guid}";
+            _requestSaveDocumenteCmd += $"_{_model.Guid}";
 
             CommandsManager.RegisterCommand(_requestCloseDocumentCmd, new RelayCommand(ExecuteRequestCloseDocument));
             CommandsManager.RegisterCommand(_requestSaveDocumenteCmd, new RelayCommand(ExecuteRequestSaveDocument));
+
+            var vm = new SRectViewModel();
+            vm.Width = 100;
+            vm.Height = 50;
+            SElements.Add(vm);
         }
 
         #endregion Constructors
@@ -133,9 +143,14 @@ namespace SPEA.App.ViewModels
         public CommandsManager CommandsManager => _commandsManager;
 
         /// <summary>
+        /// Gets a documents manager reference.
+        /// </summary>
+        public SDocumentsManager SDocumentsManager => _sDocumentsManager;
+
+        /// <summary>
         /// Gets a cross-section model.
         /// </summary>
-        public virtual CrossSectionBase Model
+        public CrossSectionBase Model
         {
             get => _model;
             private set
@@ -147,7 +162,7 @@ namespace SPEA.App.ViewModels
         /// <summary>
         /// Gets the reference to the collection of cross-section SElements.
         /// </summary>
-        public ObservableCollection<SElementViewModelBase> SElements { get; }
+        public ObservableCollection<SElementViewModelBase> SElements => _sElements;
 
         /// <summary>
         /// Gets or sets a cross-section name.
@@ -226,6 +241,11 @@ namespace SPEA.App.ViewModels
 
         #region Methods
 
+        internal void AddPolygon(SPolygonBase polygon)
+        {
+            Model.AddPolygon(polygon);
+        }
+
         ////private void SDocumentViewModel_DataChanged(object sender, PropertyChangedEventArgs e)
         ////{
         ////    IsDirty = true;
@@ -260,6 +280,6 @@ namespace SPEA.App.ViewModels
         ////    DisplayName = Name;
         ////}
 
-    #endregion Methods
-}
+        #endregion Methods
+    }
 }

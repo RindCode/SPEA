@@ -16,6 +16,7 @@ namespace SPEA.Geometry.Core
     {
         #region Fields
 
+        private readonly Guid guid = Guid.NewGuid();
         private readonly AppliedTransformations _appliedTransformations = new AppliedTransformations();
 
         #endregion Fields
@@ -25,6 +26,11 @@ namespace SPEA.Geometry.Core
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets the unique ID of this object.
+        /// </summary>
+        public Guid Guid => guid;
 
         /// <summary>
         /// Gets or sets a value of the origin location.

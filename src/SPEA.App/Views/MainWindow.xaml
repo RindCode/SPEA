@@ -12,6 +12,7 @@
     xmlns:local="clr-namespace:SPEA.App"
     xmlns:markupex="clr-namespace:SPEA.App.Extensions.Markup"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:shapes="clr-namespace:SPEA.App.Shapes"
     xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
     xmlns:vm="clr-namespace:SPEA.App.ViewModels"
     xmlns:vm_se="clr-namespace:SPEA.App.ViewModels.SElements"
@@ -216,21 +217,24 @@
                                     <Grid>
                                         <ctrl_svp:SViewportControl
                                             x:Name="SectionEditorViewport"
+                                            ItemsSource="{Binding SElements}"
                                             MajorGridEnabled="True"
                                             MinorGridEnabled="True"
                                             Background="Transparent"
                                             Style="{StaticResource SViewportControlStyle}">
-                                            <!--<ctrl_svp:SViewportControl.Resources>
-                                                <DataTemplate DataType="{x:Type vm_se:SPolygonViewModel}">
-                                                    <Polygon
+                                            <ctrl_svp:SViewportControl.Resources>
+                                                <DataTemplate DataType="{x:Type vm_se:SRectViewModel}">
+                                                    <shapes:SRectPrimitive
+                                                        Width="{Binding Width}"
+                                                        Height="{Binding Height}"
                                                         Stroke="Aquamarine"
                                                         Fill="Tomato"
                                                         StrokeThickness="2">
-                                                    </Polygon>
+                                                    </shapes:SRectPrimitive>
                                                 </DataTemplate>
-                                            </ctrl_svp:SViewportControl.Resources>-->
+                                            </ctrl_svp:SViewportControl.Resources>
                                         </ctrl_svp:SViewportControl>
-                                        <!--<Canvas x:Name="SectionEditorViewportOverlay">
+                                        <Canvas x:Name="SectionEditorViewportOverlay">
                                             <Grid
                                                 Canvas.Top="5"
                                                 Canvas.Left="5">
@@ -273,7 +277,7 @@
                                                     </Grid>
                                                 </ToggleButton>
                                             </Grid>
-                                        </Canvas>-->
+                                        </Canvas>
                                     </Grid>
                                 </DataTemplate>
                             </temselectors:AvalonDocumentTemplateSelector.AvalonDocumentMetallicDataTemplate>
@@ -304,7 +308,7 @@
                                 </LayoutAnchorablePane>
                                 <LayoutAnchorablePane>
                                     <LayoutAnchorable
-                                        Title="Entity Info"
+                                        Title="{StaticResource S.App.DockPanel.EntityInfo}"
                                         CanFloat="True"
                                         CanClose="False"
                                         CanHide="False"
@@ -326,7 +330,7 @@
                                 Orientation="Vertical">
                                 <LayoutAnchorablePane>
                                     <LayoutAnchorable
-                                        Title="Geometry"
+                                        Title="{StaticResource S.App.DockPanel.AddGeometry}"
                                         CanFloat="True"
                                         CanClose="False"
                                         CanHide="False"
@@ -334,6 +338,16 @@
                                         CanDockAsTabbedDocument="False"
                                         CanMove="True"
                                         CanShowOnHover="False">
+                                        <Button
+                                            x:Name="ADD_RECTANGLE_TEST_BUTTON"
+                                            Content="Rectangle"
+                                            Margin="5"
+                                            Width="80"
+                                            Height="35"
+                                            HorizontalAlignment="Left" HorizontalContentAlignment="Center"
+                                            VerticalAlignment="Top" VerticalContentAlignment="Center"
+                                            Command="{Binding Path=DataContext.CommandsManager[AddPrimitiveRectangle].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                                            Style="{DynamicResource RaisedButtonStyle_2}"/>
                                     </LayoutAnchorable>
                                     <LayoutAnchorable
                                         Title="{StaticResource S.App.DockPanel.SectionProperties}"

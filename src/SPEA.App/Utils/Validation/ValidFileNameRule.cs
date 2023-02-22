@@ -29,12 +29,12 @@ namespace SPEA.App.Utils.Validation
         /// <inheritdoc/>
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            var stringValue = Convert.ToString(value);
+            var str = Convert.ToString(value);
 
             // TODO: "    .txt" is okay, while "    " is an illegal file name.
             //       Change to IsNullOrWhiteSpace?
-            if (string.IsNullOrEmpty(stringValue) ||
-                stringValue.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            if (string.IsNullOrEmpty(str) ||
+                str.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             {
                 return new ValidationResult(false, _errorMessage);
             }

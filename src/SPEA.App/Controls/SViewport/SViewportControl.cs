@@ -8,9 +8,7 @@
 namespace SPEA.App.Controls.SViewport
 {
     using System;
-    using System.Collections.Generic;
     using System.Windows;
-    using System.Windows.Automation.Peers;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
 
@@ -203,6 +201,28 @@ namespace SPEA.App.Controls.SViewport
 
             _itemsHost.ItemsOwner = this;
         }
+
+        // Container types and overrides: http://drwpf.com/blog/2008/07/20/itemscontrol-g-is-for-generator/
+
+        /// <summary>
+        /// Specifies a <see cref="SViewportControl"/> item container type.
+        /// </summary>
+        /// <remarks>
+        /// Since <see cref="SViewportControl"/> inherits from <see cref="ItemsControl"/>,
+        /// its <see cref="ItemContainerGenerator"/> will use this method to get the appropriate
+        /// container type.
+        /// </remarks>
+        /// <returns><see cref="SElementContainer"/> item container.</returns>
+        protected override DependencyObject GetContainerForItemOverride() => new SElementContainer();
+
+        /// <summary>
+        /// Is used by <see cref="ItemContainerGenerator"/> to check whether a given item is 
+        /// already a type of <see cref="SElementContainer"/> before asking <see cref="ItemsControl"/>
+        /// to create a new container using <see cref="GetContainerForItemOverride"/>.
+        /// </summary>
+        /// <param name="item">An item to be checked.</param>
+        /// <returns><see langword="true"/> if a given item is <see cref="SElementContainer"/>, otherwise <see langword="false"/>.</returns>
+        protected override bool IsItemItsOwnContainerOverride(object item) => item is SElementContainer;
 
         #endregion Methods
     }
