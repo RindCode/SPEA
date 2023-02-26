@@ -12,7 +12,7 @@ namespace SPEA.App
     using System.Windows.Threading;
     using Microsoft.Extensions.DependencyInjection;
     using SPEA.App.Extensions.Markup;
-    using SPEA.App.ViewModels;
+    using SPEA.App.ViewModels.Windows;
     using SPEA.App.Views;
 
     /// <summary>
@@ -27,6 +27,9 @@ namespace SPEA.App
         /// </summary>
         public SPEA_Application()
         {
+#if DEBUG
+            IsDebugBuild = true;
+#endif
             InitializeComponent();
         }
 
@@ -40,18 +43,23 @@ namespace SPEA.App
         public static new SPEA_Application Current => (SPEA_Application)Application.Current;
 
         /// <summary>
+        /// Gets a value indicating whether the application was built for debug or release.
+        /// </summary>
+        public bool IsDebugBuild { get; } = false;
+
+        /// <summary>
         /// Gets <see cref="IServiceProvider"/> for this application, containing various app services.
         /// </summary>
-        public IServiceProvider Services { get; private set; }
+        public IServiceProvider? Services { get; private set; }
 
         /// <summary>
         /// Gets main window instance of this application.
         /// </summary>
-        public MainWindow MainWindowInstance { get; private set; }
+        public MainWindow? MainWindowInstance { get; private set; }
 
-        #endregion Properties
+#endregion Properties
 
-        #region Methods
+#region Methods
 
         // Performs startup actions.
         private void App_Startup(object sender, StartupEventArgs e)
@@ -83,6 +91,6 @@ namespace SPEA.App
             ////e.Handled = true;
         }
 
-        #endregion Methods
+#endregion Methods
     }
 }

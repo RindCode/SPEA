@@ -12,10 +12,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
     xmlns:vm="clr-namespace:SPEA.App.ViewModels"
+    xmlns:vm_wnd="clr-namespace:SPEA.App.ViewModels.Windows"
     xmlns:cmdchn="clr-namespace:SPEA.App.Commands.Chaining"
     xmlns:converter="clr-namespace:SPEA.App.Utils.Converters"
     xmlns:validation="clr-namespace:SPEA.App.Utils.Validation"
     xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
+    xmlns:behaviors="clr-namespace:SPEA.App.Extensions.Behaviors"
     mc:Ignorable="d"
     assist:WindowAssist.CloseWindowCommand="{Binding CommandsManager[CloseWindow].Command}"
     Width="420"
@@ -24,7 +26,7 @@
     Style="{StaticResource WindowWithCloseButtonStyle}"
     WindowStartupLocation="CenterScreen"
     WindowState="Normal"
-    DataContext="{markupex:DISource Type=vm:NewSectionViewModel}">
+    DataContext="{markupex:DISource Type=vm_wnd:NewSectionViewModel}">
 
     <Window.Resources>
         <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -47,7 +49,20 @@
             Text="{StaticResource S.NewSectionWindow.Window.Title}"/>
     </ctrl:WindowBase.HeaderContent>
 
-    <Grid x:Name="RootGrid">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction
+                Command="{Binding Path=DisposeViewModelCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid
+        x:Name="RootGrid"
+        Focusable="True"
+        FocusVisualStyle="{x:Null}">
+        <i:Interaction.Behaviors>
+            <behaviors:StealsFocusOnClickBehavior/>
+        </i:Interaction.Behaviors>
         <Border
             Grid.Row="1"
             Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}">
@@ -74,6 +89,9 @@
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
+                    <i:Interaction.Behaviors>
+                        <behaviors:TextBoxMoveFocusOnEnterKeyBehavior/>
+                    </i:Interaction.Behaviors>
                 </TextBox>
                 <Grid
                     x:Name="CrossSectionTypeSelector"
@@ -104,6 +122,7 @@
                         DockPanel.Dock="Right"
                         Width="64"
                         Margin="0,0,5,0"
+                        Focusable="False"
                         exten:AccentColorExtension.AccentColor="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SteelBlue}"
                         Style="{DynamicResource RaisedButtonStyle_2}"
                         Content="{StaticResource S.NewSectionWindow.Button.CreateButton.Text}"
@@ -126,6 +145,7 @@
                         DockPanel.Dock="Right"
                         Width="64"
                         IsCancel="True"
+                        Focusable="False"
                         Style="{DynamicResource RaisedButtonStyle_2}"
                         Content="{StaticResource S.NewSectionWindow.Button.CancelButton.Text}"
                         Command="{Binding Path=DataContext.CommandsManager[CloseWindow].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"

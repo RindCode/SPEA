@@ -8,14 +8,12 @@
 namespace SPEA.App.ViewModels
 {
     using System;
-    using System.Windows.Media;
-    using System.Windows.Shapes;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.Utils.Services;
-    using SPEA.App.ViewModels.SElements;
+    using SPEA.App.ViewModels.Windows;
 
     /// <summary>
     /// Represents a view model for "Add Geometry" pane.

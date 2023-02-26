@@ -5,30 +5,26 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.ViewModels.SElements
+namespace SPEA.App.ViewModels.Windows
 {
     using System;
-    using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
-    using SPEA.App.Utils.Helpers;
-    using SPEA.Core.CrossSection;
+    using SPEA.App.ViewModels.SElements;
 
     /// <summary>
     /// A view model used by "add new rectangle primitive" window.
     /// </summary>
-    public class AddPrimitiveRectangleViewModel : ObservableObject
+    public class AddPrimitiveRectangleViewModel : WindowBaseViewModel
     {
         #region Fields
 
-        private readonly CommandsManager _commandsManager;
+        private readonly SDocumentsManager _sDocumentsManager;
         private readonly string _addPrimitiveRectangleCmd = "AddPrimitiveRectangleWindow.Add";
+        private bool _disposed;
         private double _width;
         private double _height;
-        private bool _isWidthValid;
-        private bool _isHeightValid;
-        private bool _isInputValid;
 
         #endregion Fields
 
@@ -38,22 +34,43 @@ namespace SPEA.App.ViewModels.SElements
         /// Initializes a new instance of the <see cref="AddPrimitiveRectangleViewModel"/> class.
         /// </summary>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
+        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
         public AddPrimitiveRectangleViewModel(
-            CommandsManager commandsManager)
+            CommandsManager commandsManager,
+            SDocumentsManager sDocumentsManager)
+            : base(commandsManager)
         {
-            _commandsManager = commandsManager ?? throw new ArgumentNullException(nameof(commandsManager));
+            _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
 
-            CommandsManager.RegisterCommand(_addPrimitiveRectangleCmd, new RelayCommand(AddRectanglePrimitive));
+            CommandsManager.RegisterCommand(_addPrimitiveRectangleCmd, new RelayCommand(AddPrimitiveRectangle));
         }
 
         #endregion Constructors
 
-        #region Properties
+        #region IDisposable
 
-        /// <summary>
-        /// Gets a commands manager reference.
-        /// </summary>
-        public CommandsManager CommandsManager => _commandsManager;
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed state (managed objects)
+                    CommandsManager.UnregisterCommand(_addPrimitiveRectangleCmd);
+                }
+
+                // Free unmanaged resources (unmanaged objects) and override finalizer
+                // Set large fields to null
+                _disposed = true;
+            }
+
+            base.Dispose(disposing);
+        }
+
+        #endregion IDisposable
+
+        #region Properties
 
         /// <summary>
         /// Gets or sets a width values used to create a rectangle primitive.
@@ -81,11 +98,15 @@ namespace SPEA.App.ViewModels.SElements
         /// Creates a new rectangle primitive and adds it into a collection
         /// of cross-section geometry elements.
         /// </summary>
-        private void AddRectanglePrimitive()
+        private void AddPrimitiveRectangle()
         {
-            var vm = new SRectViewModel();
-            vm.Width = Width;
-            vm.Height = Height;
+            var vm = new SRectViewModel()
+            {
+                W = Width,
+                H = Height,
+            };
+
+            _sDocumentsManager.SelectedDocument.AddSElement(vm);
         }
 
         #endregion Commands Logic

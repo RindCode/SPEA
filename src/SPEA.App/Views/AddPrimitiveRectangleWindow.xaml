@@ -2,9 +2,9 @@
     x:Class="SPEA.App.Views.AddPrimitiveRectangleWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
     xmlns:ctrl="clr-namespace:SPEA.App.Controls"
     xmlns:exten="clr-namespace:SPEA.App.Extensions.AttachedProperties"
-    xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
     xmlns:markupex="clr-namespace:SPEA.App.Extensions.Markup"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -13,10 +13,12 @@
     xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
     xmlns:vm="clr-namespace:SPEA.App.ViewModels"
     xmlns:vm_se="clr-namespace:SPEA.App.ViewModels.SElements"
+    xmlns:vm_wnd="clr-namespace:SPEA.App.ViewModels.Windows"
     xmlns:cmdchn="clr-namespace:SPEA.App.Commands.Chaining"
     xmlns:converter="clr-namespace:SPEA.App.Utils.Converters"
     xmlns:validation="clr-namespace:SPEA.App.Utils.Validation"
     xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
+    xmlns:behaviors="clr-namespace:SPEA.App.Extensions.Behaviors"
     mc:Ignorable="d"
     assist:WindowAssist.CloseWindowCommand="{Binding CommandsManager[CloseWindow].Command}"
     Width="240"
@@ -25,7 +27,7 @@
     Style="{StaticResource WindowWithCloseButtonStyle}"
     WindowStartupLocation="CenterScreen"
     WindowState="Normal"
-    DataContext="{markupex:DISource Type=vm_se:AddPrimitiveRectangleViewModel}">
+    DataContext="{markupex:DISource Type=vm_wnd:AddPrimitiveRectangleViewModel}">
 
     <Window.Resources>
         <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -49,7 +51,20 @@
             Text="{StaticResource S.AddPrimitiveRectangle.Window.Title}"/>
     </ctrl:WindowBase.HeaderContent>
 
-    <Grid x:Name="RootGrid">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction
+                Command="{Binding Path=DisposeViewModelCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid
+        x:Name="RootGrid"
+        Focusable="True"
+        FocusVisualStyle="{x:Null}">
+        <i:Interaction.Behaviors>
+            <behaviors:StealsFocusOnClickBehavior/>
+        </i:Interaction.Behaviors>
         <Border
             Grid.Row="1"
             Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}">
@@ -94,6 +109,9 @@
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
+                    <i:Interaction.Behaviors>
+                        <behaviors:TextBoxMoveFocusOnEnterKeyBehavior/>
+                    </i:Interaction.Behaviors>
                 </TextBox>
                 <TextBlock
                     Grid.Row="1"
@@ -124,6 +142,9 @@
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
+                    <i:Interaction.Behaviors>
+                        <behaviors:TextBoxMoveFocusOnEnterKeyBehavior/>
+                    </i:Interaction.Behaviors>
                 </TextBox>
                 <StackPanel
                     Grid.Row="3"
@@ -135,6 +156,7 @@
                         DockPanel.Dock="Right"
                         Width="64"
                         Margin="0,0,5,0"
+                        Focusable="False"
                         exten:AccentColorExtension.AccentColor="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SteelBlue}"
                         Style="{DynamicResource RaisedButtonStyle_2}"
                         Content="{StaticResource S.AddPrimitiveRectangle.Button.AddButton.Text}">
@@ -169,6 +191,7 @@
                         DockPanel.Dock="Right"
                         Width="64"
                         IsCancel="True"
+                        Focusable="False"
                         Style="{DynamicResource RaisedButtonStyle_2}"
                         Content="{StaticResource S.AddPrimitiveRectangle.Button.CancelButton.Text}"
                         Command="{Binding Path=DataContext.CommandsManager[CloseWindow].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"

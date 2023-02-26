@@ -80,7 +80,7 @@ namespace SPEA.App.Commands
         /// </remarks>
         /// <param name="name">A unique command name (key).</param>
         /// <returns><see cref="RegisteredCommand"/> instance.</returns>
-        public RegisteredCommand this[string name]
+        public RegisteredCommand? this[string name]
         {
             get => GetRegisteredCommand(name);
         }
@@ -126,14 +126,14 @@ namespace SPEA.App.Commands
         /// <returns><see cref="RegisteredCommand"/> instance.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">If a given name (key) is not registered.</exception>
-        public RegisteredCommand GetRegisteredCommand(string name)
+        public RegisteredCommand? GetRegisteredCommand(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
                 throw new ArgumentNullException($"Invalid command name: {nameof(name)}");
             }
 
-            var isRegistered = _registeredCommands.TryGetValue(name, out RegisteredCommand value);
+            var isRegistered = _registeredCommands.TryGetValue(name, out RegisteredCommand? value);
             if (!isRegistered)
             {
                 throw new InvalidOperationException($"The requested command \"{name}\" is not registered.");
@@ -147,10 +147,10 @@ namespace SPEA.App.Commands
         /// </summary>
         /// <param name="name">A unique command name (key).</param>
         /// <returns><see cref="CommandMetadata"/> instance.</returns>
-        public CommandMetadata GetRegisteredCommandOptions(string name)
+        public CommandMetadata? GetRegisteredCommandOptions(string name)
         {
             var rc = GetRegisteredCommand(name);
-            return rc.Metadata;
+            return rc?.Metadata;
         }
 
         /// <summary>
@@ -158,10 +158,10 @@ namespace SPEA.App.Commands
         /// </summary>
         /// <param name="name">A unique command name (key).</param>
         /// <returns><see cref="ICommand"/> instance.</returns>
-        public ICommand GetCommand(string name)
+        public ICommand? GetCommand(string name)
         {
             var rc = GetRegisteredCommand(name);
-            return rc.Command;
+            return rc?.Command;
         }
 
         // Adds a new command into a dictionary of registered commands.

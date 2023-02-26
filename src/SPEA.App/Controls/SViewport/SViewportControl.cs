@@ -8,6 +8,8 @@
 namespace SPEA.App.Controls.SViewport
 {
     using System;
+    using System.Collections.Specialized;
+    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
@@ -29,12 +31,87 @@ namespace SPEA.App.Controls.SViewport
         private const string MinorGridPartName = "PART_MinorGrid";
         private const string MajorGridPartName = "PART_MajorGrid";
 
-        private InfinitePanel _infinitePanelContainer = null;
-        private SViewportItemsHostControl _itemsHost = null;
+        ////private readonly List<int> _containersIndexes = new List<int>();
+        private InfinitePanel? _infinitePanel = null;
+        private SViewportItemsHostControl? _itemsHost = null;
 
         #endregion Fields
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SViewportControl"/> class.
+        /// </summary>
+        public SViewportControl()
+        {
+            // Blank.
+        }
+
+        #endregion Constructors
+
         #region Dependency Properties
+
+        /// <summary>
+        /// DependencyProperty for <see cref="CanSelectMultipleItems"/> property.
+        /// </summary>
+        public static readonly DependencyProperty CanSelectMultipleItemsProperty =
+            DependencyProperty.Register(
+                "CanSelectMultipleItems",
+                typeof(bool),
+                typeof(SViewportControl),
+                new FrameworkPropertyMetadata(
+                    true,
+                    OnCanSelectMultipleItemsChanged));
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the current <see cref="SViewportControl"/>
+        /// allows to select multiple items.
+        /// </summary>
+        public bool CanSelectMultipleItems
+        {
+            get { return (bool)GetValue(CanSelectMultipleItemsProperty); }
+            set { SetValue(CanSelectMultipleItemsProperty, value); }
+        }
+
+        /// <summary>
+        /// DependencyProperty for <see cref="ScrollFactor"/> property.
+        /// </summary>
+        public static readonly DependencyProperty ScrollFactorProperty =
+            DependencyProperty.Register(
+                "ScrollFactor",
+                typeof(double),
+                typeof(SViewportControl),
+                new FrameworkPropertyMetadata(
+                    0.05d));
+
+        /// <summary>
+        /// Gets or sets the scroll factor value.
+        /// </summary>
+        public double ScrollFactor
+        {
+            get { return (double)GetValue(ScrollFactorProperty); }
+            set { SetValue(ScrollFactorProperty, value); }
+        }
+
+        /// <summary>
+        /// DependencyProperty for <see cref="ContentScale"/> property.
+        /// </summary>
+        public static readonly DependencyProperty ContentScaleProperty =
+            DependencyProperty.Register(
+                "ContentScale",
+                typeof(double),
+                typeof(SViewportControl),
+                new FrameworkPropertyMetadata(
+                    1.0d));
+
+        /// <summary>
+        /// Gets or sets the scale value.
+        /// </summary>
+        public double ContentScale
+        {
+            get { return (double)GetValue(ContentScaleProperty); }
+            set { SetValue(ContentScaleProperty, value); }
+        }
 
         /// <summary>
         /// DependencyProperty for <see cref="MinorGridEnabled"/> property.
@@ -44,7 +121,7 @@ namespace SPEA.App.Controls.SViewport
                 "MinorGridEnabled",
                 typeof(bool),
                 typeof(SViewportControl),
-                new PropertyMetadata(true));
+                new FrameworkPropertyMetadata(true));
 
         /// <summary>
         /// Gets or sets a value indicating whether the minor grid is enabled or not.
@@ -63,7 +140,7 @@ namespace SPEA.App.Controls.SViewport
                 "MajorGridEnabled",
                 typeof(bool),
                 typeof(SViewportControl),
-                new PropertyMetadata(true));
+                new FrameworkPropertyMetadata(true));
 
         /// <summary>
         /// Gets or sets a value indicating whether the major grid is enabled or not.
@@ -102,7 +179,7 @@ namespace SPEA.App.Controls.SViewport
                 "MinorGridViewport",
                 typeof(Rect),
                 typeof(SViewportControl),
-                new PropertyMetadata(new Rect(0, 0, 10, 10)));
+                new FrameworkPropertyMetadata(new Rect(0, 0, 10, 10)));
 
         /// <summary>
         /// Gets or sets a value of a minor grid viewport.
@@ -121,7 +198,7 @@ namespace SPEA.App.Controls.SViewport
                 "MajorGridViewport",
                 typeof(Rect),
                 typeof(SViewportControl),
-                new PropertyMetadata(new Rect(0, 0, 100, 100)));
+                new FrameworkPropertyMetadata(new Rect(0, 0, 100, 100)));
 
         /// <summary>
         /// Gets or sets a value of a major grid viewport.
@@ -146,10 +223,10 @@ namespace SPEA.App.Controls.SViewport
 
         #region Properties
 
-        /////// <summary>
-        /////// Gets the items host control.
-        /////// </summary>
-        ////internal SViewportItemsHostControl ItemsHost => _itemsHost;
+        /// <summary>
+        /// Gets the items host control.
+        /// </summary>
+        public SViewportItemsHostControl? ItemsHost => _itemsHost;
 
         /////// <summary>
         /////// Gets or sets the value of a minor grid spacing.
@@ -185,21 +262,11 @@ namespace SPEA.App.Controls.SViewport
         /// <inheritdoc/>
         public override void OnApplyTemplate()
         {
-            _infinitePanelContainer = (InfinitePanel)GetTemplateChild(InfinitePanelPartName);
-            if (_infinitePanelContainer == null)
-            {
-                throw new NullReferenceException($"Couldn't find the element with the following PART_ name: {InfinitePanelPartName}");
-            }
-
-            _infinitePanelContainer.Initialize(this);
-
             _itemsHost = (SViewportItemsHostControl)GetTemplateChild(ItemsHostPartName);
-            if (_itemsHost == null)
-            {
-                throw new NullReferenceException($"Couldn't find the element with the following PART_ name: {ItemsHostPartName}");
-            }
-
             _itemsHost.ItemsOwner = this;
+
+            _infinitePanel = (InfinitePanel)GetTemplateChild(InfinitePanelPartName);
+            _infinitePanel.Initialize(this);
         }
 
         // Container types and overrides: http://drwpf.com/blog/2008/07/20/itemscontrol-g-is-for-generator/
@@ -223,6 +290,40 @@ namespace SPEA.App.Controls.SViewport
         /// <param name="item">An item to be checked.</param>
         /// <returns><see langword="true"/> if a given item is <see cref="SElementContainer"/>, otherwise <see langword="false"/>.</returns>
         protected override bool IsItemItsOwnContainerOverride(object item) => item is SElementContainer;
+
+        /// <summary>
+        /// Invoked when the value of the <see cref="ItemsControl.Items"/> property changes.
+        /// </summary>
+        /// <param name="e">Event data.</param>
+        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+        {
+            ////Debug.WriteLine($"oldindex={e.OldStartingIndex}");
+            ////Debug.WriteLine($"newindex={e.NewStartingIndex}");
+            ////Debug.WriteLine($"action={e.Action}");
+
+            // NewStartingIndex = 0 when the first item is added.
+            ////if (e.NewStartingIndex != -1 && e.Action == NotifyCollectionChangedAction.Add)
+            ////{
+            ////    var container = (SElementContainer)ItemContainerGenerator.ContainerFromItem(e.NewStartingIndex);
+            ////    if (container.IsValid)
+            ////    {
+            ////        _containersIndexes.Add(e.NewStartingIndex);
+            ////    }
+            ////}
+        }
+
+        // CanSelectMultipleItemsProperty DP callback.
+        private static void OnCanSelectMultipleItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((SViewportControl)d).UpdateCanSelectMultipleItems((bool)e.NewValue);
+        }
+
+        // Updates CanSelectMultipleItems property in MultiSelector class, since it's a simple property.
+        // This callback keeps a connection between a custom DP and the ordinary one.
+        private void UpdateCanSelectMultipleItems(bool value)
+        {
+            base.CanSelectMultipleItems = value;
+        }
 
         #endregion Methods
     }

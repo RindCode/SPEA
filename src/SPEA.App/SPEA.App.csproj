@@ -28,6 +28,7 @@
     <RepositoryUrl>https://github.com/RindCode/SPEA</RepositoryUrl>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AssemblyName>SPEA</AssemblyName>
+    <Nullable>enable</Nullable>
     
   </PropertyGroup>
 

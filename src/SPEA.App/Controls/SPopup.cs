@@ -10,6 +10,7 @@ namespace SPEA.App.Controls
     using System.Windows;
     using System.Windows.Controls.Primitives;
     using System.Windows.Input;
+    using SPEA.App.Utils.Helpers;
 
     /// <summary>
     /// Represents an extended <see cref="Popup"/> control.
@@ -18,9 +19,23 @@ namespace SPEA.App.Controls
     {
         #region Fields
 
+        private Window _parentWindow;
         private bool _safeCloseBoundariesLocked = false;
 
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SPopup"/> class.
+        /// </summary>
+        public SPopup()
+        {
+            Loaded += SPopup_Loaded;
+            Unloaded += SPopup_Unloaded;
+        }
+
+        #endregion Constructors
 
         #region Dependency Properties
 
@@ -84,18 +99,6 @@ namespace SPEA.App.Controls
         }
 
         #endregion Dependency Properties
-
-        #region Contructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SPopup"/> class.
-        /// </summary>
-        public SPopup()
-        {
-            // Blank.
-        }
-
-        #endregion Constructors
 
         #region Properties
 
@@ -178,6 +181,39 @@ namespace SPEA.App.Controls
             {
                 IsOpen = false;
             }
+        }
+
+        // Handles Loaded event.
+        private void SPopup_Loaded(object sender, RoutedEventArgs e)
+        {
+            var parentWindow = VisualTreeHelperEx.FindParent<Window>(this);
+            if (parentWindow != null)
+            {
+                _parentWindow = parentWindow;
+                _parentWindow.LocationChanged += ParentWindow_LocationChanged;
+            }
+        }
+
+        // Handles Unloaded event.
+        private void SPopup_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Loaded += SPopup_Loaded;
+            Unloaded -= SPopup_Unloaded;
+            _parentWindow.LocationChanged -= ParentWindow_LocationChanged;
+        }
+
+        // Handles LocationChanged events of a parent window.
+        private void ParentWindow_LocationChanged(object sender, System.EventArgs e)
+        {
+            // This is a workaround to keep the PopUp position at the same place
+            // when the parent Window is moved or resized. WPF Popup Reposition() and UpdatePosition()
+            // methods are implemented as internal and private, so we cannot call them directly.
+            // However, HorizontalOffset, VerticalOffset and PlacementRectangle DPs have OnOffsetChanged()
+            // callback, which in turn will call Reposition() method
+
+            var oldValue = VerticalOffset;
+            VerticalOffset -= 0.001;
+            VerticalOffset = oldValue;
         }
 
         // Indicates whether the given mouse position in popup's coordinates is inside

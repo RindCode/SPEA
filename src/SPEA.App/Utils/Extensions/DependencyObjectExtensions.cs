@@ -1,23 +1,19 @@
 ﻿// ==================================================================================================
-// <copyright file="DependencyPropertyHelper.cs" company="Dmitry Poberezhnyy">
+// <copyright file="DependencyObjectExtensions.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Utils.Helpers
+namespace SPEA.App.Utils.Extensions
 {
     using System.Reflection;
     using System.Windows;
 
     /// <summary>
-    /// A collection is extension helpers when working with <see cref="DependencyProperty"/> objects.
+    /// Provides access to extension helpers for <see cref="DependencyProperty"/> objects.
     /// </summary>
-    /// <remarks>
-    /// Since this class provides extension methods for <see cref="DependencyObject"/>,
-    /// a namespace should be included to make them work.
-    /// </remarks>
-    public static class DependencyPropertyHelper
+    public static class DependencyObjectExtensions
     {
         #region Methods
 
@@ -43,7 +39,7 @@ namespace SPEA.App.Utils.Helpers
         /// <returns><see langword="true"/> if a such depency property is found, otherwise <see langword="fasle"/>.</returns>
         public static bool HasDependencyProperty(this DependencyObject target, string dpname)
         {
-            return FindDependencyProperty(target, dpname) != null;
+            return target.FindDependencyProperty(dpname) != null;
         }
 
         #endregion Methods

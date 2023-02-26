@@ -8,6 +8,8 @@
 namespace SPEA.App.Controls.SViewport
 {
     using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
     using SPEA.App.Utils.Extensions;
@@ -18,29 +20,29 @@ namespace SPEA.App.Controls.SViewport
     public class SViewportItemsHostControl : Panel
     {
         /// <summary>
-        /// Gets or sets the parent control.
+        /// Gets or sets the parent <see cref="ItemsControl"/>.
         /// </summary>
-        internal SViewportControl ItemsOwner { get; set; }
+        public SViewportControl? ItemsOwner { get; set; }
 
         /// <summary>
         /// Gets or sets the left most element.
         /// </summary>
-        internal SElementContainer LeftMostElement { get; set; }
+        public SElementContainer? LeftMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the top most element.
         /// </summary>
-        internal SElementContainer TopMostElement { get; set; }
+        public SElementContainer? TopMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the right most element.
         /// </summary>
-        internal SElementContainer RightMostElement { get; set; }
+        public SElementContainer? RightMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the bottom most element.
         /// </summary>
-        internal SElementContainer BottomMostElement { get; set; }
+        public SElementContainer? BottomMostElement { get; set; }
 
         /// <inheritdoc/>
         protected override Size MeasureOverride(Size constraint)
@@ -51,7 +53,7 @@ namespace SPEA.App.Controls.SViewport
                 container?.Measure(constraint);
             }
 
-            return default;
+            return new Size(0, 0);
         }
 
         /// <inheritdoc/>
@@ -66,9 +68,15 @@ namespace SPEA.App.Controls.SViewport
             {
                 if (child is SElementContainer container)
                 {
-                    child.Arrange(new Rect(new Point(container.Left, container.Top), container.DesiredSize));
+                    var rect = new Rect(new Point(container.Left, container.Top), container.DesiredSize);
+                    child.Arrange(rect);
 
-                    var bounds = container.GetBoundingBox(ItemsOwner);  // extension method
+                    ////if (!container.IsValid)
+                    ////{
+                    ////    continue;
+                    ////}
+
+                    container.BoundingBox = container.GetBoundingBox(this);  // extension method
 
                     minX = Math.Min(minX, container.BoundingBox.Left);
                     minY = Math.Min(minY, container.BoundingBox.Top);
@@ -94,6 +102,8 @@ namespace SPEA.App.Controls.SViewport
                     {
                         BottomMostElement = container;
                     }
+
+                    Debug.WriteLine($"bounds: {container.BoundingBox.Left}|{container.BoundingBox.Top}|{container.BoundingBox.Right}|{container.BoundingBox.Bottom}");
                 }
             }
 

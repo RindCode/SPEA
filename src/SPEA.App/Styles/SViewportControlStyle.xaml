@@ -50,7 +50,7 @@
                                 Background="Transparent"
                                 Focusable="False">
                                 <ctrl_svp:SViewportItemsHostControl
-                                    x:Name="PART_ItemsHost"
+                                    x:Name="PART_ItemsHost" Background="DarkSlateGray" Opacity="1"
                                     IsItemsHost="True"/>
                             </ctrl_svp:InfinitePanel>
                             <!--<Grid>

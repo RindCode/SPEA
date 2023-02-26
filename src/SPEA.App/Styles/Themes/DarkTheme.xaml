@@ -11,6 +11,7 @@
     <Color x:Key="Color.PrimaryPalette.Level2">#343434</Color>
     <Color x:Key="Color.PrimaryPalette.Level2a">#434343</Color>
     <Color x:Key="Color.PrimaryPalette.Level3">#525252</Color>
+    <Color x:Key="Color.PrimaryPalette.Level3a">#5B5B5B</Color>
     <Color x:Key="Color.PrimaryPalette.Level4">#646464</Color>
     
     <!-- Accent Colors Palette -->
@@ -19,6 +20,7 @@
     <Color x:Key="Color.AccentPalette.Tomato">#FF6347</Color>
     <Color x:Key="Color.AccentPalette.SteelBlue">#4682B4</Color>
     <Color x:Key="Color.AccentPalette.DeepSkyBlue">#00BFFF</Color>
+    <Color x:Key="Color.AccentPalette.SlateGray">#708090</Color>
 
     <!-- Primary Colors Gradients -->
     <LinearGradientBrush
@@ -87,6 +89,7 @@
     <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level2" Color="{StaticResource Color.PrimaryPalette.Level2}"/>
     <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level2a" Color="{StaticResource Color.PrimaryPalette.Level2a}"/>
     <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level3" Color="{StaticResource Color.PrimaryPalette.Level3}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level3a" Color="{StaticResource Color.PrimaryPalette.Level3a}"/>
     <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level4" Color="{StaticResource Color.PrimaryPalette.Level4}"/>
 
     <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Level0a.Inverted" Color="#4A4A4A"/>
@@ -99,6 +102,7 @@
     <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.Tomato" Color="{StaticResource Color.AccentPalette.Tomato}"/>
     <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.SteelBlue" Color="{StaticResource Color.AccentPalette.SteelBlue}"/>
     <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.DeepSkyBlue" Color="{StaticResource Color.AccentPalette.DeepSkyBlue}"/>
+    <SolidColorBrush x:Key="SolidColorBrush.PrimaryPalette.Accent.SlateGray" Color="{StaticResource Color.AccentPalette.SlateGray}"/>
 
     <SolidColorBrush x:Key="Element.Foreground.Base" Color="#D2D2D2"/>
     <SolidColorBrush x:Key="Element.Foreground.Accent" Color="#DDDDDD"/>

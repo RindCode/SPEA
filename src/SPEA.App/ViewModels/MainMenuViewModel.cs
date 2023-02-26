@@ -12,6 +12,7 @@ namespace SPEA.App.ViewModels
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
     using SPEA.App.Utils.Services;
+    using SPEA.App.ViewModels.Windows;
 
     /// <summary>
     /// A view model used by application main menu.

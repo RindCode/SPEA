@@ -9,7 +9,6 @@ namespace SPEA.App.Controllers
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
     using System.Linq;
     using System.Windows;
     using CommunityToolkit.Mvvm.ComponentModel;
@@ -31,7 +30,7 @@ namespace SPEA.App.Controllers
         private readonly string _closeDocumentCmd = "CloseDocument";
         private readonly string _closeAllDocumentsCmd = "CloseAllDocuments";
         private readonly string _closeOthersCmd = "CloseOthers";
-        private SDocumentViewModel _selectedDocument;
+        private SDocumentViewModel? _selectedDocument;
 
         #endregion Fields
 
@@ -67,7 +66,7 @@ namespace SPEA.App.Controllers
         /// <summary>
         /// Gets or sets currently active document.
         /// </summary>
-        public SDocumentViewModel SelectedDocument
+        public SDocumentViewModel? SelectedDocument
         {
             get => _selectedDocument;
             set
@@ -127,7 +126,7 @@ namespace SPEA.App.Controllers
 
             doc.Dispose();
 
-            SelectedDocument = SDocumentsCollection.Count == 0 ? null : SDocumentsCollection[^1];
+            SelectedDocument = SDocumentsCollection?.Count == 0 ? null : SDocumentsCollection?[^1];
             InvalidateCommandsCanExecute();
         }
 
@@ -141,7 +140,7 @@ namespace SPEA.App.Controllers
         /// </remarks>
         /// <param name="doc">A document to be removed.</param>
         /// <returns>The confirmation result as the instance of <see cref="MessageBoxResult"/>.</returns>
-        public MessageBoxResult RemoveDocumentWithConfirmation(SDocumentViewModel doc)
+        public MessageBoxResult RemoveDocumentWithConfirmation(SDocumentViewModel? doc)
         {
             if (doc == null)
             {
@@ -207,13 +206,13 @@ namespace SPEA.App.Controllers
         // Must be called whenever a command's CanExecute state is changed.
         private void InvalidateCommandsCanExecute()
         {
-            var cmd = CommandsManager[_closeDocumentCmd].Command as RelayCommand;
+            var cmd = CommandsManager[_closeDocumentCmd]?.Command as RelayCommand;
             cmd?.NotifyCanExecuteChanged();
 
-            cmd = CommandsManager[_closeAllDocumentsCmd].Command as RelayCommand;
+            cmd = CommandsManager[_closeAllDocumentsCmd]?.Command as RelayCommand;
             cmd?.NotifyCanExecuteChanged();
 
-            cmd = CommandsManager[_closeOthersCmd].Command as RelayCommand;
+            cmd = CommandsManager[_closeOthersCmd]?.Command as RelayCommand;
             cmd?.NotifyCanExecuteChanged();
         }
 

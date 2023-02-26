@@ -33,16 +33,16 @@ namespace SPEA.App.Controls.SViewport
         public bool CanVerticallyScroll { get; set; }
 
         /// <inheritdoc/>
-        public double ExtentHeight => _extent.Height;
+        public double ExtentHeight => ContentScale * _extent.Height;
 
         /// <inheritdoc/>
-        public double ExtentWidth => _extent.Width;
+        public double ExtentWidth => ContentScale * _extent.Width;
 
         /// <inheritdoc/>
-        public double HorizontalOffset => _offset.Width;
+        public double HorizontalOffset => ContentScale * _offset.Width;
 
         /// <inheritdoc/>
-        public double VerticalOffset => _offset.Height;
+        public double VerticalOffset => ContentScale * _offset.Height;
 
         /// <inheritdoc/>
         public double ViewportHeight => _viewport.Height;
@@ -51,7 +51,7 @@ namespace SPEA.App.Controls.SViewport
         public double ViewportWidth => _viewport.Width;
 
         /// <inheritdoc/>
-        public ScrollViewer ScrollOwner { get; set; }
+        public ScrollViewer? ScrollOwner { get; set; }
 
         #endregion Properties
 
@@ -60,25 +60,25 @@ namespace SPEA.App.Controls.SViewport
         /// <inheritdoc/>
         public void LineDown()
         {
-            TranslateVertically(_scrollFactor * _viewport.Height);
+            TranslateVertically(ScrollFactor * _viewport.Height);
         }
 
         /// <inheritdoc/>
         public void LineLeft()
         {
-            TranslateHorizontally(-_scrollFactor * _viewport.Width);
+            TranslateHorizontally(ScrollFactor * -_viewport.Width);
         }
 
         /// <inheritdoc/>
         public void LineRight()
         {
-            TranslateHorizontally(_scrollFactor * _viewport.Width);
+            TranslateHorizontally(ScrollFactor * _viewport.Width);
         }
 
         /// <inheritdoc/>
         public void LineUp()
         {
-            TranslateVertically(-_scrollFactor * _viewport.Height);
+            TranslateVertically(ScrollFactor * -_viewport.Height);
         }
 
         /// <inheritdoc/>

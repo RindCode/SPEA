@@ -15,16 +15,18 @@
     xmlns:shapes="clr-namespace:SPEA.App.Shapes"
     xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
     xmlns:vm="clr-namespace:SPEA.App.ViewModels"
+    xmlns:vm_wnd="clr-namespace:SPEA.App.ViewModels.Windows"
     xmlns:vm_se="clr-namespace:SPEA.App.ViewModels.SElements"
     xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:debug="debug-mode"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     mc:Ignorable="d"
     assist:WindowAssist.MinimizeWindowCommand="{Binding CommandsManager[MinimizeWindow].Command, Mode=OneTime}"
     assist:WindowAssist.MaximizeWindowCommand="{Binding CommandsManager[MaximizeWindow].Command, Mode=OneTime}"
     assist:WindowAssist.RestoreWindowCommand="{Binding CommandsManager[RestoreWindow].Command, Mode=OneTime}"
     assist:WindowAssist.CloseWindowCommand="{Binding CommandsManager[CloseWindow].Command, Mode=OneTime}"
-    d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+    d:DataContext="{d:DesignInstance Type=vm_wnd:MainViewModel}"
     Title="{StaticResource S.App.Title}"
     Padding="1"
     MinWidth="720"
@@ -37,7 +39,15 @@
     TextOptions.TextRenderingMode="ClearType"
     WindowStartupLocation="CenterScreen"
     WindowState="Normal"
-    DataContext="{markupex:DISource Type=vm:MainViewModel}">
+    DataContext="{markupex:DISource Type=vm_wnd:MainViewModel}">
+
+    <!--<mc:AlternateContent>
+        <mc:Choice Requires="debug">
+            <Style TargetType="{x:Type ToolTip}">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </Style>
+        </mc:Choice>
+    </mc:AlternateContent>-->
 
     <Window.Resources>
         <converters:AvalonActiveContentConverter x:Key="AvalonActiveContentConverter"/>
@@ -92,7 +102,7 @@
     <ctrl:WindowBase.HeaderContent>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="{Binding ElementName=MainMenu, Path=ActualWidth}"/>
+                <ColumnDefinition Width="Auto" MinWidth="{Binding ElementName=MainMenu, Path=ActualWidth}"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Menu
@@ -110,7 +120,7 @@
                     <MenuItem
                         Header="{StaticResource S.MainWindow.Menu.File.New}"
                         Style="{StaticResource MenuItemSubLevelStyle}"
-                        Command="{Binding Path=DataContext.CommandsManager[FileNew].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                        Command="{Binding Path=DataContext.CommandsManager[FileNew].Command, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                         InputGestureText="Ctrl+N">
                     </MenuItem>
                     <MenuItem
@@ -129,23 +139,23 @@
                     <MenuItem
                         Header="{StaticResource S.MainWindow.Menu.File.Close}"
                         Style="{StaticResource MenuItemSubLevelStyle}"
-                        Command="{Binding Path=DataContext.CommandsManager[CloseDocument].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                        Command="{Binding Path=DataContext.CommandsManager[CloseDocument].Command, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                         InputGestureText="Ctrl+W"/>
                     <MenuItem
                         Header="{StaticResource S.MainWindow.Menu.File.CloseAll}"
                         Style="{StaticResource MenuItemSubLevelStyle}"
-                        Command="{Binding Path=DataContext.CommandsManager[CloseAllDocuments].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                        Command="{Binding Path=DataContext.CommandsManager[CloseAllDocuments].Command, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                         InputGestureText="Alt+Ctrl+W"/>
                     <MenuItem
                         Header="{StaticResource S.MainWindow.Menu.File.CloseOthers}"
                         Style="{StaticResource MenuItemSubLevelStyle}"
-                        Command="{Binding Path=DataContext.CommandsManager[CloseOthers].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                        Command="{Binding Path=DataContext.CommandsManager[CloseOthers].Command, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                         InputGestureText="Alt+Ctrl+P"/>
                     <Separator Style="{DynamicResource MenuItemSeparatorStyle}"/>
                     <MenuItem
                         Header="{StaticResource S.MainWindow.Menu.File.Exit}"
                         Style="{StaticResource MenuItemSubLevelStyle}"
-                        Command="{Binding Path=DataContext.CommandsManager[CloseWindow].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                        Command="{Binding Path=DataContext.CommandsManager[CloseWindow].Command, Mode=OneTime, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                         InputGestureText="Ctrl+Q"/>
                 </MenuItem>
@@ -155,13 +165,13 @@
                     <MenuItem
                         Header="{StaticResource S.MainWindow.Menu.Edit.Undo}"
                         Style="{StaticResource MenuItemSubLevelStyle}"
-                        Command=""
+                        IsEnabled="False"
                         InputGestureText="Ctrl+Z">
                     </MenuItem>
                     <MenuItem
                         Header="{StaticResource S.MainWindow.Menu.Edit.Redo}"
                         Style="{StaticResource MenuItemSubLevelStyle}"
-                        Command=""
+                        IsEnabled="False"
                         InputGestureText="Ctrl+Y">
                     </MenuItem>
                 </MenuItem>
@@ -174,6 +184,15 @@
                     Style="{StaticResource MenuItemTopLevelStyle}"
                     IsEnabled="False"/>
             </Menu>
+            <TextBlock
+                x:Name="DEBUG_HeaderTextBlock"
+                Grid.Column="1"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Text="DEBUG BUILD" 
+                Foreground="Red"
+                Visibility="{markupex:CollapseWhenDebug}"/>
         </Grid>
     </ctrl:WindowBase.HeaderContent>
 
@@ -217,7 +236,11 @@
                                     <Grid>
                                         <ctrl_svp:SViewportControl
                                             x:Name="SectionEditorViewport"
-                                            ItemsSource="{Binding SElements}"
+                                            ItemsSource="{Binding Path=SElementsCollection, Mode=OneWay}"
+                                            SelectedItem="{Binding Path=SelectedSElement, Mode=TwoWay}"
+                                            CanSelectMultipleItems="False"
+                                            ScrollFactor="0.05"
+                                            ContentScale="1.0"
                                             MajorGridEnabled="True"
                                             MinorGridEnabled="True"
                                             Background="Transparent"
@@ -225,11 +248,11 @@
                                             <ctrl_svp:SViewportControl.Resources>
                                                 <DataTemplate DataType="{x:Type vm_se:SRectViewModel}">
                                                     <shapes:SRectPrimitive
-                                                        Width="{Binding Width}"
-                                                        Height="{Binding Height}"
-                                                        Stroke="Aquamarine"
-                                                        Fill="Tomato"
-                                                        StrokeThickness="2">
+                                                        W="{Binding Path=W, Mode=TwoWay}"
+                                                        H="{Binding Path=H, Mode=TwoWay}"
+                                                        Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level2.Inverted}"
+                                                        Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
+                                                        StrokeThickness="1">
                                                     </shapes:SRectPrimitive>
                                                 </DataTemplate>
                                             </ctrl_svp:SViewportControl.Resources>

@@ -9,15 +9,12 @@ namespace SPEA.App.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Windows.Shapes;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.ViewModels.SElements;
     using SPEA.Core.CrossSection;
-    using SPEA.Geometry.Core;
-    using SPEA.Geometry.Primitives;
 
     /// <summary>
     /// A base view model class for <see cref="CrossSectionBase"/> model.
@@ -31,9 +28,12 @@ namespace SPEA.App.ViewModels
         private readonly SDocumentsManager _sDocumentsManager;
         private readonly string _requestCloseDocumentCmd = "RequestCloseDocument";
         private readonly string _requestSaveDocumenteCmd = "RequestSaveDocument";
-        private readonly ObservableCollection<SElementViewModelBase> _sElements;
+
         private bool _disposed;
         private CrossSectionBase _model;
+        private ObservableCollection<SElementViewModelBase> _sElementsCollection = new ObservableCollection<SElementViewModelBase>();
+        private ObservableCollection<SElementViewModelBase> _selectedSElements = new ObservableCollection<SElementViewModelBase>();
+        private SElementViewModelBase? _selectedSElement;
         private bool _isDirty = false;
         private string _displayName = string.Empty;
 
@@ -57,7 +57,6 @@ namespace SPEA.App.ViewModels
 
             _model = model ?? throw new ArgumentNullException(nameof(model));
             _displayName = model.Name ?? throw new ArgumentNullException(nameof(model.Name));
-            _sElements = new ObservableCollection<SElementViewModelBase>();
 
             // Give commands their unique names related to this model ID.
             _requestCloseDocumentCmd += $"_{_model.Guid}";
@@ -66,10 +65,16 @@ namespace SPEA.App.ViewModels
             CommandsManager.RegisterCommand(_requestCloseDocumentCmd, new RelayCommand(ExecuteRequestCloseDocument));
             CommandsManager.RegisterCommand(_requestSaveDocumenteCmd, new RelayCommand(ExecuteRequestSaveDocument));
 
-            var vm = new SRectViewModel();
-            vm.Width = 100;
-            vm.Height = 50;
-            SElements.Add(vm);
+            SElementsCollection.CollectionChanged += SElementsCollection_CollectionChanged;
+            SelectedSElements.CollectionChanged += SelectedSElements_CollectionChanged;
+
+            // TODO: REMOVE CODE
+            var rect = new SRectViewModel()
+            {
+                W = 300,
+                H = 200,
+            };
+            AddSElement(rect);
         }
 
         #endregion Constructors
@@ -110,6 +115,9 @@ namespace SPEA.App.ViewModels
                     // Dispose managed state (managed objects)
                     CommandsManager.UnregisterCommand(_requestCloseDocumentCmd);
                     CommandsManager.UnregisterCommand(_requestSaveDocumenteCmd);
+                    SElementsCollection.CollectionChanged -= SElementsCollection_CollectionChanged;
+                    SelectedSElements.CollectionChanged -= SelectedSElements_CollectionChanged;
+                    SElementsCollection.Clear();
                     Model?.Dispose();
                 }
 
@@ -160,11 +168,6 @@ namespace SPEA.App.ViewModels
         }
 
         /// <summary>
-        /// Gets the reference to the collection of cross-section SElements.
-        /// </summary>
-        public ObservableCollection<SElementViewModelBase> SElements => _sElements;
-
-        /// <summary>
         /// Gets or sets a cross-section name.
         /// </summary>
         public string Name
@@ -201,6 +204,33 @@ namespace SPEA.App.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the reference to the collection of cross-section elements.
+        /// </summary>
+        public ObservableCollection<SElementViewModelBase> SElementsCollection
+        {
+            get => _sElementsCollection;
+            private set => _sElementsCollection = value;
+        }
+
+        /// <summary>
+        /// Gets the reference to the collection of selected elements.
+        /// </summary>
+        public ObservableCollection<SElementViewModelBase> SelectedSElements
+        {
+            get => _selectedSElements;
+            private set => _selectedSElements = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the currently selected item.
+        /// </summary>
+        public SElementViewModelBase? SelectedSElement
+        {
+            get => _selectedSElement;
+            set => _selectedSElement = value;
+        }
+
         #endregion Properties
 
         #region Commands
@@ -212,7 +242,7 @@ namespace SPEA.App.ViewModels
         /// <remarks>
         /// Gets a command previously registered in <see cref="CommandsManager.CommandsManager"/>.
         /// </remarks>
-        public RelayCommand RequestCloseDocumentCommand => CommandsManager.GetCommand(_requestCloseDocumentCmd) as RelayCommand;
+        public RelayCommand? RequestCloseDocumentCommand => CommandsManager.GetCommand(_requestCloseDocumentCmd) as RelayCommand;
 
         #endregion Commands
 
@@ -241,9 +271,26 @@ namespace SPEA.App.ViewModels
 
         #region Methods
 
-        internal void AddPolygon(SPolygonBase polygon)
+        /// <summary>
+        /// Adds a new element into the collection.
+        /// </summary>
+        /// <param name="element">The element to be added.</param>
+        public void AddSElement(SElementViewModelBase element)
         {
-            Model.AddPolygon(polygon);
+            SElementsCollection.Add(element);
+        }
+
+        private void SElementsCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                // Blank.
+            }
+        }
+
+        private void SelectedSElements_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            // Blank.
         }
 
         ////private void SDocumentViewModel_DataChanged(object sender, PropertyChangedEventArgs e)

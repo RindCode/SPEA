@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.ViewModels
+namespace SPEA.App.ViewModels.Windows
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +13,7 @@ namespace SPEA.App.ViewModels
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.Utils.Helpers;
+    using SPEA.App.ViewModels;
     using SPEA.Core.CrossSection;
 
     /// <summary>
@@ -24,6 +25,7 @@ namespace SPEA.App.ViewModels
 
         private readonly SDocumentsManager _sDocumentsManager;
         private readonly string _createNewDocumentCmd = "NewSectionWindow.Create";
+        private bool _disposed;
         private string _sectionName = string.Empty;
         private string _selectedSectionDefinition = string.Empty;
         private List<string> _sectionDefinitions = new List<string>()
@@ -51,6 +53,29 @@ namespace SPEA.App.ViewModels
         }
 
         #endregion Constructors
+
+        #region IDisposable
+
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed state (managed objects)
+                    CommandsManager.UnregisterCommand(_createNewDocumentCmd);
+                }
+
+                // Free unmanaged resources (unmanaged objects) and override finalizer
+                // Set large fields to null
+                _disposed = true;
+            }
+
+            base.Dispose(disposing);
+        }
+
+        #endregion IDisposable
 
         #region Properties
 
@@ -103,7 +128,7 @@ namespace SPEA.App.ViewModels
             if (_selectedSectionDefinition == ResourcesHelper.GetApplicationResource<string>("S.NewSectionWindow.CrossSectionDefinition_Metallic"))
             {
                 var cs = CrossSection.Create<MetallicCrossSection>(SectionName);
-                var vm = new SDocumentMetallicViewModel(CommandsManager, _sDocumentsManager, cs);  // TODO: Factory to avoid VM creation here?
+                var vm = new SDocumentMetallicViewModel(CommandsManager, _sDocumentsManager, cs);
                 _sDocumentsManager.AddDocument(vm);
             }
             else

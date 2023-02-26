@@ -7,6 +7,7 @@
 
 namespace SPEA.App.Utils.Extensions
 {
+    using System;
     using System.Windows;
     using System.Windows.Media;
 
@@ -18,16 +19,22 @@ namespace SPEA.App.Utils.Extensions
         #region Methods
 
         /// <summary>
-        /// Calculates the bounding box for a child element relatively to visual parent based on applied transforms.
+        /// Calculates the bounding box for a child element relatively to the visual parent based on applied transforms.
         /// </summary>
         /// <param name="element">Element the bounding box will be calculated for.</param>
         /// <param name="from">Visual element transforms will be calculated from.</param>
         /// <returns><see cref="Rect"/> bounding box.</returns>
         public static Rect GetBoundingBox(this FrameworkElement element, Visual from)
         {
+            if (from == null)
+            {
+                throw new ArgumentNullException(nameof(from));
+            }
+
             var transform = element.TransformToVisual(from);
 
-            if (double.IsNaN(element.ActualWidth) || double.IsNaN(element.ActualHeight))
+            // Width and Height DP default values are NaN.
+            if (double.IsNaN(element.Width) || double.IsNaN(element.Width))
             {
                 var actualBounds = transform.TransformBounds(new Rect(0, 0, element.ActualWidth, element.ActualHeight));
                 return actualBounds;

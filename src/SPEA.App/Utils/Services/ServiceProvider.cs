@@ -13,7 +13,7 @@ namespace SPEA.App.Utils.Services
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
     using SPEA.App.ViewModels;
-    using SPEA.App.ViewModels.SElements;
+    using SPEA.App.ViewModels.Windows;
 
     /// <summary>
     /// Application service collection for Dependency Injection purposes.

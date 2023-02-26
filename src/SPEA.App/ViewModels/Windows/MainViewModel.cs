@@ -5,13 +5,14 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.ViewModels
+namespace SPEA.App.ViewModels.Windows
 {
     using System;
     using System.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
     using SPEA.App.Controllers;
+    using SPEA.App.ViewModels;
 
     /// <summary>
     /// The main View Model used by application main window.
@@ -57,9 +58,7 @@ namespace SPEA.App.ViewModels
             _projectTreeViewModel = projectTreeViewModel ?? throw new ArgumentNullException(nameof(projectTreeViewModel));
             _addGeometryViewModel = addGeometryViewModel ?? throw new ArgumentNullException(nameof(addGeometryViewModel));
 
-            CommandsManager.RegisterCommand(
-                _requestApplicationCloseCmd,
-                new RelayCommand<CancelEventArgs>(ExecuteRequestApplicationClose));
+            CommandsManager.RegisterCommand(_requestApplicationCloseCmd, new RelayCommand<CancelEventArgs>(ExecuteRequestApplicationClose));
         }
 
         #endregion Constructors
