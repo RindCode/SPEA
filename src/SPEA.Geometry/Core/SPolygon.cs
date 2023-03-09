@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="SPolygonBase.cs" company="Dmitry Poberezhnyy">
+// <copyright file="SPolygon.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -12,12 +12,17 @@ namespace SPEA.Geometry.Core
     /// <summary>
     /// Represents a base class for polygons.
     /// </summary>
-    public abstract class SPolygonBase : SObject
+    public abstract class SPolygon : SObject
     {
         #region Fields
 
-        ////private readonly SLinearRing _shell;
-        ////private readonly SLinearRing[] _holes;
+        /// <summary>
+        /// Gets the internal type of this entity.
+        /// </summary>
+        public new const EntityType InternalType = EntityType.SPOLYGON;
+
+        private readonly SLinearRing _shell;
+        private readonly SLinearRing[] _holes;
         ////private SPoint _origin;
 
         #endregion Fields
@@ -25,9 +30,9 @@ namespace SPEA.Geometry.Core
         #region Constructors
 
         /////// <summary>
-        /////// Initializes a new instance of the <see cref="SPolygonBase"/> class.
+        /////// Initializes a new instance of the <see cref="SPolygon"/> class.
         /////// </summary>
-        ////public SPolygonBase()
+        ////public SPolygon()
         ////{
         ////    ////_shell = new SLinearRing();
         ////    ////_holes = Array.Empty<SLinearRing>();
@@ -35,17 +40,17 @@ namespace SPEA.Geometry.Core
         ////}
 
         /////// <summary>
-        /////// Initializes a new instance of the <see cref="SPolygonBase"/> class.
+        /////// Initializes a new instance of the <see cref="SPolygon"/> class.
         /////// </summary>
         /////// <param name="shell">The outer boundary of the polygon.</param>
-        ////public SPolygonBase(SLinearRing shell)
+        ////public SPolygon(SLinearRing shell)
         ////    : this(shell, Array.Empty<SLinearRing>())
         ////{
         ////    // Blank.
         ////}
 
         /////// <summary>
-        /////// Initializes a new instance of the <see cref="SPolygonBase"/> class.
+        /////// Initializes a new instance of the <see cref="SPolygon"/> class.
         /////// </summary>
         /////// <param name="shell">The outer boundary of the polygon.</param>
         /////// <param name="holes">The inner boundaries array of the polygon. Must be empty if an empty shell is provided.</param>
@@ -53,7 +58,7 @@ namespace SPEA.Geometry.Core
         /////// <exception cref="ArgumentNullException">Is thrown when <paramref name="holes"/> is <see langword="null"/>.</exception>
         /////// <exception cref="ArgumentNullException">Is thrown when <paramref name="holes"/> contains <see langword="null"/> elements.</exception>
         /////// <exception cref="ArgumentException">Is thrown when <paramref name="shell"/> is not empty, but non-empty holes were provided.</exception>
-        ////public SPolygonBase(SLinearRing shell, SLinearRing[] holes)
+        ////public SPolygon(SLinearRing shell, SLinearRing[] holes)
         ////{
         ////    ArgumentNullException.ThrowIfNull(shell);
         ////    ArgumentNullException.ThrowIfNull(holes);
@@ -100,15 +105,15 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Gets the polygon shell.
         /// </summary>
-        public abstract SLinearRing Shell { get; }
+        public virtual SLinearRing Shell => _shell;
 
         /// <summary>
         /// Gets the polygon holes array.
         /// </summary>
-        public abstract SLinearRing[] Holes { get; }
+        public virtual SLinearRing[] Holes => _holes;
 
         /// <summary>
-        /// Gets a value indicating whether the current <see cref="SPolygonBase"/> is empty
+        /// Gets a value indicating whether the current <see cref="SPolygon"/> is empty
         /// by testing is its <see cref="Shell"/> storage has no elements.
         /// </summary>
         public override bool IsEmpty => Shell.IsEmpty;

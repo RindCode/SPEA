@@ -1,5 +1,5 @@
 ﻿<ctrl:WindowBase
-    x:Class="SPEA.App.Views.AddPrimitiveRectangleWindow"
+    x:Class="SPEA.App.Views.AddPrimitiveRectWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
@@ -27,7 +27,7 @@
     Style="{StaticResource WindowWithCloseButtonStyle}"
     WindowStartupLocation="CenterScreen"
     WindowState="Normal"
-    DataContext="{markupex:DISource Type=vm_wnd:AddPrimitiveRectangleViewModel}">
+    DataContext="{markupex:DISource Type=vm_wnd:AddPrimitiveRectViewModel}">
 
     <Window.Resources>
         <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -178,7 +178,7 @@
                             <cmdchn:CommandGroup>
                                 <cmdchn:CommandGroup.Commands>
                                     <cmdchn:CommandDescriptor
-                                        Command="{Binding Path=DataContext.CommandsManager[AddPrimitiveRectangleWindow.Add].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"/>
+                                        Command="{Binding Path=DataContext.CommandsManager[AddPrimitiveRectWindow.Add].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"/>
                                     <cmdchn:CommandDescriptor
                                         Command="{Binding Path=(assist:WindowAssist.CloseWindowCommand), RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"/>

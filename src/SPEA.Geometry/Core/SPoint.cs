@@ -16,6 +16,11 @@ namespace SPEA.Geometry.Core
     {
         #region Fields
 
+        /// <summary>
+        /// Gets the internal type of this entity.
+        /// </summary>
+        public const EntityType InternalType = EntityType.SPOINT;
+
         private readonly double _x;
         private readonly double _y;
 

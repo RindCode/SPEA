@@ -100,5 +100,9 @@
     <s:String x:Key="S.SectionEditor.Button.ViewportSettings.Grid">Grid</s:String>
     <s:String x:Key="S.SectionEditor.Button.ViewportSettings.Checkbox.MajorGridlines">Major</s:String>
     <s:String x:Key="S.SectionEditor.Button.ViewportSettings.Checkbox.MinorGridlines">Minor</s:String>
+    
+    
+    <!-- SElements -->
+    <s:String x:Key="S.SElements.EntityInfo.Common.InternalType">Type</s:String>
 
 </ResourceDictionary>

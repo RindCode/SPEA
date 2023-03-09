@@ -12,7 +12,7 @@ namespace SPEA.Core.CrossSection
     /// </summary>
     /// <typeparam name="T">Cross-section model type.</typeparam>
     public abstract class CrossSectionFactory<T>
-        where T : CrossSectionBase
+        where T : CrossSection
     {
         /// <summary>
         /// Gets a type of the created cross-section.

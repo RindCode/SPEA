@@ -7,6 +7,15 @@
 
 namespace SPEA.App.ViewModels.SElements
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using SPEA.App.Models.SElements;
+    using SPEA.App.Utils.Helpers;
+    using SPEA.Geometry.Core;
+    using SPEA.Geometry.Primitives;
+
     /// <summary>
     /// Represents a view model for <see cref="Shapes.SRectPrimitive"/> shape.
     /// </summary>
@@ -14,39 +23,106 @@ namespace SPEA.App.ViewModels.SElements
     {
         #region Fields
 
+        private readonly ObservableCollection<SElementInfo> _entityInfoItems = new ObservableCollection<SElementInfo>();
+        private readonly string _internalTypePropName = ResourcesHelper.GetApplicationResource<string>("S.SElements.EntityInfo.Common.InternalType");
         private bool _disposed;
+        private SRect _model;
         private double _w;
         private double _h;
 
         #endregion Fields
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SRectViewModel"/> class.
+        /// </summary>
+        /// <param name="rect"><see cref="SRect"/> model reference.</param>
+        public SRectViewModel(SRect rect)
+        {
+            ArgumentNullException.ThrowIfNull(rect);
+
+            _model = rect;
+            _w = rect.W;
+            _h = rect.H;
+
+            // Elements order does matter.
+            _entityInfoItems.Add(new SElementInfo(name: _internalTypePropName, value: SRect.InternalType));
+            _entityInfoItems.Add(new SElementInfo(name: nameof(X0), value: rect.Origin.X));
+            _entityInfoItems.Add(new SElementInfo(name: nameof(Y0), value: rect.Origin.Y));
+            _entityInfoItems.Add(new SElementInfo(name: nameof(W), value: rect.W));
+            _entityInfoItems.Add(new SElementInfo(name: nameof(H), value: rect.H));
+
+            // To track the changes done in DataGrid.
+            for (int i = 1; i < _entityInfoItems.Count; i++)
+            {
+                PropertyChangedEventManager.AddHandler(EntityInfoItems[i], SRectViewModel_EntityInfoItemChanged, nameof(SElementInfo.Value));
+            }
+        }
+
+        #endregion Constructors
+
         #region Properties
+
+        /// <summary>
+        /// Gets a model object.
+        /// </summary>
+        public SRect Model => _model;
+
+        /// <inheritdoc/>
+        public override double X0
+        {
+            get => _model.Origin.X;
+            set
+            {
+                SetProperty(_model.Origin.X, value, _model, (model, x) => model.Origin = new SPoint(x, model.Origin.Y));
+                _entityInfoItems[1].Value = value;
+                _model = new SRect(value, _model.Origin.Y, _model.W, _model.H);
+            }
+        }
+
+        /// <inheritdoc/>
+        public override double Y0
+        {
+            get => _model.Origin.Y;
+            set
+            {
+                SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));
+                _entityInfoItems[2].Value = value;
+                _model = new SRect(_model.Origin.X, value, _model.W, _model.H);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the rectangle width.
         /// </summary>
-        /// <remarks>
-        /// Do not use <see cref="SElementViewModelBase.Width"/> property to define
-        /// or access the shape width. Use this property instead.
-        /// </remarks>
         public double W
         {
             get => _w;
-            set => SetProperty(ref _w, value);
+            set
+            {
+                SetProperty(ref _w, value);
+                _entityInfoItems[3].Value = value;
+                _model = new SRect(_model.Origin, value, _model.H);
+            }
         }
 
         /// <summary>
         /// Gets or sets the rectangle height.
         /// </summary>
-        /// <remarks>
-        /// Do not use <see cref="SElementViewModelBase.Width"/> property to define
-        /// or access the shape height. Use this property instead.
-        /// </remarks>
         public double H
         {
             get => _h;
-            set => SetProperty(ref _h, value);
+            set
+            {
+                SetProperty(ref _h, value);
+                _entityInfoItems[4].Value = value;
+                _model = new SRect(_model.Origin, _model.W, value);
+            }
         }
+
+        /// <inheritdoc/>
+        public override ObservableCollection<SElementInfo> EntityInfoItems => _entityInfoItems;
 
         #endregion Properties
 
@@ -74,6 +150,48 @@ namespace SPEA.App.ViewModels.SElements
 
         #region Methods
 
+        private void SRectViewModel_EntityInfoItemChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is not SElementInfo obj)
+            {
+                return;
+            }
+
+            if (obj.Value is not string strVal)
+            {
+                return;
+            }
+
+            var isParsed = double.TryParse(strVal, out double value);
+            if (!isParsed)
+            {
+                return;
+            }
+
+            // If EntityInfo was changed first, then this code will merely update a VM property.
+            // If a VM property was changed first, its setter will also update EntityInfo property,
+            // and then this code will be invoked. To avoid recursion, we compare VM and EntityInfo
+            // values since the event is raised after all properties are updated.
+
+            var targetProperty = obj.Name;
+            switch (targetProperty)
+            {
+                case nameof(X0):
+                    if (X0 != value) { X0 = value; }
+                    break;
+                case nameof(Y0):
+                    if (Y0 != value) { Y0 = value; }
+                    break;
+                case nameof(W):
+                    if (W != value) { W = value; }
+                    break;
+                case nameof(H):
+                    if (H != value) { H = value; }
+                    break;
+                default:
+                    return;
+            }
+        }
 
         #endregion Methods
     }

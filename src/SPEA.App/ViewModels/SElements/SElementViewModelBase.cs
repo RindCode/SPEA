@@ -8,7 +8,11 @@
 namespace SPEA.App.ViewModels.SElements
 {
     using System;
+    using System.Collections.ObjectModel;
     using CommunityToolkit.Mvvm.ComponentModel;
+    using SPEA.App.Models.SElements;
+    using SPEA.Geometry.Core;
+    using SPEA.Geometry.Primitives;
 
     /// <summary>
     /// Represents a base class for all cross-section elements view models.
@@ -17,11 +21,11 @@ namespace SPEA.App.ViewModels.SElements
     {
         #region Fields
 
-        private bool _disposedValue;
-        private double _top;
-        private double _left;
-        private double _width;
-        private double _height;
+        private bool _disposed;
+        ////private double _top;
+        ////private double _left;
+        ////private double _width;
+        ////private double _height;
 
         #endregion Fields
 
@@ -64,7 +68,7 @@ namespace SPEA.App.ViewModels.SElements
         /// <param name="disposing">Designates whether the method was called from Dispose() or not.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposedValue)
+            if (!_disposed)
             {
                 if (disposing)
                 {
@@ -73,7 +77,7 @@ namespace SPEA.App.ViewModels.SElements
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
                 // TODO: set large fields to null
-                _disposedValue = true;
+                _disposed = true;
             }
         }
 
@@ -82,52 +86,71 @@ namespace SPEA.App.ViewModels.SElements
         #region Properties
 
         /// <summary>
-        /// Gets or sets the top-most bound of the S-element bounding box.
+        /// Gets the collection of element's entity info by mapping its properties
+        /// and some additional metadata related to its underlying model.
         /// </summary>
-        public double Top
-        {
-            get => _top;
-            set
-            {
-                SetProperty(ref _top, value);
-            }
-        }
+        public abstract ObservableCollection<SElementInfo> EntityInfoItems { get; }
 
         /// <summary>
-        /// Gets or sets the left-most bound of the S-element bounding box.
+        /// Gets or sets the X-coordinate of the element's origin.
         /// </summary>
-        public double Left
-        {
-            get => _left;
-            set
-            {
-                SetProperty(ref _left, value);
-            }
-        }
+        public abstract double X0 { get; set; }
 
         /// <summary>
-        /// Gets or sets the width of the S-element bounding box.
+        /// Gets or sets the Y-coordinate of the element's origin.
         /// </summary>
-        public double Width
-        {
-            get => _width;
-            set
-            {
-                SetProperty(ref _width, value);
-            }
-        }
+        /// This value maps the model coordinate system and is different from screen
+        /// coordinate system (Y-axis is reversed).
+        /// </remarks>
+        public abstract double Y0 { get; set; }
 
-        /// <summary>
-        /// Gets or sets the heigh of the S-element bounding box.
-        /// </summary>
-        public double Height
-        {
-            get => _height;
-            set
-            {
-                SetProperty(ref _height, value);
-            }
-        }
+        /////// <summary>
+        /////// Gets or sets the top-most bound of the S-element bounding box.
+        /////// </summary>
+        ////public double Top
+        ////{
+        ////    get => _top;
+        ////    set
+        ////    {
+        ////        SetProperty(ref _top, value);
+        ////    }
+        ////}
+
+        /////// <summary>
+        /////// Gets or sets the left-most bound of the S-element bounding box.
+        /////// </summary>
+        ////public double Left
+        ////{
+        ////    get => _left;
+        ////    set
+        ////    {
+        ////        SetProperty(ref _left, value);
+        ////    }
+        ////}
+
+        /////// <summary>
+        /////// Gets or sets the width of the S-element bounding box.
+        /////// </summary>
+        ////public double W
+        ////{
+        ////    get => _width;
+        ////    set
+        ////    {
+        ////        SetProperty(ref _width, value);
+        ////    }
+        ////}
+
+        /////// <summary>
+        /////// Gets or sets the heigh of the S-element bounding box.
+        /////// </summary>
+        ////public double H
+        ////{
+        ////    get => _height;
+        ////    set
+        ////    {
+        ////        SetProperty(ref _height, value);
+        ////    }
+        ////}
 
         #endregion Properties
 

@@ -1,11 +1,11 @@
 ﻿// ==================================================================================================
-// <copyright file="SDocumentsManager.cs" company="Dmitry Poberezhnyy">
+// <copyright file="SDocumentsManagerViewModel.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.Controllers
+namespace SPEA.App.ViewModels.SDocument
 {
     using System;
     using System.Collections.ObjectModel;
@@ -16,13 +16,12 @@ namespace SPEA.App.Controllers
     using SPEA.App.Commands;
     using SPEA.App.Utils.Helpers;
     using SPEA.App.Utils.Services;
-    using SPEA.App.ViewModels;
 
     /// <summary>
     /// A conroller that provides a centralized entry point for handling requests
     /// for a <see cref="SDocumentViewModel"/> collection and its managing.
     /// </summary>
-    public class SDocumentsManager : ObservableObject
+    public class SDocumentsManagerViewModel : ObservableObject
     {
         #region Fields
 
@@ -30,6 +29,7 @@ namespace SPEA.App.Controllers
         private readonly string _closeDocumentCmd = "CloseDocument";
         private readonly string _closeAllDocumentsCmd = "CloseAllDocuments";
         private readonly string _closeOthersCmd = "CloseOthers";
+
         private SDocumentViewModel? _selectedDocument;
 
         #endregion Fields
@@ -37,10 +37,10 @@ namespace SPEA.App.Controllers
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SDocumentsManager"/> class.
+        /// Initializes a new instance of the <see cref="SDocumentsManagerViewModel"/> class.
         /// </summary>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
-        public SDocumentsManager(CommandsManager commandsManager)
+        public SDocumentsManagerViewModel(CommandsManager commandsManager)
         {
             _commandsManager = commandsManager ?? throw new ArgumentNullException(nameof(commandsManager));
 

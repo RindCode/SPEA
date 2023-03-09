@@ -57,19 +57,6 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(CornerRadiusTopLeftProperty, value);
         }
 
-        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
-        private static void OnCornerRadiusTopLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Border element = d as Border;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var cr = element.CornerRadius;
-                cr.TopLeft = (double)e.NewValue;
-                element.CornerRadius = cr;
-            }
-        }
-
         /// <summary>
         /// <see cref="DependencyProperty"/> for <see cref="GetCornerRadiusTopRight(DependencyObject)"/> getter
         /// and <see cref="SetCornerRadiusTopRight(DependencyObject, double)"/> setter.
@@ -103,19 +90,6 @@ namespace SPEA.App.Extensions.AttachedProperties
         public static void SetCornerRadiusTopRight(DependencyObject obj, double value)
         {
             obj.SetValue(CornerRadiusTopRightProperty, value);
-        }
-
-        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
-        private static void OnCornerRadiusTopRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Border element = d as Border;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var cr = element.CornerRadius;
-                cr.TopRight = (double)e.NewValue;
-                element.CornerRadius = cr;
-            }
         }
 
         /// <summary>
@@ -153,19 +127,6 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(CornerRadiusBottomRightProperty, value);
         }
 
-        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
-        private static void OnCornerRadiusBottomRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            Border element = d as Border;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var cr = element.CornerRadius;
-                cr.BottomRight = (double)e.NewValue;
-                element.CornerRadius = cr;
-            }
-        }
-
         /// <summary>
         /// <see cref="DependencyProperty"/> for <see cref="GetCornerRadiusBottomLeft(DependencyObject)"/> getter
         /// and <see cref="SetCornerRadiusTopLeft(DependencyObject, double)"/> setter.
@@ -201,10 +162,55 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(CornerRadiusBottomLeftProperty, value);
         }
 
+        #endregion Attached Properties
+
+        #region Callbacks
+
+        // TODO: Replace with switch selector and a single callback method.
+
+        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
+        private static void OnCornerRadiusTopLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Border? element = d as Border;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var cr = element.CornerRadius;
+                cr.TopLeft = (double)e.NewValue;
+                element.CornerRadius = cr;
+            }
+        }
+
+        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
+        private static void OnCornerRadiusTopRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Border? element = d as Border;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var cr = element.CornerRadius;
+                cr.TopRight = (double)e.NewValue;
+                element.CornerRadius = cr;
+            }
+        }
+
+        // Is called every time the corner radius value is changed to update the actual CornerRadius property.
+        private static void OnCornerRadiusBottomRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Border? element = d as Border;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var cr = element.CornerRadius;
+                cr.BottomRight = (double)e.NewValue;
+                element.CornerRadius = cr;
+            }
+        }
+
         // Is called every time the corner radius value is changed to update the actual CornerRadius property.
         private static void OnCornerRadiusBottomLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Border element = d as Border;
+            Border? element = d as Border;
             if (element != null)
             {
                 // Marin as a dp (Thickness), so we can set it only as a whole.
@@ -214,7 +220,7 @@ namespace SPEA.App.Extensions.AttachedProperties
             }
         }
 
-        #endregion Attached Properties
+        #endregion Callbacks
 
         #region Validation Methods
 

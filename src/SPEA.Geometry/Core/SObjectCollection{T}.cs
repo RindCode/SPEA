@@ -18,6 +18,11 @@ namespace SPEA.Geometry.Core
     {
         #region Fields
 
+        /// <summary>
+        /// Gets the internal type of this entity.
+        /// </summary>
+        public new const EntityType InternalType = EntityType.SOBJECTCOL;
+
         private readonly List<T> _items;
         private SPoint _origin;
 
@@ -54,6 +59,8 @@ namespace SPEA.Geometry.Core
         }
 
         #endregion Constructors
+
+        #region Properties
 
         /// <summary>
         /// Gets a list of <see cref="T"/> elements.
@@ -127,6 +134,10 @@ namespace SPEA.Geometry.Core
             }
         }
 
+        #endregion Properties
+
+        #region Methods
+
         /// <summary>
         /// Applies an affine transformation to all <see cref="T"/> elements in the collection.
         /// </summary>
@@ -145,5 +156,7 @@ namespace SPEA.Geometry.Core
                 item.ApplyTransformation(transform);
             }
         }
+
+        #endregion Methods
     }
 }

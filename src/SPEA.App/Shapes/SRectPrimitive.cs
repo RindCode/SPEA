@@ -23,26 +23,6 @@ namespace SPEA.App.Shapes
 
         #region Constructors
 
-        ////static SRectPrimitive()
-        ////{
-        ////    // Override FrameworkElement Width and Height DPs metadata
-        ////    // to add FrameworkPropertyMetadataOptions.AffectsRender flag to them.
-
-        ////    WidthProperty.OverrideMetadata(
-        ////        typeof(SRectPrimitive),
-        ////        new FrameworkPropertyMetadata(
-        ////            double.NaN,
-        ////            FrameworkPropertyMetadataOptions.AffectsMeasure |
-        ////            FrameworkPropertyMetadataOptions.AffectsRender));
-
-        ////    HeightProperty.OverrideMetadata(
-        ////        typeof(SRectPrimitive),
-        ////        new FrameworkPropertyMetadata(
-        ////            double.NaN,
-        ////            FrameworkPropertyMetadataOptions.AffectsMeasure |
-        ////            FrameworkPropertyMetadataOptions.AffectsRender));
-        ////}
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SRectPrimitive"/> class.
         /// </summary>
@@ -60,12 +40,13 @@ namespace SPEA.App.Shapes
         /// </summary>
         public static readonly DependencyProperty FillRuleProperty =
             DependencyProperty.Register(
-                "FillRule",
+                nameof(FillRule),
                 typeof(FillRule),
                 typeof(SRectPrimitive),
                 new FrameworkPropertyMetadata(
                     FillRule.EvenOdd,
-                    FrameworkPropertyMetadataOptions.AffectsMeasure),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure |
+                    FrameworkPropertyMetadataOptions.AffectsRender),
                 new ValidateValueCallback(IsFillRuleValid));
 
         /// <summary>
@@ -82,12 +63,13 @@ namespace SPEA.App.Shapes
         /// </summary>
         public static readonly DependencyProperty WProperty =
             DependencyProperty.Register(
-                "W",
+                nameof(W),
                 typeof(double),
                 typeof(SRectPrimitive),
                 new FrameworkPropertyMetadata(
                     1.0d,
-                    FrameworkPropertyMetadataOptions.AffectsMeasure),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure |
+                    FrameworkPropertyMetadataOptions.AffectsRender),
                 new ValidateValueCallback(IsWidthHeightValid));
 
         /// <summary>
@@ -104,12 +86,13 @@ namespace SPEA.App.Shapes
         /// </summary>
         public static readonly DependencyProperty HProperty =
             DependencyProperty.Register(
-                "H",
+                nameof(H),
                 typeof(double),
                 typeof(SRectPrimitive),
                 new FrameworkPropertyMetadata(
                     1.0d,
-                    FrameworkPropertyMetadataOptions.AffectsMeasure),
+                    FrameworkPropertyMetadataOptions.AffectsMeasure |
+                    FrameworkPropertyMetadataOptions.AffectsRender),
                 new ValidateValueCallback(IsWidthHeightValid));
 
         /// <summary>

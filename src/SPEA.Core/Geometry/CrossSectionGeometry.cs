@@ -11,30 +11,30 @@ namespace SPEA.Core.Geometry
     using SPEA.Geometry.Core;
 
     /// <summary>
-    /// Represents a <see cref="CrossSectionBase"/> geometry.
+    /// Represents a <see cref="CrossSection"/> geometry.
     /// </summary>
     public class CrossSectionGeometry
     {
-        private SObjectCollection<SPolygonBase> _actual;
-        private SObjectCollection<SPolygonBase> _clipped;
+        private SObjectCollection<SPolygon> _actual;
+        private SObjectCollection<SPolygon> _clipped;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CrossSectionGeometry"/> class.
         /// </summary>
         public CrossSectionGeometry()
         {
-            _actual = new SObjectCollection<SPolygonBase>();
-            _clipped = new SObjectCollection<SPolygonBase>();
+            _actual = new SObjectCollection<SPolygon>();
+            _clipped = new SObjectCollection<SPolygon>();
         }
 
         /// <summary>
         /// Gets a collection of added (non-clipped) polygons.
         /// </summary>
-        public SObjectCollection<SPolygonBase> Actual => _actual;
+        public SObjectCollection<SPolygon> Actual => _actual;
 
         /// <summary>
         /// Gets a collection of clipped polygons.
         /// </summary>
-        public SObjectCollection<SPolygonBase> Clipped => _clipped;
+        public SObjectCollection<SPolygon> Clipped => _clipped;
     }
 }

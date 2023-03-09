@@ -10,7 +10,7 @@ namespace SPEA.Core.CrossSection
     /// <summary>
     /// Represents a metallic built-up cross-section model.
     /// </summary>
-    public class MetallicCrossSection : CrossSectionBase
+    public class MetallicCrossSection : CrossSection
     {
         #region Fields
 

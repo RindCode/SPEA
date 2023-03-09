@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="SElementContainer.cs" company="Dmitry Poberezhnyy">
+// <copyright file="SElementItemContainer.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -7,6 +7,7 @@
 
 namespace SPEA.App.Controls.SViewport
 {
+    using SPEA.App.Utils.Helpers;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -17,7 +18,7 @@ namespace SPEA.App.Controls.SViewport
     /// located inside of <see cref="SViewportItemsHostControl"/>.
     /// </summary>
     [TemplatePart(Name = ContentPresenterName, Type = typeof(ContentPresenter))]
-    public class SElementContainer : ContentControl
+    public class SElementItemContainer : ContentControl
     {
         #region Fields
 
@@ -29,17 +30,50 @@ namespace SPEA.App.Controls.SViewport
         #region Dependency Properties
 
         /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="GetApplyTransform(DependencyObject)"/> getter
+        /// and <see cref="SetApplyTransform(DependencyObject, Transform)"/> setter.
+        /// </summary>
+        public static readonly DependencyProperty ApplyTransformProperty =
+            DependencyProperty.RegisterAttached(
+                "ApplyTransform",
+                typeof(Transform),
+                typeof(SElementItemContainer),
+                new FrameworkPropertyMetadata(
+                    default(Transform),
+                    new PropertyChangedCallback(OnApplyTransformChanged)));
+
+        /// <summary>
+        /// Gets the value of <see cref="ApplyTransformProperty"/>.
+        /// </summary>
+        /// <param name="obj">An object the value is get from.</param>
+        /// <returns>Transform value.</returns>
+        public static Transform GetApplyTransform(DependencyObject obj)
+        {
+            return (Transform)obj.GetValue(ApplyTransformProperty);
+        }
+
+        /// <summary>
+        /// Sets the value of <see cref="ApplyTransformProperty"/>.
+        /// </summary>
+        /// <param name="obj">An object the value is set to.</param>
+        /// <param name="value">Transform value.</param>
+        public static void SetApplyTransform(DependencyObject obj, Transform value)
+        {
+            obj.SetValue(ApplyTransformProperty, value);
+        }
+
+        /// <summary>
         /// DependencyProperty for <see cref="Left"/> property.
         /// </summary>
         public static readonly DependencyProperty LeftProperty =
             DependencyProperty.Register(
-                "Left",
+                nameof(Left),
                 typeof(double),
-                typeof(SElementContainer),
+                typeof(SElementItemContainer),
                 new FrameworkPropertyMetadata(0.0d));
 
         /// <summary>
-        /// Gets or sets a location of the left bound for the current <see cref="SElementContainer"/>
+        /// Gets or sets a location of the left bound for the current <see cref="SElementItemContainer"/>
         /// in <see cref="SViewportControl.ItemsHost"/> coordinates.
         /// </summary>
         public double Left
@@ -53,13 +87,13 @@ namespace SPEA.App.Controls.SViewport
         /// </summary>
         public static readonly DependencyProperty TopProperty =
             DependencyProperty.Register(
-                "Top",
+                nameof(Top),
                 typeof(double),
-                typeof(SElementContainer),
+                typeof(SElementItemContainer),
                 new FrameworkPropertyMetadata(0.0d));
 
         /// <summary>
-        /// Gets or sets a location of the top bound for the current <see cref="SElementContainer"/>
+        /// Gets or sets a location of the top bound for the current <see cref="SElementItemContainer"/>
         /// in <see cref="SViewportControl.ItemsHost"/> coordinates.
         /// </summary>
         public double Top
@@ -75,11 +109,11 @@ namespace SPEA.App.Controls.SViewport
         ////    DependencyProperty.Register(
         ////        "Right",
         ////        typeof(double),
-        ////        typeof(SElementContainer),
+        ////        typeof(SElementItemContainer),
         ////        new PropertyMetadata(0.0d));
 
         /////// <summary>
-        /////// Gets or sets a location of the right bound for the current <see cref="SElementContainer"/>
+        /////// Gets or sets a location of the right bound for the current <see cref="SElementItemContainer"/>
         /////// in <see cref="SViewportControl.ItemsHost"/> coordinates.
         /////// </summary>
         ////public double Right
@@ -95,11 +129,11 @@ namespace SPEA.App.Controls.SViewport
         ////    DependencyProperty.Register(
         ////        "Bottom",
         ////        typeof(double),
-        ////        typeof(SElementContainer),
+        ////        typeof(SElementItemContainer),
         ////        new PropertyMetadata(0.0d));
 
         /////// <summary>
-        /////// Gets or sets a location of the bottom bound for the current <see cref="SElementContainer"/>
+        /////// Gets or sets a location of the bottom bound for the current <see cref="SElementItemContainer"/>
         /////// in <see cref="SViewportControl.ItemsHost"/> coordinates.
         /////// </summary>
         ////public double Bottom
@@ -113,39 +147,18 @@ namespace SPEA.App.Controls.SViewport
         /// </summary>
         public static readonly DependencyProperty BoundingBoxProperty =
             DependencyProperty.Register(
-                "BoundingBox",
+                nameof(BoundingBox),
                 typeof(Rect),
-                typeof(SElementContainer),
+                typeof(SElementItemContainer),
                 new FrameworkPropertyMetadata(Rect.Empty));
 
         /// <summary>
-        /// Gets or sets a bounding box for the current <see cref="SElementContainer"/>.
+        /// Gets or sets a bounding box for the current <see cref="SElementItemContainer"/>.
         /// </summary>
         public Rect BoundingBox
         {
             get { return (Rect)GetValue(BoundingBoxProperty); }
             set { SetValue(BoundingBoxProperty, value); }
-        }
-
-        /// <summary>
-        /// DependencyProperty for <see cref="ApplyTransform"/> property.
-        /// </summary>
-        public static readonly DependencyProperty ApplyTransformProperty =
-            DependencyProperty.Register(
-                "ApplyTransform",
-                typeof(Transform),
-                typeof(SElementContainer),
-                new FrameworkPropertyMetadata(
-                    default(Transform),
-                    new PropertyChangedCallback(OnApplyTransformChanged)));
-
-        /// <summary>
-        /// Gets or sets transforms for the current <see cref="SElementContainer"/>.
-        /// </summary>
-        public Rect ApplyTransform
-        {
-            get { return (Rect)GetValue(ApplyTransformProperty); }
-            set { SetValue(ApplyTransformProperty, value); }
         }
 
         #endregion Dependency Properties
@@ -159,23 +172,23 @@ namespace SPEA.App.Controls.SViewport
         ////{
         ////    get
         ////    {
-        ////        return (Height != 0 || ActualHeight != 0) && (Width != 0 || ActualWidth != 0)
-        ////            && (!double.IsNaN(Height) && !double.IsNaN(ActualHeight)) && (!double.IsNaN(Width) && !double.IsNaN(ActualWidth));
+        ////        return (H != 0 || ActualHeight != 0) && (W != 0 || ActualWidth != 0)
+        ////            && (!double.IsNaN(H) && !double.IsNaN(ActualHeight)) && (!double.IsNaN(W) && !double.IsNaN(ActualWidth));
         ////    }
         ////}
 
         /// <summary>
-        /// Gets the <see cref="SElementContainer"/> translate transform.
+        /// Gets the <see cref="SElementItemContainer"/> translate transform.
         /// </summary>
         public TranslateTransform? TranslateTransform => RenderTransform is TransformGroup group ? group.Children.OfType<TranslateTransform>().FirstOrDefault() : null;
 
         /// <summary>
-        /// Gets the <see cref="SElementContainer"/> scale transform.
+        /// Gets the <see cref="SElementItemContainer"/> scale transform.
         /// </summary>
         public ScaleTransform? ScaleTransform => RenderTransform is TransformGroup group ? group.Children.OfType<ScaleTransform>().FirstOrDefault() : null;
 
         /// <summary>
-        /// Gets the <see cref="SViewportControl"/> that owns <see cref="SElementContainer"/> items container type.
+        /// Gets the <see cref="SViewportControl"/> that owns <see cref="SElementItemContainer"/> items container type.
         /// </summary>
         public SViewportControl? ItemsOwner => _itemsOwner ??= ItemsControl.ItemsControlFromItemContainer(this) as SViewportControl;
 
@@ -183,33 +196,29 @@ namespace SPEA.App.Controls.SViewport
 
         #region Methods
 
+        /// <inheritdoc/>
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-
-            // TODO: REMOVE CODE
-            var trasnformGroup = new TransformGroup();
-            trasnformGroup.Children.Add(new TranslateTransform(100, 200));
-            trasnformGroup.Children.Add(new ScaleTransform());
-            RenderTransform = trasnformGroup;
         }
 
         // Is called when the element transform has changed.
         private static void OnApplyTransformChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var source = (SElementContainer)d;
-            var newValue = (Transform)e.NewValue;
+            var source = (UIElement)d;
+            var parent = VisualTreeHelperEx.FindParent<SElementItemContainer>(d);
 
+            var newValue = (Transform)e.NewValue;
             if (newValue != source.RenderTransform)
             {
-                source.UpdateTransform(newValue);
+                parent?.UpdateTransform(newValue);
             }
         }
 
         // Updates the current transform.
         private void UpdateTransform(Transform transform)
         {
-            // Call Arrange() on ItemsHost to re-calculate bounding box.
+            // Call Arrange() on ItemsHost to re-calculate the bounding box.
             RenderTransform = transform.Clone();
             _itemsOwner?.ItemsHost?.InvalidateArrange();
         }

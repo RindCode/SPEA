@@ -15,7 +15,7 @@ namespace SPEA.App.Controls.SViewport
     using SPEA.App.Utils.Extensions;
 
     /// <summary>
-    /// Represents items host for <see cref="SElementContainer"/> objects.
+    /// Represents items host for <see cref="SElementItemContainer"/> objects.
     /// </summary>
     public class SViewportItemsHostControl : Panel
     {
@@ -27,29 +27,29 @@ namespace SPEA.App.Controls.SViewport
         /// <summary>
         /// Gets or sets the left most element.
         /// </summary>
-        public SElementContainer? LeftMostElement { get; set; }
+        public SElementItemContainer? LeftMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the top most element.
         /// </summary>
-        public SElementContainer? TopMostElement { get; set; }
+        public SElementItemContainer? TopMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the right most element.
         /// </summary>
-        public SElementContainer? RightMostElement { get; set; }
+        public SElementItemContainer? RightMostElement { get; set; }
 
         /// <summary>
         /// Gets or sets the bottom most element.
         /// </summary>
-        public SElementContainer? BottomMostElement { get; set; }
+        public SElementItemContainer? BottomMostElement { get; set; }
 
         /// <inheritdoc/>
         protected override Size MeasureOverride(Size constraint)
         {
             foreach (UIElement child in InternalChildren)
             {
-                var container = child as SElementContainer;
+                var container = child as SElementItemContainer;
                 container?.Measure(constraint);
             }
 
@@ -66,7 +66,7 @@ namespace SPEA.App.Controls.SViewport
 
             foreach (UIElement child in InternalChildren)
             {
-                if (child is SElementContainer container)
+                if (child is SElementItemContainer container)
                 {
                     var rect = new Rect(new Point(container.Left, container.Top), container.DesiredSize);
                     child.Arrange(rect);
@@ -103,7 +103,7 @@ namespace SPEA.App.Controls.SViewport
                         BottomMostElement = container;
                     }
 
-                    Debug.WriteLine($"bounds: {container.BoundingBox.Left}|{container.BoundingBox.Top}|{container.BoundingBox.Right}|{container.BoundingBox.Bottom}");
+                    Debug.WriteLine($"bounds: x0={container.BoundingBox.Left,8:F3}, y0={container.BoundingBox.Top,8:F3}, x1={container.BoundingBox.Right,8:F3}, y0={container.BoundingBox.Bottom,8:F3}");
                 }
             }
 

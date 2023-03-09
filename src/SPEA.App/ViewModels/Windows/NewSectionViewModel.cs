@@ -11,9 +11,8 @@ namespace SPEA.App.ViewModels.Windows
     using System.Collections.Generic;
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
-    using SPEA.App.Controllers;
     using SPEA.App.Utils.Helpers;
-    using SPEA.App.ViewModels;
+    using SPEA.App.ViewModels.SDocument;
     using SPEA.Core.CrossSection;
 
     /// <summary>
@@ -23,7 +22,7 @@ namespace SPEA.App.ViewModels.Windows
     {
         #region Fields
 
-        private readonly SDocumentsManager _sDocumentsManager;
+        private readonly SDocumentsManagerViewModel _sDocumentsManager;
         private readonly string _createNewDocumentCmd = "NewSectionWindow.Create";
         private bool _disposed;
         private string _sectionName = string.Empty;
@@ -41,10 +40,10 @@ namespace SPEA.App.ViewModels.Windows
         /// Initializes a new instance of the <see cref="NewSectionViewModel"/> class.
         /// </summary>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
-        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
+        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         public NewSectionViewModel(
             CommandsManager commandsManager,
-            SDocumentsManager sDocumentsManager)
+            SDocumentsManagerViewModel sDocumentsManager)
             : base(commandsManager)
         {
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
@@ -125,7 +124,9 @@ namespace SPEA.App.ViewModels.Windows
         /// </summary>
         private void CreateNewDocument()
         {
-            if (_selectedSectionDefinition == ResourcesHelper.GetApplicationResource<string>("S.NewSectionWindow.CrossSectionDefinition_Metallic"))
+            var definition = ResourcesHelper.GetApplicationResource<string>("S.NewSectionWindow.CrossSectionDefinition_Metallic");
+
+            if (_selectedSectionDefinition == definition)
             {
                 var cs = CrossSection.Create<MetallicCrossSection>(SectionName);
                 var vm = new SDocumentMetallicViewModel(CommandsManager, _sDocumentsManager, cs);

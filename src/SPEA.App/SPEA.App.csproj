@@ -29,6 +29,7 @@
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AssemblyName>SPEA</AssemblyName>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>Assets\Icons\icon.ico</ApplicationIcon>
     
   </PropertyGroup>
 
@@ -52,11 +53,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\Icons\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+    <PackageReference Include="DataGridExtensions" Version="2.5.14" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.71.2">
       <GeneratePathProperty></GeneratePathProperty>
     </PackageReference>
@@ -71,6 +77,20 @@
   <ItemGroup>
     <ProjectReference Include="..\SPEA.Core\SPEA.Core.csproj" />
     <ProjectReference Include="..\SPEA.Materials\SPEA.Materials.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Icons\icon.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Icons\icon.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

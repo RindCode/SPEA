@@ -16,6 +16,11 @@ namespace SPEA.Geometry.Core
     {
         #region Fields
 
+        /// <summary>
+        /// Gets the internal type of this entity.
+        /// </summary>
+        public new const EntityType InternalType = EntityType.SLINEPATH;
+
         private readonly SPoint[] _points;
         private SPoint _origin;
 

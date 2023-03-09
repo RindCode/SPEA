@@ -56,19 +56,6 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(MarginLeftProperty, value);
         }
 
-        // Is called every time the margin value is changed to update the actual Margin property.
-        private static void OnMarginLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            FrameworkElement element = d as FrameworkElement;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var margin = element.Margin;
-                margin.Left = (double)e.NewValue;
-                element.Margin = margin;
-            }
-        }
-
         /// <summary>
         /// <see cref="DependencyProperty"/> for <see cref="GetMarginTop(DependencyObject)"/> getter
         /// and <see cref="SetMarginTop(DependencyObject, double)"/> setter.
@@ -102,19 +89,6 @@ namespace SPEA.App.Extensions.AttachedProperties
         public static void SetMarginTop(DependencyObject obj, double value)
         {
             obj.SetValue(MarginTopProperty, value);
-        }
-
-        // Is called every time the margin value is changed to update the actual Margin property.
-        private static void OnMarginTopPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            FrameworkElement element = d as FrameworkElement;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var margin = element.Margin;
-                margin.Top = (double)e.NewValue;
-                element.Margin = margin;
-            }
         }
 
         /// <summary>
@@ -152,19 +126,6 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(MarginRightProperty, value);
         }
 
-        // Is called every time the margin value is changed to update the actual Margin property.
-        private static void OnMarginRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            FrameworkElement element = d as FrameworkElement;
-            if (element != null)
-            {
-                // Marin as a dp (Thickness), so we can set it only as a whole.
-                var margin = element.Margin;
-                margin.Right = (double)e.NewValue;
-                element.Margin = margin;
-            }
-        }
-
         /// <summary>
         /// <see cref="DependencyProperty"/> for <see cref="GetMarginBottom(DependencyObject)"/> getter
         /// and <see cref="SetMarginBottom(DependencyObject, double)"/> setter.
@@ -200,10 +161,55 @@ namespace SPEA.App.Extensions.AttachedProperties
             obj.SetValue(MarginBottomProperty, value);
         }
 
+        #endregion Attached Properties
+
+        #region Callbacks
+
+        // TODO: Replace with switch selector and a single callback method.
+
+        // Is called every time the margin value is changed to update the actual Margin property.
+        private static void OnMarginLeftPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            FrameworkElement? element = d as FrameworkElement;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var margin = element.Margin;
+                margin.Left = (double)e.NewValue;
+                element.Margin = margin;
+            }
+        }
+
+        // Is called every time the margin value is changed to update the actual Margin property.
+        private static void OnMarginTopPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            FrameworkElement? element = d as FrameworkElement;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var margin = element.Margin;
+                margin.Top = (double)e.NewValue;
+                element.Margin = margin;
+            }
+        }
+
+        // Is called every time the margin value is changed to update the actual Margin property.
+        private static void OnMarginRightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            FrameworkElement? element = d as FrameworkElement;
+            if (element != null)
+            {
+                // Marin as a dp (Thickness), so we can set it only as a whole.
+                var margin = element.Margin;
+                margin.Right = (double)e.NewValue;
+                element.Margin = margin;
+            }
+        }
+
         // Is called every time the margin value is changed to update the actual Margin property.
         private static void OnMarginBottomPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            FrameworkElement element = d as FrameworkElement;
+            FrameworkElement? element = d as FrameworkElement;
             if (element != null)
             {
                 // Marin as a dp (Thickness), so we can set it only as a whole.
@@ -213,7 +219,7 @@ namespace SPEA.App.Extensions.AttachedProperties
             }
         }
 
-        #endregion Attached Properties
+        #endregion Callbacks
 
         #region Validation Methods
 
@@ -228,7 +234,7 @@ namespace SPEA.App.Extensions.AttachedProperties
             var m = (double)value;
 
             // Margin IsValid check for Border class allows negative values and positive infinite values,
-            // while NaN and negative infinite values are not allowed (why is negative infinite not allowed?).
+            // while NaN and negative infinite values are not allowed (why is negative infinity not allowed?).
             if (double.IsNaN(m) || double.IsNegativeInfinity(m))
             {
                 return false;

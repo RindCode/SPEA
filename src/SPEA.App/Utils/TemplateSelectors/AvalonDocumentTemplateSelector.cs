@@ -9,7 +9,7 @@ namespace SPEA.App.Utils.TemplateSelectors
 {
     using System.Windows;
     using System.Windows.Controls;
-    using SPEA.App.ViewModels;
+    using SPEA.App.ViewModels.SDocument;
 
     /// <summary>
     /// <see cref="DataTemplateSelector"/> for AvalonDock document.

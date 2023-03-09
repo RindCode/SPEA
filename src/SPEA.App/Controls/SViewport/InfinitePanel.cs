@@ -23,7 +23,7 @@ namespace SPEA.App.Controls.SViewport
     /// </summary>
     /// <remarks>
     /// This panel acts an additional layer between the main control <see cref="SViewportControl"/> and
-    /// <see cref="SViewportItemsHostControl"/> (which in turn, acts as a host for <see cref="SElementContainer"/> item containers).
+    /// <see cref="SViewportItemsHostControl"/> (which in turn, acts as a host for <see cref="SElementItemContainer"/> item containers).
     /// It must be wrapped by <see cref="ScrollViewer"/> inside <see cref="SViewportControl"/>
     /// <see cref="ControlTemplate"/> with <see cref="ScrollViewer.CanContentScroll"/> property set to <see langword="true"/>.
     /// </remarks>
@@ -131,7 +131,7 @@ namespace SPEA.App.Controls.SViewport
             ////var isInsideContentBounds = contentBounds.X - calculatedOffset < 0;
             ////if (contentBounds.X > 0 && isInsideContentBounds)
             ////{
-            ////    UnscaledExtent.Width -= Math.Abs(contentBounds.X - calculatedOffset);
+            ////    UnscaledExtent.W -= Math.Abs(contentBounds.X - calculatedOffset);
             ////}
 
             var coercedOffset = CoerceHorizontalOffset(calculatedOffset);
@@ -184,23 +184,22 @@ namespace SPEA.App.Controls.SViewport
         /////// <inheritdoc/>
         ////protected override Size MeasureOverride(Size availableSize)
         ////{
-        ////    // This control naturally provides the infinite available space to its children,
-        ////    // since it's wrapped by ScrollViewer.
+        ////    // This control naturally provides the infinite available space to its children.
         ////    var infiniteSize = new Size(double.PositiveInfinity, double.PositiveInfinity);
 
         ////    // The default behavior of the Content/ContentControl MeasureOverride is
-        ////    // to measure only the first visual child (in this case - Content element).
+        ////    // to measure only the first visual child (in this case - items host control).
         ////    var contentSize = base.MeasureOverride(infiniteSize);
 
         ////    // Make sure we give enough space requested by the child element.
-        ////    if (contentSize != UnscaledExtent)
+        ////    if (contentSize != _extent)
         ////    {
-        ////        UnscaledExtent = contentSize;
+        ////        _extent = contentSize;
         ////        ScrollOwner?.InvalidateScrollInfo();
         ////    }
 
         ////    // Update viewport size based on availableSize provided by ScrollViewer.
-        ////    UpdateViewportSize(availableSize);
+        ////    //UpdateViewportSize(availableSize);
 
         ////    // Returning PositiveInfinity will raise InvalidOperationException, thus not allowed.
         ////    // Just use child dimensions to calculate the desired size in such case.
@@ -225,7 +224,7 @@ namespace SPEA.App.Controls.SViewport
         /// <inheritdoc/>
         protected override Size MeasureOverride(Size availableSize)
         {
-            return availableSize;
+            return base.MeasureOverride(availableSize);
         }
 
         /// <inheritdoc/>
@@ -241,18 +240,12 @@ namespace SPEA.App.Controls.SViewport
                 ScrollOwner.InvalidateScrollInfo();
             }
 
-            Debug.WriteLine($"extent: w={_extent.Width}, h={_extent.Height}");
-            Debug.WriteLine($"offset: w={_offset.Width}, h={_offset.Height}");
-            Debug.WriteLine($"viewport: w={_viewport.Width}, h={_viewport.Height}");
+            Debug.WriteLine($"extent:   w={_extent.Width,8:F3}, h={_extent.Height,8:F3}");
+            Debug.WriteLine($"offset:   w={_offset.Width,8:F3}, h={_offset.Height,8:F3}");
+            Debug.WriteLine($"viewport: w={_viewport.Width,8:F3}, h={_viewport.Height,8:F3}");
 
             return base.ArrangeOverride(finalSize);
         }
-
-        //////
-        ////private static Rect GetBoundsRelativeTo(FrameworkElement child, Visual parent)
-        ////{
-        ////    return child.TransformToVisual(parent).TransformBounds(new Rect(child.RenderSize));
-        ////}
 
         // 
         private void HorizontalScrollBar_Scroll(object sender, ScrollEventArgs e)
@@ -298,7 +291,7 @@ namespace SPEA.App.Controls.SViewport
         private double CoerceHorizontalOffset(double offsetOld)
         {
             // Size() doesn't allow negative values.
-            // Offset value is constrained between 0 and (extent.Width - viewport.Width).
+            // Offset value is constrained between 0 and (extent.W - viewport.W).
             var offsetMin = 0.0d;
             var offsetMax = Math.Max(offsetMin, _extent.Width - _viewport.Width);
             var offsetCoerced = Math.Clamp(offsetOld, offsetMin, offsetMax);
@@ -310,7 +303,7 @@ namespace SPEA.App.Controls.SViewport
         private double CoerceVerticalOffset(double offsetOld)
         {
             // Size() doesn't allow negative values.
-            // Therefore, offset value is constrained between 0 and (extent.Height - viewport.Height).
+            // Therefore, offset value is constrained between 0 and (extent.H - viewport.H).
             var offsetMin = 0.0d;
             var offsetMax = Math.Max(offsetMin, _extent.Height - _viewport.Height);
             var offsetCoerced = Math.Clamp(offsetOld, offsetMin, offsetMax);

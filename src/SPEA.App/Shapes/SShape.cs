@@ -107,10 +107,7 @@ namespace SPEA.App.Shapes
         /// <remarks>
         /// See <see cref="CacheDefiningGeometry"/> description for more information.
         /// </remarks>
-        protected abstract Geometry DefiningGeometry
-        {
-            get;
-        }
+        protected abstract Geometry DefiningGeometry { get; }
 
         /// <summary>
         /// Gets the final rendered geometry - a frozen copy of the cached value.

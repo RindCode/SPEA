@@ -18,7 +18,7 @@ namespace SPEA.App.Controls.SViewport
     /// </summary>
     /// <remarks>
     /// This panel acts an additional layer between the main control <see cref="SViewportControl"/> and
-    /// <see cref="SViewportItemsHostControl"/> (which in turn, acts as a host for <see cref="SElementContainer"/> objects).
+    /// <see cref="SViewportItemsHostControl"/> (which in turn, acts as a host for <see cref="SElementItemContainer"/> objects).
     /// It must be wrapped by <see cref="ScrollViewer"/> inside <see cref="SViewportControl"/>
     /// ControlTemplate with <see cref="ScrollViewer.CanContentScroll"/> property set to <see langword="true"/>.
     /// </remarks>

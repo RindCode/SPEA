@@ -5,35 +5,35 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.ViewModels
+namespace SPEA.App.ViewModels.SDocument
 {
     using System;
     using System.Collections.ObjectModel;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
-    using SPEA.App.Controllers;
     using SPEA.App.ViewModels.SElements;
     using SPEA.Core.CrossSection;
+    using SPEA.Geometry.Primitives;
 
     /// <summary>
-    /// A base view model class for <see cref="CrossSectionBase"/> model.
+    /// A base view model class for <see cref="CrossSection"/> model.
     /// Represents a single document of a build-up cross-section and all data stored within.
     /// </summary>
-    public abstract class SDocumentViewModel : ObservableObject, IDisposable
+    public class SDocumentViewModel : ObservableObject, IDisposable
     {
         #region Fields
 
         private readonly CommandsManager _commandsManager;
-        private readonly SDocumentsManager _sDocumentsManager;
+        private readonly SDocumentsManagerViewModel _sDocumentsManager;
         private readonly string _requestCloseDocumentCmd = "RequestCloseDocument";
         private readonly string _requestSaveDocumenteCmd = "RequestSaveDocument";
 
         private bool _disposed;
-        private CrossSectionBase _model;
-        private ObservableCollection<SElementViewModelBase> _sElementsCollection = new ObservableCollection<SElementViewModelBase>();
-        private ObservableCollection<SElementViewModelBase> _selectedSElements = new ObservableCollection<SElementViewModelBase>();
-        private SElementViewModelBase? _selectedSElement;
+        private CrossSection _model;
+        private ObservableCollection<SElementViewModelBase> _itemsCollection = new ObservableCollection<SElementViewModelBase>();
+        private ObservableCollection<SElementViewModelBase> _selectedItems = new ObservableCollection<SElementViewModelBase>();
+        private SElementViewModelBase? _selectedItem;
         private bool _isDirty = false;
         private string _displayName = string.Empty;
 
@@ -45,12 +45,12 @@ namespace SPEA.App.ViewModels
         /// Initializes a new instance of the <see cref="SDocumentViewModel"/> class.
         /// </summary>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager.CommandsManager"/> instance.</param>
-        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
+        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         /// <param name="model">A reference to the model instance.</param>
         public SDocumentViewModel(
             CommandsManager commandsManager,
-            SDocumentsManager sDocumentsManager,
-            CrossSectionBase model)
+            SDocumentsManagerViewModel sDocumentsManager,
+            CrossSection model)
         {
             _commandsManager = commandsManager ?? throw new ArgumentNullException(nameof(commandsManager));
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
@@ -65,16 +65,13 @@ namespace SPEA.App.ViewModels
             CommandsManager.RegisterCommand(_requestCloseDocumentCmd, new RelayCommand(ExecuteRequestCloseDocument));
             CommandsManager.RegisterCommand(_requestSaveDocumenteCmd, new RelayCommand(ExecuteRequestSaveDocument));
 
-            SElementsCollection.CollectionChanged += SElementsCollection_CollectionChanged;
-            SelectedSElements.CollectionChanged += SelectedSElements_CollectionChanged;
+            ElementsCollection.CollectionChanged += SElementsCollection_CollectionChanged;
+            SelectedElements.CollectionChanged += SelectedSElements_CollectionChanged;
 
             // TODO: REMOVE CODE
-            var rect = new SRectViewModel()
-            {
-                W = 300,
-                H = 200,
-            };
-            AddSElement(rect);
+            var rect = new SRect(0, 0, 200, 300);
+            var vm = new SRectViewModel(rect);
+            AddElement(vm);
         }
 
         #endregion Constructors
@@ -115,9 +112,9 @@ namespace SPEA.App.ViewModels
                     // Dispose managed state (managed objects)
                     CommandsManager.UnregisterCommand(_requestCloseDocumentCmd);
                     CommandsManager.UnregisterCommand(_requestSaveDocumenteCmd);
-                    SElementsCollection.CollectionChanged -= SElementsCollection_CollectionChanged;
-                    SelectedSElements.CollectionChanged -= SelectedSElements_CollectionChanged;
-                    SElementsCollection.Clear();
+                    ElementsCollection.CollectionChanged -= SElementsCollection_CollectionChanged;
+                    SelectedElements.CollectionChanged -= SelectedSElements_CollectionChanged;
+                    ElementsCollection.Clear();
                     Model?.Dispose();
                 }
 
@@ -153,12 +150,12 @@ namespace SPEA.App.ViewModels
         /// <summary>
         /// Gets a documents manager reference.
         /// </summary>
-        public SDocumentsManager SDocumentsManager => _sDocumentsManager;
+        public SDocumentsManagerViewModel SDocumentsManager => _sDocumentsManager;
 
         /// <summary>
         /// Gets a cross-section model.
         /// </summary>
-        public CrossSectionBase Model
+        public CrossSection Model
         {
             get => _model;
             private set
@@ -207,28 +204,28 @@ namespace SPEA.App.ViewModels
         /// <summary>
         /// Gets the reference to the collection of cross-section elements.
         /// </summary>
-        public ObservableCollection<SElementViewModelBase> SElementsCollection
+        public ObservableCollection<SElementViewModelBase> ElementsCollection
         {
-            get => _sElementsCollection;
-            private set => _sElementsCollection = value;
+            get => _itemsCollection;
+            private set => _itemsCollection = value;
         }
 
         /// <summary>
         /// Gets the reference to the collection of selected elements.
         /// </summary>
-        public ObservableCollection<SElementViewModelBase> SelectedSElements
+        public ObservableCollection<SElementViewModelBase> SelectedElements
         {
-            get => _selectedSElements;
-            private set => _selectedSElements = value;
+            get => _selectedItems;
+            private set => _selectedItems = value;
         }
 
         /// <summary>
         /// Gets or sets the currently selected item.
         /// </summary>
-        public SElementViewModelBase? SelectedSElement
+        public SElementViewModelBase? SelectedElement
         {
-            get => _selectedSElement;
-            set => _selectedSElement = value;
+            get => ElementsCollection[^1]; // TODO: change back
+            set => _selectedItem = value;
         }
 
         #endregion Properties
@@ -275,9 +272,9 @@ namespace SPEA.App.ViewModels
         /// Adds a new element into the collection.
         /// </summary>
         /// <param name="element">The element to be added.</param>
-        public void AddSElement(SElementViewModelBase element)
+        public void AddElement(SElementViewModelBase element)
         {
-            SElementsCollection.Add(element);
+            ElementsCollection.Add(element);
         }
 
         private void SElementsCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

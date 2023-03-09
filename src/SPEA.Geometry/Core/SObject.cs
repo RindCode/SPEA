@@ -10,11 +10,33 @@ namespace SPEA.Geometry.Core
     using SPEA.Geometry.Transform;
 
     /// <summary>
+    /// Represents valid internal types.
+    /// </summary>
+    public enum EntityType
+    {
+        SLINEPATH,
+        SLINERING,
+        SLINESEG,
+        SOBJECT,
+        SOBJECTCOL,
+        SPOINT,
+        SPOLYGON,
+        SRECT,
+        SVECTOR,
+    }
+
+    /// <summary>
     /// Represents the base class for various geometric entities.
     /// </summary>
     public abstract class SObject
     {
         #region Fields
+
+        /// <summary>
+        /// Gets the internal type of this entity.
+        /// </summary>
+        public const EntityType InternalType = EntityType.SOBJECT;
+
 
         private readonly Guid guid = Guid.NewGuid();
         private readonly AppliedTransformations _appliedTransformations = new AppliedTransformations();

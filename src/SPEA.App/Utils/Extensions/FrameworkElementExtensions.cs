@@ -33,7 +33,7 @@ namespace SPEA.App.Utils.Extensions
 
             var transform = element.TransformToVisual(from);
 
-            // Width and Height DP default values are NaN.
+            // W and H DP default values are NaN.
             if (double.IsNaN(element.Width) || double.IsNaN(element.Width))
             {
                 var actualBounds = transform.TransformBounds(new Rect(0, 0, element.ActualWidth, element.ActualHeight));

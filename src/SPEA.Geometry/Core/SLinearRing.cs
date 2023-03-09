@@ -12,6 +12,15 @@ namespace SPEA.Geometry.Core
     /// </summary>
     public class SLinearRing : SLinePath
     {
+        #region Fields
+
+        /// <summary>
+        /// Gets the internal type of this entity.
+        /// </summary>
+        public new const EntityType InternalType = EntityType.SLINEPATH;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -34,7 +43,7 @@ namespace SPEA.Geometry.Core
         {
             if (!base.IsClosed)
             {
-                throw new ArgumentException("The array must form a closed path (the last elements must be equal to the first one).");
+                throw new ArgumentException("The array must form a closed path (the last element must be equal to the first one).");
             }
 
             if (points.Count > 0 && points.Count < 3)

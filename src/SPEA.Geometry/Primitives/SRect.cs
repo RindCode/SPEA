@@ -12,14 +12,19 @@ namespace SPEA.Geometry.Primitives
     /// <summary>
     /// Represents a rectangle <see cref="SObject"/> primitive.
     /// </summary>
-    public sealed class SRect : SPolygonBase
+    public sealed class SRect : SPolygon
     {
         #region Fields
 
+        /// <summary>
+        /// Gets the internal type of this entity.
+        /// </summary>
+        public new const EntityType InternalType = EntityType.SRECT;
+
         private readonly SLinearRing _shell;
-        private readonly SLinearRing[] _holes;
-        private double _width;
-        private double _height;
+        private readonly SLinearRing[] _holes = Array.Empty<SLinearRing>();
+        private readonly double _w;
+        private readonly double _h;
 
         #endregion Fields
 
@@ -30,10 +35,10 @@ namespace SPEA.Geometry.Primitives
         /// </summary>
         /// <param name="x">The X-coordinate of the origin.</param>
         /// <param name="y">The Y-coordinate of the origin.</param>
-        /// <param name="width">The width of the rectangle. Can be negative.</param>
-        /// <param name="height">The height of the rectangle. Can be negative.</param>
+        /// <param name="w">The w of the rectangle. Can be negative.</param>
+        /// <param name="h">The h of the rectangle. Can be negative.</param>
         /// <exception cref="ArgumentOutOfRangeException">Is thrown when any of the parameters is out of its valid range.</exception>
-        public SRect(double x, double y, double width, double height)
+        public SRect(double x, double y, double w, double h)
         {
             if (double.IsNaN(x) || double.IsInfinity(x))
             {
@@ -45,21 +50,21 @@ namespace SPEA.Geometry.Primitives
                 throw new ArgumentOutOfRangeException(nameof(y), "The origin coordinates must be finite and valid.");
             }
 
-            if (width == 0)
+            if (w == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(width), "Width cannot be zero.");
+                throw new ArgumentOutOfRangeException(nameof(w), "W cannot be zero.");
             }
 
-            if (height == 0)
+            if (h == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(height), "Width cannot be zero.");
+                throw new ArgumentOutOfRangeException(nameof(h), "W cannot be zero.");
             }
 
-            _width = width;
-            _height = height;
+            _w = w;
+            _h = h;
             _holes = Array.Empty<SLinearRing>();
 
-            var geom = BuildGeometry(width, height);
+            var geom = GenerateGeometry(w, h);
             geom.Translate(x, y);
             _shell = geom;
         }
@@ -68,10 +73,10 @@ namespace SPEA.Geometry.Primitives
         /// Initializes a new instance of the <see cref="SRect"/> class.
         /// </summary>
         /// <param name="origin">The origin location.</param>
-        /// <param name="width">The width of the rectangle.</param>
-        /// <param name="height">The height of the rectangle.</param>
-        public SRect(SPoint origin, double width, double height)
-            : this(origin.X, origin.Y, width, height)
+        /// <param name="w">The w of the rectangle.</param>
+        /// <param name="h">The h of the rectangle.</param>
+        public SRect(SPoint origin, double w, double h)
+            : this(origin.X, origin.Y, w, h)
         {
             // Blank.
         }
@@ -84,24 +89,23 @@ namespace SPEA.Geometry.Primitives
         /// <exception cref="ArgumentOutOfRangeException">Is thrown when any of the parameters is out of its valid range.</exception>
         public SRect(SPoint origin, SPoint point)
         {
-            var width = point.X - origin.X;
-            var height = point.Y - origin.Y;
+            var w = point.X - origin.X;
+            var h = point.Y - origin.Y;
 
-            if (width == 0)
+            if (w == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(width), "Width cannot be zero.");
+                throw new ArgumentOutOfRangeException(nameof(w), "W cannot be zero.");
             }
 
-            if (height == 0)
+            if (h == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(height), "Height cannot be zero.");
+                throw new ArgumentOutOfRangeException(nameof(h), "H cannot be zero.");
             }
 
-            _width = width;
-            _height = height;
-            _holes = Array.Empty<SLinearRing>();
+            _w = w;
+            _h = h;
 
-            var geom = BuildGeometry(width, height);
+            var geom = GenerateGeometry(w, h);
             geom.Translate(origin.X, origin.Y);
             _shell = geom;
         }
@@ -129,36 +133,29 @@ namespace SPEA.Geometry.Primitives
         public override SLinearRing[] Holes => _holes;
 
         /// <summary>
-        /// Gets or sets the rectangle width.
+        /// Gets the rectangle w.
         /// </summary>
-        public double Width
-        {
-            get => _width;
-            set => _width = value;
-        }
+        public double W => _w;
 
         /// <summary>
-        /// Gets or sets the rectangle height.
+        /// Gets the rectangle h.
         /// </summary>
-        public double Height
-        {
-            get => _height;
-            set => _height = value;
-        }
+        public double H => _h;
 
         #endregion Properties
 
         #region Methods
 
-        // Generates a rectangle geometry using its width and height.
-        private static SLinearRing BuildGeometry(double width, double height)
+        // Generates a rectangle geometry using its w and h.
+        private static SLinearRing GenerateGeometry(double w, double h)
         {
             var p0 = new SPoint(0, 0);
-            var p1 = new SPoint(0 + width, 0);
-            var p2 = new SPoint(0 + width, 0 + height);
-            var p3 = new SPoint(0, 0 + height);
+            var p1 = new SPoint(0 + w, 0);
+            var p2 = new SPoint(0 + w, 0 + h);
+            var p3 = new SPoint(0, 0 + h);
+            var p4 = p0;
 
-            var points = new SPoint[4] { p0, p1, p2, p3 };
+            var points = new SPoint[5] { p0, p1, p2, p3, p4 };
             var geom = new SLinearRing(points);
 
             return geom;

@@ -11,8 +11,8 @@ namespace SPEA.App.ViewModels.Windows
     using System.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
     using SPEA.App.Commands;
-    using SPEA.App.Controllers;
     using SPEA.App.ViewModels;
+    using SPEA.App.ViewModels.SDocument;
 
     /// <summary>
     /// The main View Model used by application main window.
@@ -21,7 +21,7 @@ namespace SPEA.App.ViewModels.Windows
     {
         #region Fields
 
-        private readonly SDocumentsManager _sDocumentsManager;
+        private readonly SDocumentsManagerViewModel _sDocumentsManager;
         private readonly MainMenuViewModel _mainMenuViewModel;
         private readonly ProjectTreeViewModel _projectTreeViewModel;
         private readonly AddGeometryViewModel _addGeometryViewModel;
@@ -39,13 +39,13 @@ namespace SPEA.App.ViewModels.Windows
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
-        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
+        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         /// <param name="mainMenuViewModel">A reference to <see cref="MainMenuViewModel"/> instance.</param>
         /// <param name="projectTreeViewModel">A reference to <see cref="ProjectTreeViewModel"/> instance.</param>
         /// <param name="addGeometryViewModel">A reference to <see cref="AddGeometryViewModel"/> instance.</param>
         public MainViewModel(
             CommandsManager commandsManager,
-            SDocumentsManager sDocumentsManager,
+            SDocumentsManagerViewModel sDocumentsManager,
             MainMenuViewModel mainMenuViewModel,
             ProjectTreeViewModel projectTreeViewModel,
             AddGeometryViewModel addGeometryViewModel)
@@ -68,12 +68,12 @@ namespace SPEA.App.ViewModels.Windows
         /// <summary>
         /// Gets current View Model.
         /// </summary>
-        public static MainViewModel Current { get; private set; }
+        public static MainViewModel? Current { get; private set; }
 
         /// <summary>
         /// Gets SDocuments controller.
         /// </summary>
-        public SDocumentsManager SDocumentsManagerInstance => _sDocumentsManager;
+        public SDocumentsManagerViewModel SDocumentsManagerViewModelInstance => _sDocumentsManager;
 
         /// <summary>
         /// Gets main menu view model.
@@ -97,7 +97,7 @@ namespace SPEA.App.ViewModels.Windows
         /// <summary>
         /// Implements <see cref="RequestApplicationClose"/> command logic.
         /// </summary>
-        private void ExecuteRequestApplicationClose(CancelEventArgs e)
+        private void ExecuteRequestApplicationClose(CancelEventArgs? e)
         {
             // Blank.
         }

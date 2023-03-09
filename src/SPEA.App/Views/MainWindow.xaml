@@ -16,10 +16,10 @@
     xmlns:uc="clr-namespace:SPEA.App.Views.UserControls"
     xmlns:vm="clr-namespace:SPEA.App.ViewModels"
     xmlns:vm_wnd="clr-namespace:SPEA.App.ViewModels.Windows"
+    xmlns:vm_sd="clr-namespace:SPEA.App.ViewModels.SDocument"
     xmlns:vm_se="clr-namespace:SPEA.App.ViewModels.SElements"
     xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:debug="debug-mode"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     mc:Ignorable="d"
     assist:WindowAssist.MinimizeWindowCommand="{Binding CommandsManager[MinimizeWindow].Command, Mode=OneTime}"
@@ -41,16 +41,12 @@
     WindowState="Normal"
     DataContext="{markupex:DISource Type=vm_wnd:MainViewModel}">
 
-    <!--<mc:AlternateContent>
-        <mc:Choice Requires="debug">
-            <Style TargetType="{x:Type ToolTip}">
-                <Setter Property="Visibility" Value="Collapsed"/>
-            </Style>
-        </mc:Choice>
-    </mc:AlternateContent>-->
-
     <Window.Resources>
         <converters:AvalonActiveContentConverter x:Key="AvalonActiveContentConverter"/>
+        <converters:InverseDoubleConverter x:Key="InverseDoubleConverter"/>
+        <CollectionViewSource
+            x:Key="EntityInfoCollection"
+            Source="{Binding Path=SDocumentsManagerViewModelInstance.SelectedDocument.SelectedElement.EntityInfoItems, Mode=OneWay}"/>
     </Window.Resources>
 
     <Window.Effect>
@@ -74,7 +70,7 @@
             Gesture="Ctrl+S"/>
         <KeyBinding
             Command="{Binding CommandsManager[CloseDocument].Command}"
-            CommandParameter="{Binding SDocumentsManagerInstance.SelectedDocument}"
+            CommandParameter="{Binding SDocumentsManagerViewModelInstance.SelectedDocument}"
             Gesture="Ctrl+W"/>
         <KeyBinding
             Command="{Binding CommandsManager[CloseAllDocuments].Command}"
@@ -190,8 +186,8 @@
                 Margin="0,0,10,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Text="DEBUG BUILD" 
-                Foreground="Red"
+                Text="debug build" 
+                Foreground="Tomato"
                 Visibility="{markupex:CollapseWhenDebug}"/>
         </Grid>
     </ctrl:WindowBase.HeaderContent>
@@ -209,8 +205,8 @@
 
                 <avalondock:DockingManager
                     x:Name="AvalonDockingManager"
-                    ActiveContent="{Binding SDocumentsManagerInstance.SelectedDocument, Mode=TwoWay, Converter={StaticResource AvalonActiveContentConverter}}"
-                    DocumentsSource="{Binding SDocumentsManagerInstance.SDocumentsCollection}"
+                    ActiveContent="{Binding SDocumentsManagerViewModelInstance.SelectedDocument, Mode=TwoWay, Converter={StaticResource AvalonActiveContentConverter}}"
+                    DocumentsSource="{Binding SDocumentsManagerViewModelInstance.SDocumentsCollection}"
                     AllowMixedOrientation="True"
                     Background="Transparent"
                     GridSplitterWidth="2"
@@ -232,12 +228,12 @@
                     <avalondock:DockingManager.LayoutItemTemplateSelector>
                         <temselectors:AvalonDocumentTemplateSelector>
                             <temselectors:AvalonDocumentTemplateSelector.AvalonDocumentMetallicDataTemplate>
-                                <DataTemplate DataType="{x:Type vm:SDocumentMetallicViewModel}">
+                                <DataTemplate DataType="{x:Type vm_sd:SDocumentMetallicViewModel}">
                                     <Grid>
                                         <ctrl_svp:SViewportControl
                                             x:Name="SectionEditorViewport"
-                                            ItemsSource="{Binding Path=SElementsCollection, Mode=OneWay}"
-                                            SelectedItem="{Binding Path=SelectedSElement, Mode=TwoWay}"
+                                            ItemsSource="{Binding Path=ElementsCollection, Mode=OneWay}"
+                                            SelectedItem="{Binding Path=SelectedElement, Mode=TwoWay}"
                                             CanSelectMultipleItems="False"
                                             ScrollFactor="0.05"
                                             ContentScale="1.0"
@@ -248,11 +244,23 @@
                                             <ctrl_svp:SViewportControl.Resources>
                                                 <DataTemplate DataType="{x:Type vm_se:SRectViewModel}">
                                                     <shapes:SRectPrimitive
+                                                        x:Name="SRectPrimitive"
+                                                        SnapsToDevicePixels="True"
                                                         W="{Binding Path=W, Mode=TwoWay}"
                                                         H="{Binding Path=H, Mode=TwoWay}"
                                                         Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level2.Inverted}"
                                                         Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
-                                                        StrokeThickness="1">
+                                                        StrokeThickness="1.0"
+                                                        ctrl_svp:SElementItemContainer.ApplyTransform="{DynamicResource TransformGroup}">
+                                                        <shapes:SRectPrimitive.Resources>
+                                                            <TransformGroup x:Key="TransformGroup">
+                                                                <TranslateTransform
+                                                                    X="{Binding Path=X0, Mode=TwoWay}"
+                                                                    Y="{Binding Path=Y0, Mode=TwoWay, Converter={StaticResource InverseDoubleConverter}}"/>
+                                                                <RotateTransform/>
+                                                                <ScaleTransform/>
+                                                            </TransformGroup>
+                                                        </shapes:SRectPrimitive.Resources>
                                                     </shapes:SRectPrimitive>
                                                 </DataTemplate>
                                             </ctrl_svp:SViewportControl.Resources>
@@ -312,7 +320,7 @@
                         <LayoutPanel Orientation="Horizontal">
 
                             <LayoutAnchorablePaneGroup
-                                DockMinWidth="100" DockMinHeight="100" DockWidth="250"
+                                DockMinWidth="100" DockMinHeight="100" DockWidth="300"
                                 Orientation="Vertical">
                                 <LayoutAnchorablePane>
                                     <LayoutAnchorable
@@ -339,6 +347,20 @@
                                         CanDockAsTabbedDocument="False"
                                         CanMove="True"
                                         CanShowOnHover="False">
+                                        <Grid>
+                                            <DataGrid
+                                                x:Name="EntityInfoDataGrid"
+                                                ItemsSource="{Binding Source={StaticResource EntityInfoCollection}, Mode=OneWay}"
+                                                AutoGenerateColumns="False"
+                                                CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+                                                CanUserReorderColumns="False" CanUserSortColumns="False" CanUserResizeColumns="True"
+                                                EnableRowVirtualization="False" EnableColumnVirtualization="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=OneWay}" IsReadOnly="True"/>
+                                                    <DataGridTextColumn Header="Value" Binding="{Binding Value, Mode=TwoWay}" IsReadOnly="False" Width="*"/>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Grid>
                                     </LayoutAnchorable>
                                 </LayoutAnchorablePane>
                             </LayoutAnchorablePaneGroup>
@@ -349,7 +371,7 @@
                             </LayoutDocumentPaneGroup>
 
                             <LayoutAnchorablePaneGroup
-                                DockMinWidth="100" DockMinHeight="100" DockWidth="250"
+                                DockMinWidth="100" DockMinHeight="100" DockWidth="300"
                                 Orientation="Vertical">
                                 <LayoutAnchorablePane>
                                     <LayoutAnchorable
@@ -369,7 +391,7 @@
                                             Height="35"
                                             HorizontalAlignment="Left" HorizontalContentAlignment="Center"
                                             VerticalAlignment="Top" VerticalContentAlignment="Center"
-                                            Command="{Binding Path=DataContext.CommandsManager[AddPrimitiveRectangle].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
+                                            Command="{Binding Path=DataContext.CommandsManager[AddPrimitiveRect].Command, RelativeSource={RelativeSource AncestorType=ctrl:WindowBase}}"
                                             Style="{DynamicResource RaisedButtonStyle_2}"/>
                                     </LayoutAnchorable>
                                     <LayoutAnchorable

@@ -5,10 +5,9 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.App.ViewModels
+namespace SPEA.App.ViewModels.SDocument
 {
     using SPEA.App.Commands;
-    using SPEA.App.Controllers;
     using SPEA.Core.CrossSection;
 
     /// <summary>
@@ -28,11 +27,11 @@ namespace SPEA.App.ViewModels
         /// Initializes a new instance of the <see cref="SDocumentMetallicViewModel"/> class.
         /// </summary>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager.CommandsManager"/> instance.</param>
-        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManager"/> instance.</param>
+        /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         /// <param name="model">A reference to the model instance.</param>
         public SDocumentMetallicViewModel(
             CommandsManager commandsManager,
-            SDocumentsManager sDocumentsManager,
+            SDocumentsManagerViewModel sDocumentsManager,
             MetallicCrossSection model)
             : base(commandsManager, sDocumentsManager, model)
         {

@@ -279,17 +279,17 @@ namespace SPEA.App.Controls.SViewport
         /// its <see cref="ItemContainerGenerator"/> will use this method to get the appropriate
         /// container type.
         /// </remarks>
-        /// <returns><see cref="SElementContainer"/> item container.</returns>
-        protected override DependencyObject GetContainerForItemOverride() => new SElementContainer();
+        /// <returns><see cref="SElementItemContainer"/> item container.</returns>
+        protected override DependencyObject GetContainerForItemOverride() => new SElementItemContainer();
 
         /// <summary>
         /// Is used by <see cref="ItemContainerGenerator"/> to check whether a given item is 
-        /// already a type of <see cref="SElementContainer"/> before asking <see cref="ItemsControl"/>
+        /// already a type of <see cref="SElementItemContainer"/> before asking <see cref="ItemsControl"/>
         /// to create a new container using <see cref="GetContainerForItemOverride"/>.
         /// </summary>
         /// <param name="item">An item to be checked.</param>
-        /// <returns><see langword="true"/> if a given item is <see cref="SElementContainer"/>, otherwise <see langword="false"/>.</returns>
-        protected override bool IsItemItsOwnContainerOverride(object item) => item is SElementContainer;
+        /// <returns><see langword="true"/> if a given item is <see cref="SElementItemContainer"/>, otherwise <see langword="false"/>.</returns>
+        protected override bool IsItemItsOwnContainerOverride(object item) => item is SElementItemContainer;
 
         /// <summary>
         /// Invoked when the value of the <see cref="ItemsControl.Items"/> property changes.
@@ -304,7 +304,7 @@ namespace SPEA.App.Controls.SViewport
             // NewStartingIndex = 0 when the first item is added.
             ////if (e.NewStartingIndex != -1 && e.Action == NotifyCollectionChangedAction.Add)
             ////{
-            ////    var container = (SElementContainer)ItemContainerGenerator.ContainerFromItem(e.NewStartingIndex);
+            ////    var container = (SElementItemContainer)ItemContainerGenerator.ContainerFromItem(e.NewStartingIndex);
             ////    if (container.IsValid)
             ////    {
             ////        _containersIndexes.Add(e.NewStartingIndex);

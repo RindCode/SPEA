@@ -11,8 +11,8 @@ namespace SPEA.App.Utils.Services
     using CommunityToolkit.Mvvm.Messaging;
     using Microsoft.Extensions.DependencyInjection;
     using SPEA.App.Commands;
-    using SPEA.App.Controllers;
     using SPEA.App.ViewModels;
+    using SPEA.App.ViewModels.SDocument;
     using SPEA.App.ViewModels.Windows;
 
     /// <summary>
@@ -31,10 +31,10 @@ namespace SPEA.App.Utils.Services
             var services = new ServiceCollection();
 
             // Services.
-            services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+            ////services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
             // Controllers
-            services.AddSingleton<SDocumentsManager>();
+            services.AddSingleton<SDocumentsManagerViewModel>();
             services.AddSingleton<CommandsManager>();
 
             // View Models
@@ -43,7 +43,7 @@ namespace SPEA.App.Utils.Services
             services.AddSingleton<ProjectTreeViewModel>();
             services.AddSingleton<AddGeometryViewModel>();
             services.AddTransient<NewSectionViewModel>();
-            services.AddTransient<AddPrimitiveRectangleViewModel>();
+            services.AddTransient<AddPrimitiveRectViewModel>();
 
             return services.BuildServiceProvider();
         }

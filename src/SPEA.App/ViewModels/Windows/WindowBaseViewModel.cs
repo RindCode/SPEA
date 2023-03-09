@@ -104,25 +104,25 @@ namespace SPEA.App.ViewModels.Windows
         #region Commands Logic
 
         // Minimize window command logic.
-        private void ExecuteMinimizeWindow(Window window)
+        private void ExecuteMinimizeWindow(Window? window)
         {
             SystemCommands.MinimizeWindow(window);
         }
 
         // Maximize window command logic.
-        private void ExecuteMaximizeWindow(Window window)
+        private void ExecuteMaximizeWindow(Window? window)
         {
             SystemCommands.MaximizeWindow(window);
         }
 
         // Restore down window command logic.
-        private void ExecuteRestoreWindow(Window window)
+        private void ExecuteRestoreWindow(Window? window)
         {
             SystemCommands.RestoreWindow(window);
         }
 
         // Close window command logic.
-        private void ExecuteCloseWindow(Window window)
+        private void ExecuteCloseWindow(Window? window)
         {
             SystemCommands.CloseWindow(window);
         }
