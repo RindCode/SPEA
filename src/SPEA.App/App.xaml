@@ -25,20 +25,22 @@
                 <ResourceDictionary Source="pack://application:,,,/Styles/Themes/DarkTheme.xaml"/>
 
                 <!-- Styles -->
-                <ResourceDictionary Source="pack://application:,,,/Styles/ValidationErrorTemplate.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/ButtonStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/MainMenuStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/CheckBoxStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/ComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/ContextMenuStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/WindowStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/MainMenuStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/ScrollBarStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/ScrollViewerStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/SElementContainerStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/SViewportControlStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/TabControlStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/TextBoxStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/ToggleButtonStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Styles/ToolTipStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/ScrollViewerStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/ScrollBarStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/TextBoxStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/ComboBoxStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/CheckBoxStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Styles/SViewportControlStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/ValidationErrorTemplate.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Styles/WindowStyle.xaml"/>
 
                 <!-- AvalonDock re-Styles -->
                 <!-- For some reason, these resources MUST be ordered as below matching with the original one from AvalonDock Generic.xaml -->

@@ -43,14 +43,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type avalonDockControls:LayoutAnchorableControl}">
                     <Border
-						Background="{TemplateBinding Background}"
 						BorderBrush="{TemplateBinding BorderBrush}"
 						BorderThickness="{TemplateBinding BorderThickness}"
 						KeyboardNavigation.TabNavigation="Cycle">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Border
                                 x:Name="Header"
@@ -62,7 +61,7 @@
                                     BorderBrush="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
                                     BorderThickness="0,1,0,0"
                                     Style="{StaticResource SPEA_AnchorablePaneTitleStyle}"
-                                    Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    Model="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"/>
                             </Border>
 
                             <!--
@@ -74,7 +73,7 @@
 								Content="{Binding LayoutItem.View, RelativeSource={RelativeSource TemplatedParent}}"
 								ContentTemplate="{Binding LayoutItem.View.ContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
 								ContentTemplateSelector="{Binding LayoutItem.View.ContentTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}"
-								FlowDirection="{TemplateBinding FlowDirection}" />
+								FlowDirection="{TemplateBinding FlowDirection}"/>
 
                             <!--<ContentPresenter
                                 FlowDirection="{TemplateBinding FlowDirection}"
@@ -92,10 +91,10 @@
 								without any other LayoutAnchorableControl
 							-->
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.IsFloating}" Value="True" />
-                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.Parent.IsDirectlyHostedInFloatingWindow}" Value="True" />
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.IsFloating}" Value="True"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model.Parent.IsDirectlyHostedInFloatingWindow}" Value="True"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="Header" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Header" Property="Visibility" Value="Collapsed"/>
                         </MultiDataTrigger>
                         <MultiDataTrigger>
                             <!--
@@ -103,9 +102,9 @@
 								See Issue #148 Drop Down Menu for LayoutAnchorables is not correct with Virtualization
 							-->
                             <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model}" Value="{x:Null}" />
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Model}" Value="{x:Null}"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="Header" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Header" Property="Visibility" Value="Collapsed"/>
                         </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

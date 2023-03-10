@@ -350,14 +350,28 @@
                                         <Grid>
                                             <DataGrid
                                                 x:Name="EntityInfoDataGrid"
+                                                Margin="1"
                                                 ItemsSource="{Binding Source={StaticResource EntityInfoCollection}, Mode=OneWay}"
                                                 AutoGenerateColumns="False"
+                                                HeadersVisibility="All"
+                                                GridLinesVisibility="None"   
                                                 CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
                                                 CanUserReorderColumns="False" CanUserSortColumns="False" CanUserResizeColumns="True"
-                                                EnableRowVirtualization="False" EnableColumnVirtualization="False">
+                                                EnableRowVirtualization="False" EnableColumnVirtualization="False"
+                                                Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
+                                                FontFamily="Consolas"
+                                                Style="{StaticResource DataGridStyle}">
                                                 <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=OneWay}" IsReadOnly="True"/>
-                                                    <DataGridTextColumn Header="Value" Binding="{Binding Value, Mode=TwoWay}" IsReadOnly="False" Width="*"/>
+                                                    <DataGridTextColumn
+                                                        Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Name}"
+                                                        Binding="{Binding Name, Mode=OneWay}"
+                                                        IsReadOnly="True" EditingElementStyle="{StaticResource DataGridTextBoxStyle}"
+                                                        CellStyle="{StaticResource ReadOnlyDataGridCellStyle}"/>
+                                                    <DataGridTextColumn
+                                                        Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Value}"
+                                                        Binding="{Binding Value, Mode=TwoWay}"
+                                                        IsReadOnly="False" Width="*" EditingElementStyle="{StaticResource DataGridTextBoxStyle}"
+                                                        CellStyle="{StaticResource ReadOnlyDataGridCellStyle}"/>
                                                 </DataGrid.Columns>
                                             </DataGrid>
                                         </Grid>

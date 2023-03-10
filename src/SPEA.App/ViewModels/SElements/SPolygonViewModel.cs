@@ -7,9 +7,11 @@
 
 namespace SPEA.App.ViewModels.SElements
 {
+    using System;
     using System.Collections.ObjectModel;
     using SPEA.App.Models.SElements;
     using SPEA.Geometry.Core;
+    using SPEA.Geometry.Primitives;
 
     /// <summary>
     /// Represent a view model for <see cref="SPolygon"/> model object.
@@ -18,19 +20,34 @@ namespace SPEA.App.ViewModels.SElements
     {
         #region Fields
 
-        private readonly SPolygon? _model;
+        private readonly SPolygon _model;
         private readonly ObservableCollection<SElementInfo> _entityInfoItems = new ObservableCollection<SElementInfo>();
 
         private bool _disposed;
 
         #endregion Fields
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SPolygonViewModel"/> class.
+        /// </summary>
+        /// <param name="polygon"><see cref="SPolygon"/> model reference.</param>
+        public SPolygonViewModel(SPolygon polygon)
+        {
+            ArgumentNullException.ThrowIfNull(polygon);
+
+            _model = polygon;
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
         /// Gets a model object.
         /// </summary>
-        public virtual SPolygon? Model => _model;
+        public virtual SPolygon Model => _model;
 
         /// <inheritdoc/>
         public override double X0
@@ -49,6 +66,16 @@ namespace SPEA.App.ViewModels.SElements
             set
             {
                 SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));
+            }
+        }
+
+        /// <inheritdoc/>
+        public override double Angle
+        {
+            get => _model.Origin.Y;
+            set
+            {
+                ////SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));
             }
         }
 

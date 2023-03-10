@@ -158,7 +158,6 @@
         </Grid>
     </ControlTemplate>
 
-    <!--  No key => applies to all scrollbars  -->
     <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Style.Triggers>

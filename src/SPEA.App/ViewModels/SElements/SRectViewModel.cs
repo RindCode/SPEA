@@ -10,7 +10,6 @@ namespace SPEA.App.ViewModels.SElements
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Diagnostics;
     using SPEA.App.Models.SElements;
     using SPEA.App.Utils.Helpers;
     using SPEA.Geometry.Core;
@@ -47,9 +46,10 @@ namespace SPEA.App.ViewModels.SElements
             _h = rect.H;
 
             // Elements order does matter.
-            _entityInfoItems.Add(new SElementInfo(name: _internalTypePropName, value: SRect.InternalType));
+            _entityInfoItems.Add(new SElementInfo(name: _internalTypePropName, value: SRect.InternalType, isReadOnly: true));
             _entityInfoItems.Add(new SElementInfo(name: nameof(X0), value: rect.Origin.X));
             _entityInfoItems.Add(new SElementInfo(name: nameof(Y0), value: rect.Origin.Y));
+            _entityInfoItems.Add(new SElementInfo(name: nameof(Angle), value: 0));
             _entityInfoItems.Add(new SElementInfo(name: nameof(W), value: rect.W));
             _entityInfoItems.Add(new SElementInfo(name: nameof(H), value: rect.H));
 
@@ -93,6 +93,18 @@ namespace SPEA.App.ViewModels.SElements
             }
         }
 
+        /// <inheritdoc/>
+        public override double Angle
+        {
+            get => _model.Origin.Y;
+            set
+            {
+                ////SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));
+                _entityInfoItems[3].Value = value;
+                ////_model = new SRect(_model.Origin.X, value, _model.W, _model.H);
+            }
+        }
+
         /// <summary>
         /// Gets or sets the rectangle width.
         /// </summary>
@@ -102,7 +114,7 @@ namespace SPEA.App.ViewModels.SElements
             set
             {
                 SetProperty(ref _w, value);
-                _entityInfoItems[3].Value = value;
+                _entityInfoItems[4].Value = value;
                 _model = new SRect(_model.Origin, value, _model.H);
             }
         }
@@ -116,7 +128,7 @@ namespace SPEA.App.ViewModels.SElements
             set
             {
                 SetProperty(ref _h, value);
-                _entityInfoItems[4].Value = value;
+                _entityInfoItems[5].Value = value;
                 _model = new SRect(_model.Origin, _model.W, value);
             }
         }
@@ -181,6 +193,9 @@ namespace SPEA.App.ViewModels.SElements
                     break;
                 case nameof(Y0):
                     if (Y0 != value) { Y0 = value; }
+                    break;
+                case nameof(Angle):
+                    if (Angle != value) { Angle = value; }
                     break;
                 case nameof(W):
                     if (W != value) { W = value; }

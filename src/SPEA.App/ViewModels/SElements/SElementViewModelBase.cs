@@ -104,6 +104,11 @@ namespace SPEA.App.ViewModels.SElements
         /// </remarks>
         public abstract double Y0 { get; set; }
 
+        /// <summary>
+        /// Gets or sets the angle of rotation.
+        /// </summary>
+        public abstract double Angle { get; set; }
+
         /////// <summary>
         /////// Gets or sets the top-most bound of the S-element bounding box.
         /////// </summary>

@@ -17,7 +17,7 @@
         <!--<Setter Property="Background" Value="{Binding Model.Root.Manager.Background, RelativeSource={RelativeSource Self}}"/>-->
         <Setter Property="Background" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource SolidColorBrush.PrimaryPalette.Level0a}"/>
-        <Setter Property="BorderThickness" Value="1,1,1,1"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="TabStripPlacement" Value="Top"/>
         <Setter Property="Template">
@@ -76,6 +76,12 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{DynamicResource Element.Foreground.Inactive}"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count, FallbackValue=1}" Value="1">
+                            <Setter TargetName="HeaderPanelBorder" Property="Background" Value="Transparent"/>
+                            <Setter TargetName="HeaderPanelBorder" Property="BorderThickness" Value="0"/>
+                            <Setter TargetName="HeaderPanelBorder2" Property="Background" Value="Transparent"/>
+                            <Setter TargetName="HeaderPanelBorder2" Property="BorderThickness" Value="0"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
