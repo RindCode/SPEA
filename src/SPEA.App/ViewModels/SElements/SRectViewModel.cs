@@ -10,6 +10,7 @@ namespace SPEA.App.ViewModels.SElements
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Diagnostics;
     using SPEA.App.Models.SElements;
     using SPEA.App.Utils.Helpers;
     using SPEA.Geometry.Core;
@@ -75,9 +76,9 @@ namespace SPEA.App.ViewModels.SElements
             get => _model.Origin.X;
             set
             {
-                SetProperty(_model.Origin.X, value, _model, (model, x) => model.Origin = new SPoint(x, model.Origin.Y));
+                var newOrigin = new SPoint(value, _model.Origin.Y);
+                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.Origin = origin);
                 _entityInfoItems[1].Value = value;
-                _model = new SRect(value, _model.Origin.Y, _model.W, _model.H);
             }
         }
 
@@ -87,16 +88,16 @@ namespace SPEA.App.ViewModels.SElements
             get => _model.Origin.Y;
             set
             {
-                SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));
+                var newOrigin = new SPoint(_model.Origin.X, value);
+                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.Origin = origin);
                 _entityInfoItems[2].Value = value;
-                _model = new SRect(_model.Origin.X, value, _model.W, _model.H);
             }
         }
 
         /// <inheritdoc/>
         public override double Angle
         {
-            get => _model.Origin.Y;
+            get => _model.AppliedTransformations.Rotate.Angle;
             set
             {
                 ////SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));

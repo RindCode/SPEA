@@ -13,6 +13,7 @@ namespace SPEA.Geometry.Transform
     public class AppliedTransformations
     {
         private TranslationTransformation _translate;
+        private RotateTransformation _rotate;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppliedTransformations"/> class.
@@ -20,6 +21,7 @@ namespace SPEA.Geometry.Transform
         public AppliedTransformations()
         {
             _translate = new TranslationTransformation();
+            _rotate = new RotateTransformation();
         }
 
         /// <summary>
@@ -29,6 +31,15 @@ namespace SPEA.Geometry.Transform
         {
             get => _translate;
             set => _translate = value;
+        }
+
+        /// <summary>
+        /// Gets or sets a translation transform.
+        /// </summary>
+        public RotateTransformation Rotate
+        {
+            get => _rotate;
+            set => _rotate = value;
         }
     }
 }

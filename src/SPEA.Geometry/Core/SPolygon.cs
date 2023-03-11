@@ -12,15 +12,16 @@ namespace SPEA.Geometry.Core
     /// <summary>
     /// Represents a base class for polygons.
     /// </summary>
-    public abstract class SPolygon : SObject
+    public class SPolygon : SObject
     {
         #region Fields
 
         /// <summary>
         /// Gets the internal type of this entity.
         /// </summary>
-        public new const EntityType InternalType = EntityType.SPOLYGON;
+        public new const SEntityType InternalType = SEntityType.SPOLYGON;
 
+        private readonly SPolygon _definingObject;
         private readonly SLinearRing _shell;
         private readonly SLinearRing[] _holes;
         ////private SPoint _origin;
@@ -80,6 +81,31 @@ namespace SPEA.Geometry.Core
         ////    _origin = shell.Origin;
         ////}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SPolygon"/> class.
+        /// </summary>
+        public SPolygon()
+        {
+            ////_shell = new SLinearRing();
+            ////_holes = new SLinearRing[0];
+            ////_definingObject = new SPolygon(this);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SPolygon"/> class.
+        /// </summary>
+        /// <param name="sPolygon"><see cref="SPolygon"/> object used for a "copy".</param>
+        protected SPolygon(SPolygon sPolygon)
+        {
+            _shell = new SLinearRing(sPolygon.Shell.Points);
+
+            var holes = new SLinearRing[sPolygon.Holes.Length];
+            Array.Copy(sPolygon.Holes, holes, holes.Length);
+            _holes = holes;
+
+            _definingObject = sPolygon.DefiningObject;
+        }
+
         #endregion Constructors
 
         #region Properties
@@ -95,10 +121,8 @@ namespace SPEA.Geometry.Core
                     return;
                 }
 
-                var dx = value.X - Shell.Origin.X;
-                var dy = value.Y - Shell.Origin.Y;
-                var transform = new TranslationTransformation(dx, dy);
-                ApplyTransformation(transform);
+                var d = value - Shell.Origin;
+                Translate(d.X, d.Y);
             }
         }
 
@@ -118,12 +142,15 @@ namespace SPEA.Geometry.Core
         /// </summary>
         public override bool IsEmpty => Shell.IsEmpty;
 
+        /// <inheritdoc/>
+        public override SPolygon DefiningObject => _definingObject;
+
         #endregion Properties
 
         #region Methods
 
         /// <inheritdoc/>
-        public override void ApplyTransformation(AffineTransformation transform)
+        public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
         {
             ArgumentNullException.ThrowIfNull(transform);
 

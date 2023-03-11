@@ -19,7 +19,7 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Gets the internal type of this entity.
         /// </summary>
-        public const EntityType InternalType = EntityType.SPOINT;
+        public const SEntityType InternalType = SEntityType.SPOINT;
 
         private readonly double _x;
         private readonly double _y;
@@ -160,8 +160,6 @@ namespace SPEA.Geometry.Core
         /// <returns>A new transformed <see cref="SPoint"/>.</returns>
         public SPoint Transform(AffineTransformation tr)
         {
-            ////ArgumentNullException.ThrowIfNull(tr);
-
             if (tr.IsIdentity)
             {
                 return this;

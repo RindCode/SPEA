@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="TranslationTransformation.cs" company="Dmitry Poberezhnyy">
+// <copyright file="RotateTransformation.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -10,45 +10,44 @@ namespace SPEA.Geometry.Transform
     using SPEA.Numerics.Matrices;
 
     /// <summary>
-    /// Represents a translation transform.
+    /// Represents a rotation transform.
     /// </summary>
-    public sealed class TranslationTransformation : AffineTransformation
+    public class RotateTransformation : AffineTransformation
     {
         #region Fields
 
         private readonly SquareMatrix _value;
         private readonly bool _isIdentity;
-        private readonly double _x;
-        private readonly double _y;
+        private readonly double _angle;
 
         #endregion Fields
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TranslationTransformation"/> class.
+        /// Initializes a new instance of the <see cref="RotateTransformation"/> class.
         /// </summary>
-        public TranslationTransformation()
+        public RotateTransformation()
         {
             _value = IdentityTransform;
             _isIdentity = true;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TranslationTransformation"/> class.
+        /// Initializes a new instance of the <see cref="RotateTransformation"/> class.
         /// </summary>
-        /// <param name="x">The displacement along the X axis.</param>
-        /// <param name="y">The displacement along the Y axis.</param>
-        public TranslationTransformation(double x, double y)
+        /// <param name="angle">The angle of rotation.</param>
+        public RotateTransformation(double angle)
         {
             var matrix = IdentityTransform;
-            matrix[0, 2] = x;
-            matrix[1, 2] = y;
+            matrix[0, 0] = Math.Cos(angle);
+            matrix[0, 1] = -1 * Math.Sin(angle);
+            matrix[1, 0] = Math.Sin(angle);
+            matrix[1, 1] = Math.Cos(angle);
 
             _value = matrix;
             _isIdentity = false;
-            _x = x;
-            _y = y;
+            _angle = angle;
         }
 
         #endregion Constructors
@@ -62,14 +61,9 @@ namespace SPEA.Geometry.Transform
         public override bool IsIdentity => _isIdentity;
 
         /// <summary>
-        /// Gets the displacement along the X axis.
+        /// Gets the angle of rotation.
         /// </summary>
-        public double X => _x;
-
-        /// <summary>
-        /// Gets the displacement along the Y axis.
-        /// </summary>
-        public double Y => _y;
+        public double Angle => _angle;
 
         #endregion Properties
     }

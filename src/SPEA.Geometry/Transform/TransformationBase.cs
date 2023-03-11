@@ -10,6 +10,25 @@ namespace SPEA.Geometry.Transform
     using SPEA.Numerics.Matrices;
 
     /// <summary>
+    /// Defines the applied transformation type.
+    /// </summary>
+    public enum TransformationType
+    {
+        /// <summary>
+        /// The transformation will be applied relative
+        /// to the initial state. Normally the initial state
+        /// contains no transofrmations.
+        /// </summary>
+        RelativeToInitial,
+
+        /// <summary>
+        /// The transformation will be applied relative
+        /// to the current transformation (appended).
+        /// </summary>
+        RelativeToCurrent,
+    }
+
+    /// <summary>
     /// Represents a base class for any transformations.
     /// </summary>
     public abstract class TransformationBase

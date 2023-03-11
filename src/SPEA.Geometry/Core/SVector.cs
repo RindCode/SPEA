@@ -17,7 +17,7 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Gets the internal type of this entity.
         /// </summary>
-        public const EntityType InternalType = EntityType.SVECTOR;
+        public const SEntityType InternalType = SEntityType.SVECTOR;
 
         private readonly SPoint _p;
 

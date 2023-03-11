@@ -8,6 +8,7 @@
 namespace SPEA.Geometry.Primitives
 {
     using SPEA.Geometry.Core;
+    using System.Diagnostics;
 
     /// <summary>
     /// Represents a rectangle <see cref="SObject"/> primitive.
@@ -19,8 +20,9 @@ namespace SPEA.Geometry.Primitives
         /// <summary>
         /// Gets the internal type of this entity.
         /// </summary>
-        public new const EntityType InternalType = EntityType.SRECT;
+        public new const SEntityType InternalType = SEntityType.SRECT;
 
+        private readonly SRect _definingObject;
         private readonly SLinearRing _shell;
         private readonly SLinearRing[] _holes = Array.Empty<SLinearRing>();
         private readonly double _w;
@@ -62,11 +64,14 @@ namespace SPEA.Geometry.Primitives
 
             _w = w;
             _h = h;
-            _holes = Array.Empty<SLinearRing>();
 
-            var geom = GenerateGeometry(w, h);
-            geom.Translate(x, y);
-            _shell = geom;
+            var geometry = GenerateGeometry(w, h);
+            _shell = geometry;
+
+            _definingObject = new SRect(this);
+
+            geometry.Translate(x, y);
+            _shell = geometry;
         }
 
         /// <summary>
@@ -88,26 +93,9 @@ namespace SPEA.Geometry.Primitives
         /// <param name="point">The location of the point located in the corner opposite to the origin.</param>
         /// <exception cref="ArgumentOutOfRangeException">Is thrown when any of the parameters is out of its valid range.</exception>
         public SRect(SPoint origin, SPoint point)
+            : this(origin.X, origin.Y, point.X, point.Y)
         {
-            var w = point.X - origin.X;
-            var h = point.Y - origin.Y;
-
-            if (w == 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(w), "W cannot be zero.");
-            }
-
-            if (h == 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(h), "H cannot be zero.");
-            }
-
-            _w = w;
-            _h = h;
-
-            var geom = GenerateGeometry(w, h);
-            geom.Translate(origin.X, origin.Y);
-            _shell = geom;
+            // Blank.
         }
 
         /// <summary>
@@ -122,6 +110,24 @@ namespace SPEA.Geometry.Primitives
             // Blank.
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SRect"/> class.
+        /// </summary>
+        /// <param name="sRect"><see cref="SRect"/> object used for a "copy".</param>
+        private SRect(SRect sRect)
+        {
+            _w = sRect.W;
+            _h = sRect.H;
+
+            _shell = new SLinearRing(sRect.Shell.Points);
+
+            var holes = new SLinearRing[sRect.Holes.Length];
+            Array.Copy(sRect.Holes, holes, holes.Length);
+            _holes = holes;
+
+            _definingObject = this;
+        }
+
         #endregion Constructors
 
         #region Properties
@@ -131,6 +137,9 @@ namespace SPEA.Geometry.Primitives
 
         /// <inheritdoc/>
         public override SLinearRing[] Holes => _holes;
+
+        /// <inheritdoc/>
+        public override SRect DefiningObject => _definingObject;
 
         /// <summary>
         /// Gets the rectangle w.

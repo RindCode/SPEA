@@ -12,7 +12,7 @@ namespace SPEA.Geometry.Core
     /// <summary>
     /// Represents valid internal types.
     /// </summary>
-    public enum EntityType
+    public enum SEntityType
     {
         SLINEPATH,
         SLINERING,
@@ -35,8 +35,7 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Gets the internal type of this entity.
         /// </summary>
-        public const EntityType InternalType = EntityType.SOBJECT;
-
+        public const SEntityType InternalType = SEntityType.SOBJECT;
 
         private readonly Guid guid = Guid.NewGuid();
         private readonly AppliedTransformations _appliedTransformations = new AppliedTransformations();
@@ -63,6 +62,12 @@ namespace SPEA.Geometry.Core
         /// Gets a value indicating whether the current <see cref="SObject"/> can be treated as empty.
         /// </summary>
         public abstract bool IsEmpty { get; }
+
+        /// <summary>
+        /// Gets the initial geometry (with no transformations applied)
+        /// of the <see cref="SObject"/> or of a type of a derived class.
+        /// </summary>
+        public abstract SObject DefiningObject { get; }
 
         /// <summary>
         /// Gets an object that wraps all applied transformations.
@@ -139,18 +144,32 @@ namespace SPEA.Geometry.Core
         /// Applies an affine transformation to the <see cref="SObject"/>.
         /// </summary>
         /// <param name="transform">An affine transformation to be applied.</param>
-        public abstract void ApplyTransformation(AffineTransformation transform);
+        /// <param name="transformationType">The transformation type.</param>
+        public abstract void ApplyTransformation(AffineTransformation transform, TransformationType transformationType);
 
         /// <summary>
         /// Translates the current <see cref="SObject"/>.
         /// </summary>
         /// <param name="x">The displacement along the X axis.</param>
         /// <param name="y">The displacement along the Y axis.</param>
-        public void Translate(double x, double y)
+        /// <param name="transformationType">The transformation type.</param>
+        public void Translate(double x, double y, TransformationType transformationType = TransformationType.RelativeToCurrent)
         {
             var transform = new TranslationTransformation(x, y);
             AppliedTransformations.Translate = transform;
-            ApplyTransformation(transform);
+            ApplyTransformation(transform, transformationType);
+        }
+
+        /// <summary>
+        /// Rotates the current <see cref="SObject"/>.
+        /// </summary>
+        /// <param name="angle">The angle of rotation.</param>
+        /// <param name="transformationType">The transformation type.</param>
+        public void Rotate(double angle, TransformationType transformationType = TransformationType.RelativeToCurrent)
+        {
+            var transform = new RotateTransformation(angle);
+            AppliedTransformations.Rotate = transform;
+            ApplyTransformation(transform, transformationType);
         }
 
         #endregion Methods

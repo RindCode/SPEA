@@ -52,4 +52,8 @@
     <ProjectReference Include="..\SPEA.Numerics\SPEA.Numerics.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
 </Project>

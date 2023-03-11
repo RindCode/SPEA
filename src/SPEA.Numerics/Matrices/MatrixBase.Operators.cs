@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="MatrixBase.Arithmetic.cs" company="Dmitry Poberezhnyy">
+// <copyright file="MatrixBase.Operators.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -14,10 +14,7 @@ namespace SPEA.Numerics.Matrices
     {
         #region Methods
 
-        public static MatrixBase Add(MatrixBase left, MatrixBase right)
-        {
-            return left;
-        }
+        public static MatrixBase operator +(MatrixBase left, MatrixBase right) => Add(left, right);
 
         #endregion Methods
     }

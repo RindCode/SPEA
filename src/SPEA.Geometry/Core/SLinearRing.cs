@@ -17,7 +17,7 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Gets the internal type of this entity.
         /// </summary>
-        public new const EntityType InternalType = EntityType.SLINEPATH;
+        public new const SEntityType InternalType = SEntityType.SLINEPATH;
 
         #endregion Fields
 

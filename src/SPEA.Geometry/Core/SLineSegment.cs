@@ -17,7 +17,7 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Gets the internal type of this entity.
         /// </summary>
-        public const EntityType InternalType = EntityType.SLINESEG;
+        public const SEntityType InternalType = SEntityType.SLINESEG;
 
         private readonly SPoint _p0;
         private readonly SPoint _p1;

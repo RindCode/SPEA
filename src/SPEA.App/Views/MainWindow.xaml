@@ -257,7 +257,7 @@
                                                                 <TranslateTransform
                                                                     X="{Binding Path=X0, Mode=TwoWay}"
                                                                     Y="{Binding Path=Y0, Mode=TwoWay, Converter={StaticResource InverseDoubleConverter}}"/>
-                                                                <RotateTransform/>
+                                                                <RotateTransform Angle="{Binding Path=Angle, Mode=TwoWay}"/>
                                                                 <ScaleTransform/>
                                                             </TransformGroup>
                                                         </shapes:SRectPrimitive.Resources>
@@ -359,15 +359,16 @@
                                                 CanUserReorderColumns="False" CanUserSortColumns="False" CanUserResizeColumns="True"
                                                 EnableRowVirtualization="False" EnableColumnVirtualization="False"
                                                 Background="{DynamicResource SolidColorBrush.PrimaryPalette.Level2}"
-                                                FontFamily="Consolas"
                                                 Style="{StaticResource DataGridStyle}">
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn
+                                                        FontFamily="Consolas"
                                                         Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Name}"
                                                         Binding="{Binding Name, Mode=OneWay}"
                                                         IsReadOnly="True" EditingElementStyle="{StaticResource DataGridTextBoxStyle}"
                                                         CellStyle="{StaticResource ReadOnlyDataGridCellStyle}"/>
                                                     <DataGridTextColumn
+                                                        FontFamily="Consolas"
                                                         Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Value}"
                                                         Binding="{Binding Value, Mode=TwoWay}"
                                                         IsReadOnly="False" Width="*" EditingElementStyle="{StaticResource DataGridTextBoxStyle}"

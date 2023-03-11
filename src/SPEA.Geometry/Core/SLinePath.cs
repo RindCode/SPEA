@@ -19,8 +19,9 @@ namespace SPEA.Geometry.Core
         /// <summary>
         /// Gets the internal type of this entity.
         /// </summary>
-        public new const EntityType InternalType = EntityType.SLINEPATH;
+        public new const SEntityType InternalType = SEntityType.SLINEPATH;
 
+        private readonly SLinePath _definingObject;
         private readonly SPoint[] _points;
         private SPoint _origin;
 
@@ -35,6 +36,7 @@ namespace SPEA.Geometry.Core
         {
             _points = Array.Empty<SPoint>();
             _origin = default(SPoint);
+            _definingObject = new SLinePath(this);
         }
 
         /// <summary>
@@ -54,6 +56,22 @@ namespace SPEA.Geometry.Core
 
             _points = points.ToArray();
             _origin = points.Count > 0 ? points[0] : default(SPoint);
+            _definingObject = new SLinePath(this);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SLinePath"/> class.
+        /// </summary>
+        /// <param name="sLinePath"><see cref="SLinePath"/> object used for a "copy".</param>
+        protected SLinePath(SLinePath sLinePath)
+        {
+            var points = new SPoint[sLinePath.Points.Length];
+            Array.Copy(sLinePath.Points, points, points.Length);
+            _points = sLinePath.Points;
+
+            _origin = sLinePath.Origin;
+
+            _definingObject = this;
         }
 
         #endregion Constructors
@@ -70,14 +88,7 @@ namespace SPEA.Geometry.Core
         {
             get
             {
-                if (IsEmpty)
-                {
-                    _origin = default(SPoint);
-                    return _origin;
-                }
-
-                _origin = _points[0];
-                return _origin;
+                return IsEmpty ? default(SPoint) : _points[0];
             }
 
             set
@@ -87,12 +98,8 @@ namespace SPEA.Geometry.Core
                     return;
                 }
 
-                var dx = value.X - _origin.X;
-                var dy = value.Y - _origin.Y;
-                var transform = new TranslationTransformation(dx, dy);
-                ApplyTransformation(transform);
-
-                _origin = _points[0];  // TODO: Use this instead of value to avoid precision errors? How close are they?
+                var d = value - _origin;
+                Translate(d.X, d.Y);
             }
         }
 
@@ -101,6 +108,9 @@ namespace SPEA.Geometry.Core
         /// and contains no points in it.
         /// </summary>
         public override bool IsEmpty => _points.Length == 0;
+
+        /// <inheritdoc/>
+        public override SLinePath DefiningObject => _definingObject;
 
         /// <summary>
         /// Gets a value indicating whether the currect <see cref="SLinePath"/> is closed.
@@ -133,12 +143,18 @@ namespace SPEA.Geometry.Core
         #region Methods
 
         /// <inheritdoc/>
-        public override void ApplyTransformation(AffineTransformation transform)
+        public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
             if (transform.IsIdentity)
             {
+                return;
+            }
+
+            if (transformationType == TransformationType.RelativeToInitial)
+            {
+                // TODO:
                 return;
             }
 
