@@ -87,7 +87,7 @@ namespace SPEA.Geometry.Core
         public static bool HasNullElements<T>(IEnumerable<T> collection)
             where T : class
         {
-            ArgumentNullException.ThrowIfNull(collection);
+            ArgumentNullException.ThrowIfNull(collection, nameof(collection));
 
             foreach (var item in collection)
             {
@@ -107,7 +107,7 @@ namespace SPEA.Geometry.Core
         /// <returns><see langword="true"/> if at least one non-empty element found, otherwise <see langword="false"/>.</returns>
         public static bool HasNonEmptyElements(SObject[] collection)
         {
-            ArgumentNullException.ThrowIfNull(collection);
+            ArgumentNullException.ThrowIfNull(collection, nameof(collection));
 
             foreach (var item in collection)
             {
@@ -127,7 +127,7 @@ namespace SPEA.Geometry.Core
         /// <returns><see langword="true"/> if at least one empty element found, otherwise <see langword="false"/>.</returns>
         public static bool HasEmptyElements(SObject[] collection)
         {
-            ArgumentNullException.ThrowIfNull(collection);
+            ArgumentNullException.ThrowIfNull(collection, nameof(collection));
 
             foreach (var item in collection)
             {

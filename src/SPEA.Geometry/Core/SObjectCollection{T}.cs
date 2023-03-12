@@ -49,7 +49,7 @@ namespace SPEA.Geometry.Core
         /// <exception cref="ArgumentNullException">Is thrown when <paramref name="objects"/> contains <see langword="null"/> elements.</exception>
         public SObjectCollection(T[] objects)
         {
-            ArgumentNullException.ThrowIfNull(objects);
+            ArgumentNullException.ThrowIfNull(objects, nameof(objects));
 
             if (HasNullElements(objects))
             {
@@ -171,7 +171,7 @@ namespace SPEA.Geometry.Core
         /// <param name="transform">An affine transformation to be applied.</param>
         public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
         {
-            ArgumentNullException.ThrowIfNull(transform);
+            ArgumentNullException.ThrowIfNull(transform, nameof(transform));
 
             if (transform.IsIdentity)
             {

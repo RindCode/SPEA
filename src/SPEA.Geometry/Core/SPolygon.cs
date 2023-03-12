@@ -152,7 +152,7 @@ namespace SPEA.Geometry.Core
         /// <inheritdoc/>
         public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
         {
-            ArgumentNullException.ThrowIfNull(transform);
+            ArgumentNullException.ThrowIfNull(transform, nameof(transform));
 
             if (transform.IsIdentity)
             {

@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="RowMajorStorage.cs" company="Dmitry Poberezhnyy">
+// <copyright file="DenseColumnMajorStorage.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -8,12 +8,14 @@
 namespace SPEA.Numerics.Matrices.Storage
 {
     /// <summary>
-    /// Represents a row-major matrix storage type.
+    /// Represents a column-major matrix storage type.
     /// </summary>
-    public sealed class RowMajorStorage : StorageBase
+    public sealed class DenseColumnMajorStorage : MatrixStorage
     {
         #region Fields
 
+        private static readonly MatrixStorageType _storageType = MatrixStorageType.Dense;
+        private static readonly MatrixDataOrderType _orderType = MatrixDataOrderType.ColumMajor;
         private readonly double[] _data;
 
         #endregion Fields
@@ -21,36 +23,28 @@ namespace SPEA.Numerics.Matrices.Storage
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RowMajorStorage"/> class.
+        /// Initializes a new instance of the <see cref="DenseColumnMajorStorage"/> class.
         /// </summary>
         /// <param name="rows">The number of rows.</param>
         /// <param name="columns">The number of columns.</param>
-        public RowMajorStorage(int rows, int columns)
+        public DenseColumnMajorStorage(int rows, int columns)
             : base(rows, columns)
         {
             _data = new double[rows * columns];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RowMajorStorage"/> class.
-        /// </summary>
-        /// <param name="rows">The number of rows.</param>
-        /// <param name="columns">The number of columns.</param>
-        /// <param name="data">The array representing a data storage.</param>
-        public RowMajorStorage(int rows, int columns, double[] data)
-            : base(rows, columns)
-        {
-            _data = data;
         }
 
         #endregion Constructors
 
         #region Properties
 
-        /// <summary>
-        /// Gets the raw matrix data stored as a single-dimension array.
-        /// </summary>
-        public double[] Data => _data;
+        /// <inheritdoc/>
+        public override MatrixStorageType StorageType => _storageType;
+
+        /// <inheritdoc/>
+        public override MatrixDataOrderType OrderType => _orderType;
+
+        /// <inheritdoc/>
+        public override double[] Data => _data;
 
         #endregion Properties
 
@@ -59,13 +53,13 @@ namespace SPEA.Numerics.Matrices.Storage
         /// <inheritdoc/>
         public override double At(int row, int column)
         {
-            return Data[(row * ColumnCount) + column];
+            return Data[(column * RowCount) + row];
         }
 
         /// <inheritdoc/>
         public override void At(int row, int column, double value)
         {
-            Data[(row * ColumnCount) + column] = value;
+            Data[(column * RowCount) + row] = value;
         }
 
         #endregion Methods

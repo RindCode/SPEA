@@ -40,7 +40,7 @@ namespace SPEA.App.ViewModels.SElements
         /// <param name="rect"><see cref="SRect"/> model reference.</param>
         public SRectViewModel(SRect rect)
         {
-            ArgumentNullException.ThrowIfNull(rect);
+            ArgumentNullException.ThrowIfNull(rect, nameof(rect));
 
             _model = rect;
             _w = rect.W;

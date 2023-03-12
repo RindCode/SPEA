@@ -35,7 +35,7 @@ namespace SPEA.App.ViewModels.SElements
         /// <param name="polygon"><see cref="SPolygon"/> model reference.</param>
         public SPolygonViewModel(SPolygon polygon)
         {
-            ArgumentNullException.ThrowIfNull(polygon);
+            ArgumentNullException.ThrowIfNull(polygon, nameof(polygon));
 
             _model = polygon;
         }

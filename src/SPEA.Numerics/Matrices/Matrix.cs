@@ -1,45 +1,59 @@
 ﻿// ==================================================================================================
-// <copyright file="StorageBase.cs" company="Dmitry Poberezhnyy">
+// <copyright file="Matrix.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Numerics.Matrices.Storage
+namespace SPEA.Numerics.Matrices
 {
+    using System.Runtime.CompilerServices;
+    using SPEA.Numerics.Matrices.Builder;
+    using SPEA.Numerics.Matrices.Storage;
+
     /// <summary>
-    /// Represents a base class for matrix storages.
+    /// Represents a base class for matrices of an arbitrary size.
     /// </summary>
-    public abstract class StorageBase : IEquatable<StorageBase>
+    public abstract partial class Matrix : IEquatable<Matrix>
     {
         #region Fields
 
-        private readonly int _rows;
-        private readonly int _columns;
+        private readonly MatrixStorage _storage;
 
         #endregion Fields
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StorageBase"/> class.
+        /// Initializes a new instance of the <see cref="Matrix"/> class.
         /// </summary>
         /// <param name="rows">The number of rows.</param>
         /// <param name="columns">The number of columns.</param>
-        protected StorageBase(int rows, int columns)
+        /// <param name="order">The order type.</param>
+        protected internal Matrix(int rows, int columns, MatrixDataOrderType order = MatrixDataOrderType.ColumMajor)
         {
-            if (rows <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rows), "The number of rows of a matrix must be non-negative.");
-            }
+            // The permitted number of rows and columns is checked within a storage ctor.
 
-            if (columns <= 0)
+            switch (order)
             {
-                throw new ArgumentOutOfRangeException(nameof(columns), "The number of columns of a matrix must be non-negative.");
+                case MatrixDataOrderType.RowMajor:
+                    _storage = new DenseRowMajorStorage(rows, columns);
+                    break;
+                case MatrixDataOrderType.ColumMajor:
+                    _storage = new DenseColumnMajorStorage(rows, columns);
+                    break;
+                default:
+                    throw new NotSupportedException($"The specified matrix order type is not supported: {order}");
             }
+        }
 
-            _rows = rows;
-            _columns = columns;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Matrix"/> class.
+        /// </summary>
+        /// <param name="storage">The matrix storage used for creation.</param>
+        protected Matrix(MatrixStorage storage)
+        {
+            _storage = storage;
         }
 
         #endregion Constructors
@@ -47,14 +61,35 @@ namespace SPEA.Numerics.Matrices.Storage
         #region Properties
 
         /// <summary>
+        /// Gets a matrix builder instance.
+        /// </summary>
+        public abstract MatrixBuilder Build { get; }
+
+        /// <summary>
         /// Gets the number of matrix rows.
         /// </summary>
-        public int RowCount => _rows;
+        public virtual int RowCount => Storage.RowCount;
 
         /// <summary>
         /// Gets the number of matrix columns.
         /// </summary>
-        public int ColumnCount => _columns;
+        public virtual int ColumnCount => Storage.ColumnCount;
+
+        /// <summary>
+        /// Gets the storage type.
+        /// </summary>
+        public MatrixStorageType StorageType => Storage.StorageType;
+
+        /// <summary>
+        /// Gets the matrix data ordering scheme.
+        /// </summary>
+        public MatrixDataOrderType OrderType => Storage.OrderType;
+
+        /// <summary>
+        /// Gets the matrix data storage.
+        /// </summary>
+        public MatrixStorage Storage => _storage;
+
 
         #endregion Properties
 
@@ -68,11 +103,13 @@ namespace SPEA.Numerics.Matrices.Storage
         /// <returns>The requested element.</returns>
         public double this[int row, int column]
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return At(row, column);
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             set
             {
                 At(row, column, value);
@@ -89,7 +126,11 @@ namespace SPEA.Numerics.Matrices.Storage
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>The requested element.</returns>
-        public abstract double At(int row, int column);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public virtual double At(int row, int column)
+        {
+            return Storage.At(row, column);
+        }
 
         /// <summary>
         /// Sets the element.
@@ -97,7 +138,22 @@ namespace SPEA.Numerics.Matrices.Storage
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <param name="value">The value to be set.</param>
-        public abstract void At(int row, int column, double value);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public virtual void At(int row, int column, double value)
+        {
+            Storage.At(row, column, value);
+        }
+
+        /// <summary>
+        /// Creates a deep copy of the matrix.
+        /// </summary>
+        /// <returns>A deep copy of the matrix.</returns>
+        public virtual Matrix DeepCopy()
+        {
+            var result = Build.SameAs(this);
+            Storage.CopyToUnchecked(result.Storage);
+            return result;
+        }
 
         /// <summary>
         /// Sets all matrix entries using a defined fill function.
@@ -106,24 +162,13 @@ namespace SPEA.Numerics.Matrices.Storage
         /// This method takes into acccount the storage order type.
         /// </remarks>
         /// <param name="func">Fill function.</param>
-        public virtual void Fill(Func<int, int, double> func)
+        public void Fill(Func<int, int, double> func)
         {
-            if (func == null)
-            {
-                throw new ArgumentNullException(nameof(func));
-            }
-
-            for (int r = 0; r < RowCount; r++)
-            {
-                for (int c = 0; c < ColumnCount; c++)
-                {
-                    this[r, c] = func(r, c);
-                }
-            }
+            Storage.Fill(func);
         }
 
         /// <inheritdoc/>
-        public bool Equals(StorageBase? other)
+        public bool Equals(Matrix? other)
         {
             if (ReferenceEquals(other, null))
             {
@@ -138,7 +183,7 @@ namespace SPEA.Numerics.Matrices.Storage
         /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
-            return Equals(obj as StorageBase);
+            return Equals(obj as Matrix);
         }
 
         /// <inheritdoc/>
@@ -151,7 +196,7 @@ namespace SPEA.Numerics.Matrices.Storage
         }
 
         // Performs an equality complete check.
-        private static bool EqualsInternal(StorageBase left, StorageBase right)
+        private static bool EqualsInternal(Matrix left, Matrix right)
         {
             if (left == null)
             {
@@ -163,26 +208,14 @@ namespace SPEA.Numerics.Matrices.Storage
                 throw new ArgumentNullException(nameof(right));
             }
 
-            if (left.RowCount != right.RowCount)
+            if (left.OrderType != right.OrderType)
             {
                 return false;
             }
 
-            if (left.ColumnCount != right.ColumnCount)
+            if (!left.Storage.Equals(right.Storage))
             {
                 return false;
-            }
-
-            // The order doesn't matter, we check all elements.
-            for (int r = 0; r < left.RowCount; r++)
-            {
-                for (int c = 0; c < left.ColumnCount; c++)
-                {
-                    if (!left[r, c].Equals(right[r, c]))
-                    {
-                        return false;
-                    }
-                }
             }
 
             return true;

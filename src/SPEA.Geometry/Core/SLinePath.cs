@@ -47,7 +47,7 @@ namespace SPEA.Geometry.Core
         /// <exception cref="ArgumentOutOfRangeException">Is thrown when <paramref name="points"/> has invalid number of elements.</exception>
         public SLinePath(IList<SPoint> points)
         {
-            ArgumentNullException.ThrowIfNull(points);
+            ArgumentNullException.ThrowIfNull(points, nameof(points));
 
             if (points.Count == 1)
             {
@@ -145,7 +145,7 @@ namespace SPEA.Geometry.Core
         /// <inheritdoc/>
         public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
         {
-            ArgumentNullException.ThrowIfNull(transform);
+            ArgumentNullException.ThrowIfNull(transform, nameof(transform));
 
             if (transform.IsIdentity)
             {

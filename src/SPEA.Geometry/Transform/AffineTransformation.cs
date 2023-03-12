@@ -31,7 +31,7 @@ namespace SPEA.Geometry.Transform
         /// <remarks>
         /// Applying this matrix doesn't produce any transformation.
         /// </remarks>
-        public static SquareMatrix IdentityTransform => SquareMatrix.GetIdentity(AffineMatrixDim);
+        public static DenseSquareMatrix IdentityTransform => DenseSquareMatrix.GetIdentity(AffineMatrixDim);
 
         /// <summary>
         /// Gets a value of the first row and the first column of the matrix.
