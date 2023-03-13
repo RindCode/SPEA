@@ -111,20 +111,7 @@ namespace SPEA.Geometry.Core
         #region Properties
 
         /// <inheritdoc/>
-        public override SPoint Origin
-        {
-            get => Shell.Origin;
-            set
-            {
-                if (Shell.Origin == value)
-                {
-                    return;
-                }
-
-                var d = value - Shell.Origin;
-                Translate(d.X, d.Y);
-            }
-        }
+        public override SPoint Origin => Shell.Origin;
 
         /// <summary>
         /// Gets the polygon shell.
@@ -159,19 +146,10 @@ namespace SPEA.Geometry.Core
                 return;
             }
 
-            var shell = Shell.Points;
-            for (int i = 0; i < shell.Length; i++)
+            Shell.ApplyTransformation(transform, transformationType);
+            foreach (var hole in Holes)
             {
-                shell[i] = shell[i].Transform(transform);
-            }
-
-            for (int i = 0; i < Holes.Length; i++)
-            {
-                var hole = Holes[i].Points;
-                for (int j = 0; j < hole.Length; j++)
-                {
-                    hole[i] = hole[i].Transform(transform);
-                }
+                hole.ApplyTransformation(transform, transformationType);
             }
         }
 

@@ -232,7 +232,7 @@
                                     <Grid>
                                         <ctrl_svp:SViewportControl
                                             x:Name="SectionEditorViewport"
-                                            ItemsSource="{Binding Path=ElementsCollection, Mode=OneWay}"
+                                            ItemsSource="{Binding Path=AddedElements, Mode=OneWay}"
                                             SelectedItem="{Binding Path=SelectedElement, Mode=TwoWay}"
                                             CanSelectMultipleItems="False"
                                             ScrollFactor="0.05"
@@ -248,16 +248,19 @@
                                                         SnapsToDevicePixels="True"
                                                         W="{Binding Path=W, Mode=TwoWay}"
                                                         H="{Binding Path=H, Mode=TwoWay}"
-                                                        Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level2.Inverted}"
+                                                        Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level3.Inverted}"
                                                         Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
-                                                        StrokeThickness="1.0"
+                                                        StrokeThickness="2"
                                                         ctrl_svp:SElementItemContainer.ApplyTransform="{DynamicResource TransformGroup}">
                                                         <shapes:SRectPrimitive.Resources>
                                                             <TransformGroup x:Key="TransformGroup">
                                                                 <TranslateTransform
                                                                     X="{Binding Path=X0, Mode=TwoWay}"
                                                                     Y="{Binding Path=Y0, Mode=TwoWay, Converter={StaticResource InverseDoubleConverter}}"/>
-                                                                <RotateTransform Angle="{Binding Path=Angle, Mode=TwoWay}"/>
+                                                                <RotateTransform
+                                                                    Angle="{Binding Path=Angle, Mode=TwoWay}"
+                                                                    CenterX="{Binding Path=Cx, Mode=OneWay}"
+                                                                    CenterY="{Binding Path=Cy, Mode=OneWay, Converter={StaticResource InverseDoubleConverter}}"/>
                                                                 <ScaleTransform/>
                                                             </TransformGroup>
                                                         </shapes:SRectPrimitive.Resources>

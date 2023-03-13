@@ -8,7 +8,6 @@
 namespace SPEA.Geometry.Primitives
 {
     using SPEA.Geometry.Core;
-    using System.Diagnostics;
 
     /// <summary>
     /// Represents a rectangle <see cref="SObject"/> primitive.
@@ -150,6 +149,21 @@ namespace SPEA.Geometry.Primitives
         /// Gets the rectangle h.
         /// </summary>
         public double H => _h;
+
+        /// <summary>
+        /// Gets the signed area of a closed ring.
+        /// </summary>
+        public double A0 => Shell.As;
+
+        /// <summary>
+        /// Gets the unsigned area of a closed ring.
+        /// </summary>
+        public double A => Shell.A;
+
+        /// <summary>
+        /// Gets the centroid location.
+        /// </summary>
+        public SPoint Centroid => Shell.Centroid;
 
         #endregion Properties
 

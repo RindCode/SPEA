@@ -153,9 +153,11 @@ namespace SPEA.Geometry.Core
         }
 
         /// <summary>
-        /// Creates a new <see cref="SPoint"/> by applying a given
-        /// affine transformation to the current <see cref="SPoint"/>.
+        /// Creates a new <see cref="SPoint"/> by applying a given affine transformation to the current <see cref="SPoint"/>.
         /// </summary>
+        /// <remarks>
+        /// The point to which the transformation is applied appears on the RIGHT side: TR x P.
+        /// </remarks>
         /// <param name="tr">An affine transformation to be applied.</param>
         /// <returns>A new transformed <see cref="SPoint"/>.</returns>
         public SPoint Transform(AffineTransformation tr)

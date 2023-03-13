@@ -81,6 +81,30 @@ namespace SPEA.Numerics.Matrices
         public static Matrix operator -(Matrix left, Matrix right) => left.Subtract(right);
 
         /// <summary>
+        /// Multiplies the matrix by a scalar and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="left">The matrix to multiply.</param>
+        /// <param name="right">The scalar to multiply the matrix by.</param>
+        /// <returns>A new resulting matrix.</returns>
+        public static Matrix operator *(Matrix left, double right) => left.Multiply(right);
+
+        /// <summary>
+        /// Multiplies the matrix by a scalar and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="left">The scalar to multiply the matrix by.</param>
+        /// <param name="right">The matrix to multiply.</param>
+        /// <returns>A new resulting matrix.</returns>
+        public static Matrix operator *(double left, Matrix right) => right.Multiply(left);
+
+        /// <summary>
+        /// Multiplies two matrices and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="left">The left matrix to multiply.</param>
+        /// <param name="right">The right matrix to multiply.</param>
+        /// <returns>A new resulting matrix.</returns>
+        public static Matrix operator *(Matrix left, Matrix right) => right.Multiply(left);
+
+        /// <summary>
         /// Adds a scalar to each element current matrix and returns a new resulting matrix.
         /// </summary>
         /// <param name="scalar">A scalar to add.</param>
@@ -102,13 +126,14 @@ namespace SPEA.Numerics.Matrices
         /// </summary>
         /// <param name="other">A matrix to add.</param>
         /// <returns>The resulting matrix.</returns>
+        /// <exception cref="ArgumentException">Is thrown if the matrices dimensions don't match.</exception>
         public Matrix Add(Matrix other)
         {
             if (RowCount != other.RowCount || ColumnCount != other.ColumnCount)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(other),
-                    $"Cannot add matrices of different dimensions: this={RowCount}x{ColumnCount}, {nameof(other)}={other.RowCount}x{other.ColumnCount}");
+                throw new ArgumentException(
+                    $"Cannot add matrices of different dimensions: this={RowCount}x{ColumnCount}, {nameof(other)}={other.RowCount}x{other.ColumnCount}",
+                    nameof(other));
             }
 
             var result = Build.SameAs(this, other, RowCount, ColumnCount);
@@ -149,17 +174,61 @@ namespace SPEA.Numerics.Matrices
         /// </summary>
         /// <param name="other">A matrix to add.</param>
         /// <returns>The resulting matrix.</returns>
+        /// <exception cref="ArgumentException">Is thrown if the matrices dimensions don't match.</exception>
         public Matrix Subtract(Matrix other)
         {
             if (RowCount != other.RowCount || ColumnCount != other.ColumnCount)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(other),
-                    $"Cannot subtract matrices of different dimensions: this={RowCount}x{ColumnCount}, {nameof(other)}={other.RowCount}x{other.ColumnCount}");
+                throw new ArgumentException(
+                    $"Cannot subtract matrices of different dimensions: this={RowCount}x{ColumnCount}, {nameof(other)}={other.RowCount}x{other.ColumnCount}",
+                    nameof(other));
             }
 
             var result = Build.SameAs(this, other, RowCount, ColumnCount);
             DoSubtract(other, result);
+            return result;
+        }
+
+        /// <summary>
+        /// Multiplies the matrix by a scalar and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="scalar">A scalar to multiply the matrix by.</param>
+        /// <returns>The resulting matrix.</returns>
+        public Matrix Multiply(double scalar)
+        {
+            if (scalar == 0.0d)
+            {
+                return Build.SameAs(this);
+            }
+
+            if (scalar == 1.0d)
+            {
+                return DeepCopy();
+            }
+
+            var result = Build.SameAs(this);
+            DoMultiply(scalar, result);
+            return result;
+        }
+
+        /// <summary>
+        /// Multiplies two matrices and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="other">A matrix to multiply by.</param>
+        /// <returns>The resulting matrix.</returns>
+        /// <exception cref="ArgumentException">Is thrown if the matrices dimensions don't match.</exception>
+        public Matrix Multiply(Matrix other)
+        {
+            if (ColumnCount != other.RowCount)
+            {
+                throw new ArgumentException(
+                    $"Cannot multiply the matrices, because {nameof(ColumnCount)} of the current matrix doesn't match with the {nameof(other.RowCount)} of {nameof(other)} matrix: " +
+                    $"this={RowCount}x{ColumnCount}, {nameof(other)}={other.RowCount}x{other.ColumnCount}",
+                    nameof(other));
+            }
+
+            var result = Build.SameAs(this);
+            DoMultiply(other, result);
             return result;
         }
 

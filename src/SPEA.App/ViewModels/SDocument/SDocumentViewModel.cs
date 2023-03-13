@@ -65,7 +65,7 @@ namespace SPEA.App.ViewModels.SDocument
             CommandsManager.RegisterCommand(_requestCloseDocumentCmd, new RelayCommand(ExecuteRequestCloseDocument));
             CommandsManager.RegisterCommand(_requestSaveDocumenteCmd, new RelayCommand(ExecuteRequestSaveDocument));
 
-            ElementsCollection.CollectionChanged += SElementsCollection_CollectionChanged;
+            AddedElements.CollectionChanged += SElementsCollection_CollectionChanged;
             SelectedElements.CollectionChanged += SelectedSElements_CollectionChanged;
 
             // TODO: REMOVE CODE
@@ -112,9 +112,9 @@ namespace SPEA.App.ViewModels.SDocument
                     // Dispose managed state (managed objects)
                     CommandsManager.UnregisterCommand(_requestCloseDocumentCmd);
                     CommandsManager.UnregisterCommand(_requestSaveDocumenteCmd);
-                    ElementsCollection.CollectionChanged -= SElementsCollection_CollectionChanged;
+                    AddedElements.CollectionChanged -= SElementsCollection_CollectionChanged;
                     SelectedElements.CollectionChanged -= SelectedSElements_CollectionChanged;
-                    ElementsCollection.Clear();
+                    AddedElements.Clear();
                     Model?.Dispose();
                 }
 
@@ -204,7 +204,7 @@ namespace SPEA.App.ViewModels.SDocument
         /// <summary>
         /// Gets the reference to the collection of cross-section elements.
         /// </summary>
-        public ObservableCollection<SElementViewModelBase> ElementsCollection
+        public ObservableCollection<SElementViewModelBase> AddedElements
         {
             get => _itemsCollection;
             private set => _itemsCollection = value;
@@ -224,7 +224,7 @@ namespace SPEA.App.ViewModels.SDocument
         /// </summary>
         public SElementViewModelBase? SelectedElement
         {
-            get => ElementsCollection[^1]; // TODO: change back
+            get => AddedElements[^1]; // TODO: change back
             set => _selectedItem = value;
         }
 
@@ -274,7 +274,7 @@ namespace SPEA.App.ViewModels.SDocument
         /// <param name="element">The element to be added.</param>
         public void AddElement(SElementViewModelBase element)
         {
-            ElementsCollection.Add(element);
+            AddedElements.Add(element);
         }
 
         private void SElementsCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

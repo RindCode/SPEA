@@ -22,8 +22,7 @@ namespace SPEA.Geometry.Core
         public new const SEntityType InternalType = SEntityType.SLINEPATH;
 
         private readonly SLinePath _definingObject;
-        private readonly SPoint[] _points;
-        private SPoint _origin;
+        private SPoint[] _points;
 
         #endregion Fields
 
@@ -35,7 +34,6 @@ namespace SPEA.Geometry.Core
         public SLinePath()
         {
             _points = Array.Empty<SPoint>();
-            _origin = default(SPoint);
             _definingObject = new SLinePath(this);
         }
 
@@ -55,7 +53,6 @@ namespace SPEA.Geometry.Core
             }
 
             _points = points.ToArray();
-            _origin = points.Count > 0 ? points[0] : default(SPoint);
             _definingObject = new SLinePath(this);
         }
 
@@ -68,8 +65,6 @@ namespace SPEA.Geometry.Core
             var points = new SPoint[sLinePath.Points.Length];
             Array.Copy(sLinePath.Points, points, points.Length);
             _points = sLinePath.Points;
-
-            _origin = sLinePath.Origin;
 
             _definingObject = this;
         }
@@ -84,24 +79,7 @@ namespace SPEA.Geometry.Core
         public SPoint[] Points => _points;
 
         /// <inheritdoc/>
-        public override SPoint Origin
-        {
-            get
-            {
-                return IsEmpty ? default(SPoint) : _points[0];
-            }
-
-            set
-            {
-                if (_origin == value)
-                {
-                    return;
-                }
-
-                var d = value - _origin;
-                Translate(d.X, d.Y);
-            }
-        }
+        public override SPoint Origin => IsEmpty ? default(SPoint) : _points[0];
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="SLinePath"/> is empty
@@ -142,6 +120,14 @@ namespace SPEA.Geometry.Core
 
         #region Methods
 
+        /////// <inheritdoc/>
+        ////public override SLinePath DeepCopy()
+        ////{
+        ////    var points = new SPoint[Points.Length];
+        ////    Array.Copy(Points, points, points.Length);
+        ////    return new SLinePath(points);
+        ////}
+
         /// <inheritdoc/>
         public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
         {
@@ -154,14 +140,24 @@ namespace SPEA.Geometry.Core
 
             if (transformationType == TransformationType.RelativeToInitial)
             {
-                // TODO:
-                return;
+                var initial = new SPoint[Points.Length];
+                Array.Copy(Points, initial, initial.Length);
+                for (int i = 0; i < initial.Length; i++)
+                {
+                    initial[i] = initial[i].Transform(transform);
+                }
+
+                _points = initial;
+            }
+            else
+            {
+                for (int i = 0; i < Points.Length; i++)
+                {
+                    Points[i] = Points[i].Transform(transform);
+                }
             }
 
-            for (int i = 0; i < Points.Length; i++)
-            {
-                Points[i] = Points[i].Transform(transform);
-            }
+            InvalidateCache();
         }
 
         #endregion Methods

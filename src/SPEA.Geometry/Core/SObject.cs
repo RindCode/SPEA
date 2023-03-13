@@ -8,6 +8,7 @@
 namespace SPEA.Geometry.Core
 {
     using SPEA.Geometry.Transform;
+    using SPEA.Numerics.Matrices;
 
     /// <summary>
     /// Represents valid internal types.
@@ -54,9 +55,9 @@ namespace SPEA.Geometry.Core
         public Guid Guid => guid;
 
         /// <summary>
-        /// Gets or sets a value of the origin location.
+        /// Gets a value of the origin location.
         /// </summary>
-        public abstract SPoint Origin { get; set; }
+        public abstract SPoint Origin { get; }
 
         /// <summary>
         /// Gets a value indicating whether the current <see cref="SObject"/> can be treated as empty.
@@ -69,10 +70,10 @@ namespace SPEA.Geometry.Core
         /// </summary>
         public abstract SObject DefiningObject { get; }
 
-        /// <summary>
-        /// Gets an object that wraps all applied transformations.
-        /// </summary>
-        public AppliedTransformations AppliedTransformations => _appliedTransformations;
+        /////// <summary>
+        /////// Gets an object that wraps all applied transformations.
+        /////// </summary>
+        ////public AppliedTransformations AppliedTransformations => _appliedTransformations;
 
         #endregion Properties
 
@@ -140,6 +141,33 @@ namespace SPEA.Geometry.Core
             return false;
         }
 
+        /////// <summary>
+        /////// Creates a deep copy of the object.
+        /////// </summary>
+        /////// <returns>A deep copy of the object.</returns>
+        ////public abstract SObject DeepCopy();
+
+        /// <summary>
+        /// Moves the origin to the speicfied location.
+        /// </summary>
+        /// <param name="point">A new origin location.</param>
+        public virtual void MoveOriginTo(SPoint point)
+        {
+            MoveOriginTo(point.X, point.Y);
+        }
+
+        /// <summary>
+        /// Moves the origin to the speicfied location.
+        /// </summary>
+        /// <param name="x">The X coordination of a new oorigin location.</param>
+        /// <param name="y">The Y coordination of a new oorigin location.</param>
+        public void MoveOriginTo(double x, double y)
+        {
+            var dx = x - Origin.X;
+            var dy = y - Origin.Y;
+            Translate(dx, dy);
+        }
+
         /// <summary>
         /// Applies an affine transformation to the <see cref="SObject"/>.
         /// </summary>
@@ -156,7 +184,7 @@ namespace SPEA.Geometry.Core
         public void Translate(double x, double y, TransformationType transformationType = TransformationType.RelativeToCurrent)
         {
             var transform = new TranslationTransformation(x, y);
-            AppliedTransformations.Translate = transform;
+            ////AppliedTransformations.Translate = transform;
             ApplyTransformation(transform, transformationType);
         }
 
@@ -164,12 +192,35 @@ namespace SPEA.Geometry.Core
         /// Rotates the current <see cref="SObject"/>.
         /// </summary>
         /// <param name="angle">The angle of rotation.</param>
+        /// <param name="rotateAround">The location of a rotation point.</param>
         /// <param name="transformationType">The transformation type.</param>
-        public void Rotate(double angle, TransformationType transformationType = TransformationType.RelativeToCurrent)
+        public void Rotate(double angle, SPoint rotateAround = default, TransformationType transformationType = TransformationType.RelativeToCurrent)
         {
-            var transform = new RotateTransformation(angle);
-            AppliedTransformations.Rotate = transform;
-            ApplyTransformation(transform, transformationType);
+            if (rotateAround == default)
+            {
+                var transform = new RotateTransformation(angle);
+                ////AppliedTransformations.Rotate = transform;
+                ApplyTransformation(transform, transformationType);
+            }
+            else
+            {
+                var d = rotateAround;
+                var translateBackMatrix = new TranslationTransformation(d.X, d.Y).Value;
+                var rotateMatrix = new RotateTransformation(angle).Value;
+                var translateMatrix = new TranslationTransformation(-d.X, -d.Y).Value;
+                var transform = new CompositeTransformation(translateBackMatrix * rotateMatrix * translateMatrix);
+                ////AppliedTransformations.Composite = transform;
+                ApplyTransformation(transform, transformationType);
+            }
+        }
+
+        /// <summary>
+        /// Provides a derived object an opportunity to invalidate its calculated
+        /// (cached) values. Typically it happens when the object was transformed.
+        /// </summary>
+        protected virtual void InvalidateCache()
+        {
+            // Blank.
         }
 
         #endregion Methods

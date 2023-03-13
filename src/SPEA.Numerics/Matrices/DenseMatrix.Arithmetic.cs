@@ -86,6 +86,32 @@ namespace SPEA.Numerics.Matrices
             base.DoSubtract(other, result);
         }
 
+        /// <inheritdoc/>
+        protected override void DoMultiply(double scalar, Matrix result)
+        {
+            if (result.StorageType == Matrices.Storage.MatrixStorageType.Dense)
+            {
+                ArrayHelper.ScaleArray(scalar, Storage.Data, result.Storage.Data);
+                return;
+            }
+
+            base.DoMultiply(scalar, result);
+        }
+
+        /// <inheritdoc/>
+        protected override void DoMultiply(Matrix other, Matrix result)
+        {
+            if (result.StorageType == Matrices.Storage.MatrixStorageType.Dense)
+            {
+                // Hints:
+                // 1. https://stackoverflow.com/a/74881846
+                base.DoMultiply(other, result);  // TODO: IMPORTANT! Replace with faster multiplication algorithm.
+                return;
+            }
+
+            base.DoMultiply(other, result);
+        }
+
         #endregion Methods
     }
 }

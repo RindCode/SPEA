@@ -104,6 +104,38 @@ namespace SPEA.Numerics.Matrices
             Map2((x, y) => x - y, other, result);
         }
 
+        /// <summary>
+        /// Multiplies the matrix by a scalar and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="scalar">A scalar to multiply the matrix by.</param>
+        /// <param name="result">The resulting matrix.</param>
+        protected virtual void DoMultiply(double scalar, Matrix result)
+        {
+            Map(x => x * scalar, result);
+        }
+
+        /// <summary>
+        /// Multiplies two matrices and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="other">The other matrix the current one will be multiplied by.</param>
+        /// <param name="result">The resulting matrix.</param>
+        protected virtual void DoMultiply(Matrix other, Matrix result)
+        {
+            for (int r = 0; r < RowCount; r++)
+            {
+                for (int c = 0; c < other.ColumnCount; c++)
+                {
+                    var s = 0.0;
+                    for (int k = 0; k < ColumnCount; k++)
+                    {
+                        s += At(r, k) * other.At(k, c);
+                    }
+
+                    result.At(r, c, s);
+                }
+            }
+        }
+
         #endregion Methods
     }
 }

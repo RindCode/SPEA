@@ -187,7 +187,8 @@ namespace SPEA.App.Shapes
 
         /// <summary>
         /// Provides an opportunity for derived classes to implement their own logic
-        /// to cache <see cref="DefiningGeometry"/> value.
+        /// to cache <see cref="DefiningGeometry"/> value. The geometry is set in UI coordinates
+        /// (Y is pointing downward).
         /// </summary>
         /// <remarks>
         /// <para>

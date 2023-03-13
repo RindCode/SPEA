@@ -55,7 +55,8 @@ namespace SPEA.App.ViewModels.SElements
             get => _model.Origin.X;
             set
             {
-                SetProperty(_model.Origin.X, value, _model, (model, x) => model.Origin = new SPoint(x, model.Origin.Y));
+                var newOrigin = new SPoint(value, _model.Origin.Y);
+                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.MoveOriginTo(origin));
             }
         }
 
@@ -65,14 +66,15 @@ namespace SPEA.App.ViewModels.SElements
             get => _model.Origin.Y;
             set
             {
-                SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));
+                var newOrigin = new SPoint(_model.Origin.X, value);
+                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.MoveOriginTo(origin));
             }
         }
 
         /// <inheritdoc/>
         public override double Angle
         {
-            get => _model.Origin.Y;
+            get => 0;
             set
             {
                 ////SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));

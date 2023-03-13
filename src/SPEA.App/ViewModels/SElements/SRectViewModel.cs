@@ -10,11 +10,11 @@ namespace SPEA.App.ViewModels.SElements
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Diagnostics;
     using SPEA.App.Models.SElements;
     using SPEA.App.Utils.Helpers;
     using SPEA.Geometry.Core;
     using SPEA.Geometry.Primitives;
+    using SPEA.Geometry.Transform;
 
     /// <summary>
     /// Represents a view model for <see cref="Shapes.SRectPrimitive"/> shape.
@@ -27,6 +27,7 @@ namespace SPEA.App.ViewModels.SElements
         private readonly string _internalTypePropName = ResourcesHelper.GetApplicationResource<string>("S.SElements.EntityInfo.Common.InternalType");
         private bool _disposed;
         private SRect _model;
+        private double _angle;
         private double _w;
         private double _h;
 
@@ -53,6 +54,9 @@ namespace SPEA.App.ViewModels.SElements
             _entityInfoItems.Add(new SElementInfo(name: nameof(Angle), value: 0));
             _entityInfoItems.Add(new SElementInfo(name: nameof(W), value: rect.W));
             _entityInfoItems.Add(new SElementInfo(name: nameof(H), value: rect.H));
+            _entityInfoItems.Add(new SElementInfo(name: nameof(A), value: rect.A, isReadOnly: true));
+            _entityInfoItems.Add(new SElementInfo(name: nameof(Cx), value: rect.Centroid.X, isReadOnly: true));
+            _entityInfoItems.Add(new SElementInfo(name: nameof(Cy), value: rect.Centroid.Y, isReadOnly: true));
 
             // To track the changes done in DataGrid.
             for (int i = 1; i < _entityInfoItems.Count; i++)
@@ -77,7 +81,7 @@ namespace SPEA.App.ViewModels.SElements
             set
             {
                 var newOrigin = new SPoint(value, _model.Origin.Y);
-                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.Origin = origin);
+                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.MoveOriginTo(origin));
                 _entityInfoItems[1].Value = value;
             }
         }
@@ -89,7 +93,7 @@ namespace SPEA.App.ViewModels.SElements
             set
             {
                 var newOrigin = new SPoint(_model.Origin.X, value);
-                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.Origin = origin);
+                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.MoveOriginTo(origin));
                 _entityInfoItems[2].Value = value;
             }
         }
@@ -97,12 +101,13 @@ namespace SPEA.App.ViewModels.SElements
         /// <inheritdoc/>
         public override double Angle
         {
-            get => _model.AppliedTransformations.Rotate.Angle;
+            get => _angle;
             set
             {
-                ////SetProperty(_model.Origin.Y, value, _model, (model, y) => model.Origin = new SPoint(model.Origin.X, y));
+                var cg = _model.Shell.Centroid;
+                _model.Rotate(value, cg, TransformationType.RelativeToInitial);
+                SetProperty(ref _angle, value);
                 _entityInfoItems[3].Value = value;
-                ////_model = new SRect(_model.Origin.X, value, _model.W, _model.H);
             }
         }
 
@@ -133,6 +138,12 @@ namespace SPEA.App.ViewModels.SElements
                 _model = new SRect(_model.Origin, _model.W, value);
             }
         }
+
+        public double A => _model.A;
+
+        public double Cx => _model.Centroid.X;
+
+        public double Cy => _model.Centroid.Y;
 
         /// <inheritdoc/>
         public override ObservableCollection<SElementInfo> EntityInfoItems => _entityInfoItems;

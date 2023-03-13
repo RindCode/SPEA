@@ -12,6 +12,7 @@ namespace SPEA.Geometry.Transform
     /// </summary>
     public class AppliedTransformations
     {
+        private CompositeTransformation _composite;
         private TranslationTransformation _translate;
         private RotateTransformation _rotate;
 
@@ -20,8 +21,18 @@ namespace SPEA.Geometry.Transform
         /// </summary>
         public AppliedTransformations()
         {
+            _composite = new CompositeTransformation();
             _translate = new TranslationTransformation();
             _rotate = new RotateTransformation();
+        }
+
+        /// <summary>
+        /// Gets or sets a custom composite transform.
+        /// </summary>
+        public CompositeTransformation Composite
+        {
+            get => _composite;
+            set => _composite = value;
         }
 
         /// <summary>

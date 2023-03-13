@@ -25,7 +25,6 @@ namespace SPEA.Geometry.Core
 
         private readonly SObjectCollection<T> _definingObject;
         private readonly List<T> _items;
-        private SPoint _origin;
 
         #endregion Fields
 
@@ -37,7 +36,6 @@ namespace SPEA.Geometry.Core
         public SObjectCollection()
         {
             _items = new List<T>();
-            _origin = default(SPoint);
             _definingObject = new SObjectCollection<T>(this);
         }
 
@@ -57,7 +55,6 @@ namespace SPEA.Geometry.Core
             }
 
             _items = new List<T>(objects);
-            _origin = _items.Count > 0 ? _items[0].Origin : default(SPoint);
             _definingObject = new SObjectCollection<T>(this);
         }
 
@@ -68,7 +65,6 @@ namespace SPEA.Geometry.Core
         protected SObjectCollection(SObjectCollection<T> sObjectCollection)
         {
             _items = sObjectCollection.Items;
-            _origin = sObjectCollection.Origin;
             _definingObject = this;
         }
 
@@ -96,37 +92,17 @@ namespace SPEA.Geometry.Core
         {
             get
             {
-                _origin = default(SPoint);
+                var origin = default(SPoint);
                 foreach (var item in Items)
                 {
                     if (!item.IsEmpty)
                     {
-                        _origin = item.Origin;
+                        origin = item.Origin;
                         break;
                     }
                 }
 
-                return _origin;
-            }
-
-            set
-            {
-                if (_origin == value)
-                {
-                    return;
-                }
-
-                // The group origin is the origin ofthe first item.
-                var d = value - _origin;
-                foreach (var item in Items)
-                {
-                    if (!item.IsEmpty)
-                    {
-                        Translate(d.X, d.Y);
-                    }
-                }
-
-                _origin = Items[0].Origin;  // TODO: Use this instead of value to avoid precision errors? How close are they?
+                return origin;
             }
         }
 
@@ -164,6 +140,24 @@ namespace SPEA.Geometry.Core
         #endregion Properties
 
         #region Methods
+
+        /// <inheritdoc/>
+        public override void MoveOriginTo(SPoint point)
+        {
+            if (Origin == point)
+            {
+                return;
+            }
+
+            var d = point - Origin;
+            foreach (var item in Items)
+            {
+                if (!item.IsEmpty)
+                {
+                    Translate(d.X, d.Y);
+                }
+            }
+        }
 
         /// <summary>
         /// Applies an affine transformation to all <see cref="T"/> elements in the sObjectCollection.
