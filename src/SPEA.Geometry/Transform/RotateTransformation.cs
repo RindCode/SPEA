@@ -16,7 +16,7 @@ namespace SPEA.Geometry.Transform
     {
         #region Fields
 
-        private readonly DenseSquareMatrix _value;
+        private readonly DenseRectMatrix _value;
         private readonly bool _isIdentity;
         private readonly double _angle;
 
@@ -55,7 +55,7 @@ namespace SPEA.Geometry.Transform
         #region Properties
 
         /// <inheritdoc/>
-        public override DenseSquareMatrix Value => _value;
+        public override DenseRectMatrix Value => _value;
 
         /// <inheritdoc/>
         public override bool IsIdentity => _isIdentity;

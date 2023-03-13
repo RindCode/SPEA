@@ -18,7 +18,7 @@ namespace SPEA.Numerics.Matrices
         /// Applies a function to each value of the current matrix.
         /// </summary>
         /// <param name="function">A function to be applied.</param>
-        public void MapInplace(Func<double, double> function)
+        internal void MapInplace(Func<double, double> function)
         {
             Storage.MapInplace(function);
         }
@@ -29,7 +29,7 @@ namespace SPEA.Numerics.Matrices
         /// </summary>
         /// <param name="function">A function to be applied.</param>
         /// <param name="result">The resulting matrix the function is applied to.</param>
-        public void Map(Func<double, double> function, Matrix result)
+        internal void Map(Func<double, double> function, Matrix result)
         {
             if (ReferenceEquals(this, result))
             {
@@ -48,9 +48,19 @@ namespace SPEA.Numerics.Matrices
         /// <param name="function">A function to be applied.</param>
         /// <param name="other">Another matrix used for mapping.</param>
         /// <param name="result">The resulting matrix the function is applied to.</param>
-        public void Map2(Func<double, double, double> function, Matrix other, Matrix result)
+        internal void Map2(Func<double, double, double> function, Matrix other, Matrix result)
         {
             Storage.Map2To(function, other.Storage, result.Storage);
+        }
+
+        /// <summary>
+        /// Adds a scalar to each element current matrix and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="scalar">A scalar to add.</param>
+        /// <param name="result">The resulting matrix.</param>
+        protected virtual void DoAdd(double scalar, Matrix result)
+        {
+            Map(x => x + scalar, result);
         }
 
         /// <summary>
@@ -65,13 +75,33 @@ namespace SPEA.Numerics.Matrices
         }
 
         /// <summary>
-        /// Adds a scalar to the current matrix and returns a new resulting matrix.
+        /// Negates each element of the matrix.
         /// </summary>
-        /// <param name="scalar">A scalar to add.</param>
         /// <param name="result">The resulting matrix.</param>
-        protected virtual void DoAdd(double scalar, Matrix result)
+        protected virtual void DoNegate(Matrix result)
         {
-            Map(x => x + scalar, result);
+            Map(x => -x, result);
+        }
+
+        /// <summary>
+        /// Subtracts a scalar from each element of the matrix and returns a new resulting matrix.
+        /// </summary>
+        /// <param name="scalar">A scalar to subtract.</param>
+        /// <param name="result">The resulting matrix.</param>
+        protected virtual void DoSubtract(double scalar, Matrix result)
+        {
+            Map(x => x - scalar, result);
+        }
+
+        /// <summary>
+        /// Subtracts another matrix from a current one and stores the result
+        /// in <paramref name="result"/> matrix.
+        /// </summary>
+        /// <param name="other">Another matrix to add.</param>
+        /// <param name="result">The resulting matrix.</param>
+        protected virtual void DoSubtract(Matrix other, Matrix result)
+        {
+            Map2((x, y) => x - y, other, result);
         }
 
         #endregion Methods

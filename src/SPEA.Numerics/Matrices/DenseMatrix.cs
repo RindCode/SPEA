@@ -7,6 +7,7 @@
 
 namespace SPEA.Numerics.Matrices
 {
+    using SPEA.Numerics.Matrices.Builder;
     using SPEA.Numerics.Matrices.Storage;
 
     /// <summary>
@@ -14,6 +15,12 @@ namespace SPEA.Numerics.Matrices
     /// </summary>
     public abstract partial class DenseMatrix : Matrix
     {
+        #region Fields
+
+        private static readonly RectMatrixBuilder _builder = new RectMatrixBuilder();
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -42,5 +49,24 @@ namespace SPEA.Numerics.Matrices
         }
 
         #endregion Constructors
+
+        #region Properties
+
+        /// <inheritdoc/>
+        public override RectMatrixBuilder Build => _builder;
+
+        #endregion Properties
+
+        #region Methods
+
+        /// <inheritdoc/>
+        public override DenseMatrix DeepCopy()
+        {
+            var result = Build.SameAs(this);
+            Storage.CopyToUnchecked(result.Storage);
+            return result;
+        }
+
+        #endregion Methods
     }
 }

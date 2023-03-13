@@ -26,39 +26,19 @@ namespace SPEA.Numerics.Matrices.Builder
         /// <inheritdoc/>
         public override DenseRectMatrix SameAs(Matrix example)
         {
-            return SameAs(example, example.RowCount, example.ColumnCount);
+            return (DenseRectMatrix)base.SameAs(example, example.RowCount, example.ColumnCount);
         }
 
         /// <inheritdoc/>
         public override DenseRectMatrix SameAs(Matrix example, int rows, int columns)
         {
-            ArgumentNullException.ThrowIfNull(example, nameof(example));
-
-            var storageType = example.StorageType;
-            switch (storageType)
-            {
-                case MatrixStorageType.Dense:
-                    return Dense(rows, columns, example.OrderType);
-                default:
-                    throw new NotSupportedException($"Matrix storage type {storageType.GetType().Name} is not supported.");
-            }
+            return (DenseRectMatrix)base.SameAs(example, rows, columns);
         }
 
         /// <inheritdoc/>
         public override DenseRectMatrix SameAs(Matrix example1, Matrix example2, int rows, int columns)
         {
-            ArgumentNullException.ThrowIfNull(example1, nameof(example1));
-            ArgumentNullException.ThrowIfNull(example2, nameof(example2));
-
-            var orderType = example1.OrderType == example2.OrderType ? example1.OrderType : MatrixDataOrderType.ColumMajor;
-
-            if (example1.StorageType == MatrixStorageType.Dense || example2.StorageType == MatrixStorageType.Dense)
-            {
-                return Dense(rows, columns, orderType);
-            }
-
-            // Fallback to dense representation.
-            return Dense(rows, columns, orderType);
+            return (DenseRectMatrix)base.SameAs(example1, example2, rows, columns);
         }
 
         /// <inheritdoc/>
@@ -77,15 +57,13 @@ namespace SPEA.Numerics.Matrices.Builder
         /// <inheritdoc/>
         public override DenseRectMatrix Dense(int rows, int columns, MatrixDataOrderType orderType)
         {
-            switch (orderType)
-            {
-                case MatrixDataOrderType.ColumMajor:
-                    return Dense(new DenseColumnMajorStorage(rows, columns));
-                case MatrixDataOrderType.RowMajor:
-                    return Dense(new DenseRowMajorStorage(rows, columns));
-                default:
-                    throw new NotSupportedException($"Unsupported matrix storage type.");
-            }
+            return (DenseRectMatrix)base.Dense(rows, columns, orderType);
+        }
+
+        /// <inheritdoc/>
+        public override Matrix DenseIdentity(int rows, int columns, MatrixDataOrderType orderType)
+        {
+            return (DenseRectMatrix)base.DenseIdentity(rows, columns, orderType);
         }
 
         #endregion Methods

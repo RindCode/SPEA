@@ -29,7 +29,10 @@ namespace SPEA.Numerics.Matrices.Builder
         /// </summary>
         /// <param name="example">The example matrix.</param>
         /// <returns>A new matrix of the same kind and dimension.</returns>
-        public abstract Matrix SameAs(Matrix example);
+        public virtual Matrix SameAs(Matrix example)
+        {
+            return SameAs(example, example.RowCount, example.ColumnCount);
+        }
 
         /// <summary>
         /// Creates a new empty (zeroed) matrix of the same kind and dimension as the provided example and parameters.
@@ -38,7 +41,19 @@ namespace SPEA.Numerics.Matrices.Builder
         /// <param name="rows">The required number of rows of a resulting matrix.</param>
         /// <param name="columns">The required number of columns of a resulting matrix.</param>
         /// <returns>A new matrix of the same kind and the requested dimension.</returns>
-        public abstract Matrix SameAs(Matrix example, int rows, int columns);
+        public virtual Matrix SameAs(Matrix example, int rows, int columns)
+        {
+            ArgumentNullException.ThrowIfNull(example, nameof(example));
+
+            var storageType = example.StorageType;
+            switch (storageType)
+            {
+                case MatrixStorageType.Dense:
+                    return Dense(rows, columns, example.OrderType);
+                default:
+                    throw new NotSupportedException($"Matrix storage type {storageType.GetType().Name} is not supported.");
+            }
+        }
 
         /// <summary>
         /// Creates a new empty (zeroed) matrix of a specified size and with the type closest to both examples provided.
@@ -52,7 +67,21 @@ namespace SPEA.Numerics.Matrices.Builder
         /// <param name="rows">The required number of rows of a resulting matrix.</param>
         /// <param name="columns">The required number of columns of a resulting matrix.</param>
         /// <returns>A new matrix of the requested size.</returns>
-        public abstract Matrix SameAs(Matrix example1, Matrix example2, int rows, int columns);
+        public virtual Matrix SameAs(Matrix example1, Matrix example2, int rows, int columns)
+        {
+            ArgumentNullException.ThrowIfNull(example1, nameof(example1));
+            ArgumentNullException.ThrowIfNull(example2, nameof(example2));
+
+            var orderType = example1.OrderType == example2.OrderType ? example1.OrderType : MatrixDataOrderType.ColumMajor;
+
+            if (example1.StorageType == MatrixStorageType.Dense || example2.StorageType == MatrixStorageType.Dense)
+            {
+                return Dense(rows, columns, orderType);
+            }
+
+            // Fallback to dense representation.
+            return Dense(rows, columns, orderType);
+        }
 
         /// <summary>
         /// Creates a new dense matrix using the initialized storage instance.
@@ -70,7 +99,41 @@ namespace SPEA.Numerics.Matrices.Builder
         /// <param name="columns">The required number of columns of a resulting matrix.</param>
         /// <param name="orderType">The order type.</param>
         /// <returns>A new dense matrix of the requested size.</returns>
-        public abstract Matrix Dense(int rows, int columns, MatrixDataOrderType orderType);
+        /// <exception cref="NotSupportedException">Is thrown if the selected data order is not supported.</exception>
+        public virtual Matrix Dense(int rows, int columns, MatrixDataOrderType orderType)
+        {
+            switch (orderType)
+            {
+                case MatrixDataOrderType.ColumMajor:
+                    return Dense(new DenseColumnMajorStorage(rows, columns));
+                case MatrixDataOrderType.RowMajor:
+                    return Dense(new DenseRowMajorStorage(rows, columns));
+                default:
+                    throw new NotSupportedException($"Unsupported matrix storage type.");
+            }
+        }
+
+        /// <summary>
+        /// Creates a new identity dense matrix using a given number of rows and columns and storage order type.
+        /// All elements will be set to zero, while the main diagonal elements will be set to 1.0.
+        /// </summary>
+        /// <param name="rows">The required number of rows of a resulting matrix.</param>
+        /// <param name="columns">The required number of columns of a resulting matrix.</param>
+        /// <param name="orderType">The order type.</param>
+        /// <returns>A new dense matrix of the requested size.</returns>
+        /// <exception cref="NotSupportedException">Is thrown if the selected data order is not supported.</exception>
+        public virtual Matrix DenseIdentity(int rows, int columns, MatrixDataOrderType orderType)
+        {
+            switch (orderType)
+            {
+                case MatrixDataOrderType.ColumMajor:
+                    return Dense(DenseColumnMajorStorage.OfDiagonalInit(rows, columns, _ => 1.0d));
+                case MatrixDataOrderType.RowMajor:
+                    return Dense(DenseRowMajorStorage.OfDiagonalInit(rows, columns, _ => 1.0d));
+                default:
+                    throw new NotSupportedException($"Unsupported matrix storage type.");
+            }
+        }
 
         #endregion Methods
     }

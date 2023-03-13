@@ -8,6 +8,7 @@
 namespace SPEA.Geometry.Transform
 {
     using SPEA.Numerics.Matrices;
+    using SPEA.Numerics.Matrices.Storage;
 
     /// <summary>
     /// Represents a base class for affine transformations.
@@ -31,7 +32,7 @@ namespace SPEA.Geometry.Transform
         /// <remarks>
         /// Applying this matrix doesn't produce any transformation.
         /// </remarks>
-        public static DenseSquareMatrix IdentityTransform => DenseSquareMatrix.GetIdentity(AffineMatrixDim);
+        public static DenseRectMatrix IdentityTransform => DenseRectMatrix.CreateIdentity(AffineMatrixDim, MatrixDataOrderType.ColumMajor);
 
         /// <summary>
         /// Gets a value of the first row and the first column of the matrix.

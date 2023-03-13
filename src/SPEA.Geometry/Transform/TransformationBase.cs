@@ -36,7 +36,7 @@ namespace SPEA.Geometry.Transform
         /// <summary>
         /// Gets the current transformation matrix.
         /// </summary>
-        public abstract DenseSquareMatrix Value { get; }
+        public abstract DenseRectMatrix Value { get; }
 
         /// <summary>
         /// Gets a value indicating whether the transformation matrix is an identity matrix.
