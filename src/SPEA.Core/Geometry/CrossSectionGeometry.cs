@@ -7,7 +7,7 @@
 
 namespace SPEA.Core.Geometry
 {
-    using SPEA.Core.CrossSection;
+    using SPEA.Core.CrossSections;
     using SPEA.Geometry.Core;
 
     /// <summary>

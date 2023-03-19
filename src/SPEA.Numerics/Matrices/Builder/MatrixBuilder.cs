@@ -100,7 +100,7 @@ namespace SPEA.Numerics.Matrices.Builder
         /// <param name="orderType">The order type.</param>
         /// <returns>A new dense matrix of the requested size.</returns>
         /// <exception cref="NotSupportedException">Is thrown if the selected data order is not supported.</exception>
-        public virtual Matrix Dense(int rows, int columns, MatrixDataOrderType orderType)
+        public virtual Matrix Dense(int rows, int columns, MatrixDataOrderType orderType = MatrixDataOrderType.ColumMajor)
         {
             switch (orderType)
             {
@@ -122,7 +122,7 @@ namespace SPEA.Numerics.Matrices.Builder
         /// <param name="orderType">The order type.</param>
         /// <returns>A new dense matrix of the requested size.</returns>
         /// <exception cref="NotSupportedException">Is thrown if the selected data order is not supported.</exception>
-        public virtual Matrix DenseIdentity(int rows, int columns, MatrixDataOrderType orderType)
+        public virtual Matrix DenseIdentity(int rows, int columns, MatrixDataOrderType orderType = MatrixDataOrderType.ColumMajor)
         {
             switch (orderType)
             {

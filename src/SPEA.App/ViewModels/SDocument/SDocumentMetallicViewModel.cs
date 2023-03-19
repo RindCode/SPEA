@@ -7,8 +7,9 @@
 
 namespace SPEA.App.ViewModels.SDocument
 {
+    using CommunityToolkit.Mvvm.Messaging;
     using SPEA.App.Commands;
-    using SPEA.Core.CrossSection;
+    using SPEA.Core.CrossSections;
 
     /// <summary>
     /// Represents a view model for <see cref="MetallicCrossSection"/> model type.
@@ -26,14 +27,16 @@ namespace SPEA.App.ViewModels.SDocument
         /// <summary>
         /// Initializes a new instance of the <see cref="SDocumentMetallicViewModel"/> class.
         /// </summary>
+        /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager.CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         /// <param name="model">A reference to the model instance.</param>
         public SDocumentMetallicViewModel(
+            IMessenger messenger,
             CommandsManager commandsManager,
             SDocumentsManagerViewModel sDocumentsManager,
             MetallicCrossSection model)
-            : base(commandsManager, sDocumentsManager, model)
+            : base(messenger, commandsManager, sDocumentsManager, model)
         {
             // Blank.
         }

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	<TargetFramework>net7.0-windows</TargetFramework>
@@ -22,25 +22,30 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
+	<DebugType>none</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
+	<DebugType>none</DebugType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+	<None Include="..\..\README.md">
+		<Pack>True</Pack>
+		<PackagePath>\</PackagePath>
+	</None>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Clipper2" Version="1.2.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -48,7 +53,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SPEA.Geometry\SPEA.Geometry.csproj" />
+    <ProjectReference Include="..\SPEA.Core\SPEA.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Results\" />
   </ItemGroup>
 
 </Project>

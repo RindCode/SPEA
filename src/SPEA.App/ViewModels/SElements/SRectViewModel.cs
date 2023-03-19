@@ -9,10 +9,10 @@ namespace SPEA.App.ViewModels.SElements
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using SPEA.App.Models.SElements;
+    using System.Windows.Media;
+    using CommunityToolkit.Mvvm.Messaging;
+    using CommunityToolkit.Mvvm.Messaging.Messages;
     using SPEA.App.Utils.Helpers;
-    using SPEA.Geometry.Core;
     using SPEA.Geometry.Primitives;
     using SPEA.Geometry.Transform;
 
@@ -23,13 +23,17 @@ namespace SPEA.App.ViewModels.SElements
     {
         #region Fields
 
-        private readonly ObservableCollection<SElementInfo> _entityInfoItems = new ObservableCollection<SElementInfo>();
+        private readonly ObservableCollection<SElementInfoViewModel> _entityInfoItems = new ObservableCollection<SElementInfoViewModel>();
         private readonly string _internalTypePropName = ResourcesHelper.GetApplicationResource<string>("S.SElements.EntityInfo.Common.InternalType");
+        private bool _isUpdatingFromModel = false;
         private bool _disposed;
         private SRect _model;
+        private Matrix _transformMatrix;
+        private double _x0;
+        private double _y0;
         private double _angle;
-        private double _w;
         private double _h;
+        private double _w;
 
         #endregion Fields
 
@@ -39,50 +43,61 @@ namespace SPEA.App.ViewModels.SElements
         /// Initializes a new instance of the <see cref="SRectViewModel"/> class.
         /// </summary>
         /// <param name="rect"><see cref="SRect"/> model reference.</param>
-        public SRectViewModel(SRect rect)
+        /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
+        public SRectViewModel(
+            IMessenger messenger,
+            SRect rect)
+            : base(messenger)
         {
             ArgumentNullException.ThrowIfNull(rect, nameof(rect));
 
             _model = rect;
-            _w = rect.W;
+            _x0 = rect.LocalSystem.Origin.X;
+            _y0 = rect.LocalSystem.Origin.Y;
+            _angle = rect.LocalSystem.Angle;
             _h = rect.H;
+            _w = rect.W;
+            _transformMatrix = ConvertToScreenTransformMatrix(_model.LocalSystem.GlobalTransform);
 
-            // Elements order does matter.
-            _entityInfoItems.Add(new SElementInfo(name: _internalTypePropName, value: SRect.InternalType, isReadOnly: true));
-            _entityInfoItems.Add(new SElementInfo(name: nameof(X0), value: rect.Origin.X));
-            _entityInfoItems.Add(new SElementInfo(name: nameof(Y0), value: rect.Origin.Y));
-            _entityInfoItems.Add(new SElementInfo(name: nameof(Angle), value: 0));
-            _entityInfoItems.Add(new SElementInfo(name: nameof(W), value: rect.W));
-            _entityInfoItems.Add(new SElementInfo(name: nameof(H), value: rect.H));
-            _entityInfoItems.Add(new SElementInfo(name: nameof(A), value: rect.A, isReadOnly: true));
-            _entityInfoItems.Add(new SElementInfo(name: nameof(Cx), value: rect.Centroid.X, isReadOnly: true));
-            _entityInfoItems.Add(new SElementInfo(name: nameof(Cy), value: rect.Centroid.Y, isReadOnly: true));
+            InitializeEntityInfoItems(rect);
 
-            // To track the changes done in DataGrid.
-            for (int i = 1; i < _entityInfoItems.Count; i++)
-            {
-                PropertyChangedEventManager.AddHandler(EntityInfoItems[i], SRectViewModel_EntityInfoItemChanged, nameof(SElementInfo.Value));
-            }
+            Messenger.Register<PropertyChangedMessage<object>>(this, (r, m) => OnValueUpdated(m));
         }
 
         #endregion Constructors
 
         #region Properties
 
-        /// <summary>
-        /// Gets a model object.
-        /// </summary>
-        public SRect Model => _model;
+        /// <inheritdoc/>
+        public override ObservableCollection<SElementInfoViewModel> EntityInfoItems => _entityInfoItems;
+
+        /// <inheritdoc/>
+        public override SRect Model => _model;
+
+        /// <inheritdoc/>
+        public override Matrix TransformMatrix
+        {
+            get => _transformMatrix;
+            set
+            {
+                SetProperty(ref _transformMatrix, value);
+            }
+        }
 
         /// <inheritdoc/>
         public override double X0
         {
-            get => _model.Origin.X;
+            get => _x0;
             set
             {
-                var newOrigin = new SPoint(value, _model.Origin.Y);
-                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.MoveOriginTo(origin));
-                _entityInfoItems[1].Value = value;
+                if (_isUpdatingFromModel)
+                {
+                    SetProperty(ref _x0, value);
+                }
+                else
+                {
+                    MoveOrigin(value, Y0, Angle);
+                }
             }
         }
 
@@ -92,9 +107,14 @@ namespace SPEA.App.ViewModels.SElements
             get => _model.Origin.Y;
             set
             {
-                var newOrigin = new SPoint(_model.Origin.X, value);
-                SetProperty(_model.Origin, newOrigin, _model, (model, origin) => model.MoveOriginTo(origin));
-                _entityInfoItems[2].Value = value;
+                if (_isUpdatingFromModel)
+                {
+                    SetProperty(ref _y0, value);
+                }
+                else
+                {
+                    MoveOrigin(X0, value, Angle);
+                }
             }
         }
 
@@ -104,10 +124,14 @@ namespace SPEA.App.ViewModels.SElements
             get => _angle;
             set
             {
-                var cg = _model.Shell.Centroid;
-                _model.Rotate(value, cg, TransformationType.RelativeToInitial);
-                SetProperty(ref _angle, value);
-                _entityInfoItems[3].Value = value;
+                if (_isUpdatingFromModel)
+                {
+                    SetProperty(ref _angle, value);
+                }
+                else
+                {
+                    RotateAroundCenter(value);
+                }
             }
         }
 
@@ -119,9 +143,9 @@ namespace SPEA.App.ViewModels.SElements
             get => _w;
             set
             {
-                SetProperty(ref _w, value);
-                _entityInfoItems[4].Value = value;
-                _model = new SRect(_model.Origin, value, _model.H);
+                _model = new SRect(_model.Origin, value, H);
+                Messenger.Send(new PropertyChangedMessage<object>(this, nameof(W), _w, _model.W));
+                SetProperty(ref _w, _model.H);
             }
         }
 
@@ -133,20 +157,11 @@ namespace SPEA.App.ViewModels.SElements
             get => _h;
             set
             {
-                SetProperty(ref _h, value);
-                _entityInfoItems[5].Value = value;
-                _model = new SRect(_model.Origin, _model.W, value);
+                _model = new SRect(_model.Origin, W, value);
+                Messenger.Send(new PropertyChangedMessage<object>(this, nameof(H), _h, _model.H));
+                SetProperty(ref _h, _model.H);
             }
         }
-
-        public double A => _model.A;
-
-        public double Cx => _model.Centroid.X;
-
-        public double Cy => _model.Centroid.Y;
-
-        /// <inheritdoc/>
-        public override ObservableCollection<SElementInfo> EntityInfoItems => _entityInfoItems;
 
         #endregion Properties
 
@@ -172,48 +187,124 @@ namespace SPEA.App.ViewModels.SElements
 
         #endregion IDisposable
 
+        #region Initializers
+
+        // Elements will appear in the table in the following order.
+        private void InitializeEntityInfoItems(SRect model)
+        {
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, _internalTypePropName, typeof(string), SRect.InternalType, true));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(X0), typeof(double), _x0));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(Y0), typeof(double), _y0));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(Angle), typeof(double), _angle));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(W), typeof(double), model.W));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(H), typeof(double), model.H));
+        }
+
+        #endregion Initializers
+
         #region Methods
 
-        private void SRectViewModel_EntityInfoItemChanged(object? sender, PropertyChangedEventArgs e)
+        /// <inheritdoc/>
+        protected override void MoveOrigin(double x, double y, double angle)
         {
-            if (sender is not SElementInfo obj)
+            var rotate = new RotateTransformation(angle);
+            var translate = new TranslationTransformation(x, y);
+            var transform = new GeneralTransformation(rotate.Value * translate.Value);
+
+            Model.LocalSystem.TransformInGlobal(transform, TransformAction.Replace);
+
+            SendMessagesOnPropertyChanged();
+            UpdateDataFromModel();
+        }
+
+        /// <inheritdoc/>
+        protected override void RotateAroundCenter(double angle)
+        {
+            var rc = Model.GetBoundingBox().Center;
+            var rotate = new RotateTransformation(angle - Model.LocalSystem.Angle, rc);
+            var transform = new GeneralTransformation(rotate.Value);
+
+            Model.LocalSystem.TransformInGlobal(transform, TransformAction.Append);
+
+            SendMessagesOnPropertyChanged();
+            UpdateDataFromModel();
+        }    
+
+        private void SendMessagesOnPropertyChanged()
+        {
+            var oldX0 = _x0;
+            var oldY0 = _y0;
+            var oldAngle = _angle;
+
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(X0), oldX0, Model.LocalSystem.Origin.X));
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Y0), oldY0, Model.LocalSystem.Origin.Y));
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Angle), oldAngle, Model.LocalSystem.Angle));
+        }
+
+        private void UpdateDataFromModel()
+        {
+            _isUpdatingFromModel = true;
+
+            TransformMatrix = ConvertToScreenTransformMatrix(Model.LocalSystem.GlobalTransform);
+
+            X0 = Model.LocalSystem.Origin.X;
+            Y0 = Model.LocalSystem.Origin.Y;
+            Angle = Model.LocalSystem.Angle;
+
+            _isUpdatingFromModel = false;
+        }
+
+        // Updates a property value when the update request comes from messaging.
+        private void OnValueUpdated(PropertyChangedMessage<object> message)
+        {
+            var sender = message.Sender as SElementInfoViewModel;
+            var targetProperty = message.PropertyName;
+            if (sender == null || string.IsNullOrEmpty(targetProperty))
             {
                 return;
             }
 
-            if (obj.Value is not string strVal)
-            {
-                return;
-            }
-
-            var isParsed = double.TryParse(strVal, out double value);
-            if (!isParsed)
-            {
-                return;
-            }
-
-            // If EntityInfo was changed first, then this code will merely update a VM property.
-            // If a VM property was changed first, its setter will also update EntityInfo property,
-            // and then this code will be invoked. To avoid recursion, we compare VM and EntityInfo
-            // values since the event is raised after all properties are updated.
-
-            var targetProperty = obj.Name;
             switch (targetProperty)
             {
                 case nameof(X0):
-                    if (X0 != value) { X0 = value; }
+                    if (sender.DataType == typeof(double))
+                    {
+                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
+                        X0 = value != X0 ? value : X0;
+                    }
+
                     break;
                 case nameof(Y0):
-                    if (Y0 != value) { Y0 = value; }
+                    if (sender.DataType == typeof(double))
+                    {
+                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
+                        Y0 = value != Y0 ? value : Y0;
+                    }
+
                     break;
                 case nameof(Angle):
-                    if (Angle != value) { Angle = value; }
+                    if (sender.DataType == typeof(double))
+                    {
+                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
+                        Angle = value != Angle ? value : Angle;
+                    }
+
                     break;
                 case nameof(W):
-                    if (W != value) { W = value; }
+                    if (sender.DataType == typeof(double))
+                    {
+                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
+                        W = value != W ? value : W;
+                    }
+
                     break;
                 case nameof(H):
-                    if (H != value) { H = value; }
+                    if (sender.DataType == typeof(double))
+                    {
+                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
+                        H = value != H ? value : H;
+                    }
+
                     break;
                 default:
                     return;

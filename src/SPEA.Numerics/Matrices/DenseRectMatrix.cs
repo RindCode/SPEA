@@ -66,7 +66,12 @@ namespace SPEA.Numerics.Matrices
         /// <summary>
         /// Gets a matrix builder instance.
         /// </summary>
-        public override RectMatrixBuilder Build => _matrixBuilder;
+        public static RectMatrixBuilder Build => _matrixBuilder;
+
+        /// <summary>
+        /// Gets a matrix builder instance.
+        /// </summary>
+        public override RectMatrixBuilder Builder => _matrixBuilder;
 
         /// <summary>
         /// Gets a value indicating whether the current matrix is square.
@@ -83,11 +88,14 @@ namespace SPEA.Numerics.Matrices
         /// Creates a new square indentity matrix, where all elements are set to zero, and
         /// the main diaginal elements are set to 1.0.
         /// </summary>
+        /// <remarks>
+        /// The default data order is <see cref="MatrixDataOrderType.ColumMajor"/>.
+        /// </remarks>
         /// <param name="dimension">The dimension value (rowsNum = columnsNum).</param>
         /// <param name="order">The dimension type.</param>
         /// <returns>A new identity matrix.</returns>
         /// <exception cref="NotSupportedException">Is thrown if the selected data order is not supported.</exception>
-        public static DenseRectMatrix CreateIdentity(int dimension, MatrixDataOrderType order)
+        public static DenseRectMatrix CreateIdentity(int dimension, MatrixDataOrderType order = MatrixDataOrderType.ColumMajor)
         {
             switch (order)
             {
@@ -105,7 +113,7 @@ namespace SPEA.Numerics.Matrices
         /// <inheritdoc/>
         public override DenseRectMatrix DeepCopy()
         {
-            var result = Build.SameAs(this);
+            var result = Builder.SameAs(this);
             Storage.CopyToUnchecked(result.Storage);
             return result;
         }

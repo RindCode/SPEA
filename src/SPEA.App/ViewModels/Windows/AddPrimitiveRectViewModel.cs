@@ -9,6 +9,7 @@ namespace SPEA.App.ViewModels.Windows
 {
     using System;
     using CommunityToolkit.Mvvm.Input;
+    using CommunityToolkit.Mvvm.Messaging;
     using SPEA.App.Commands;
     using SPEA.App.ViewModels.SDocument;
 
@@ -32,12 +33,14 @@ namespace SPEA.App.ViewModels.Windows
         /// <summary>
         /// Initializes a new instance of the <see cref="AddPrimitiveRectViewModel"/> class.
         /// </summary>
+        /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         public AddPrimitiveRectViewModel(
+            IMessenger messenger,
             CommandsManager commandsManager,
             SDocumentsManagerViewModel sDocumentsManager)
-            : base(commandsManager)
+            : base(messenger, commandsManager)
         {
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
 

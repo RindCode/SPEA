@@ -42,13 +42,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
-    <Page Remove="bin\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
@@ -91,6 +84,11 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Messaging\" />
+    <Folder Include="Models\SElements\" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

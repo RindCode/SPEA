@@ -8,6 +8,8 @@
 namespace SPEA.Geometry.Primitives
 {
     using SPEA.Geometry.Core;
+    using SPEA.Geometry.Misc;
+    using SPEA.Geometry.Transform;
 
     /// <summary>
     /// Represents a rectangle <see cref="SObject"/> primitive.
@@ -21,7 +23,6 @@ namespace SPEA.Geometry.Primitives
         /// </summary>
         public new const SEntityType InternalType = SEntityType.SRECT;
 
-        private readonly SRect _definingObject;
         private readonly SLinearRing _shell;
         private readonly SLinearRing[] _holes = Array.Empty<SLinearRing>();
         private readonly double _w;
@@ -64,13 +65,8 @@ namespace SPEA.Geometry.Primitives
             _w = w;
             _h = h;
 
-            var geometry = GenerateGeometry(w, h);
-            _shell = geometry;
-
-            _definingObject = new SRect(this);
-
-            geometry.Translate(x, y);
-            _shell = geometry;
+            _shell = GenerateGeometry(w, h);
+            LocalSystem.TransformInGlobal(new TranslationTransformation(x, y));
         }
 
         /// <summary>
@@ -109,24 +105,6 @@ namespace SPEA.Geometry.Primitives
             // Blank.
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SRect"/> class.
-        /// </summary>
-        /// <param name="sRect"><see cref="SRect"/> object used for a "copy".</param>
-        private SRect(SRect sRect)
-        {
-            _w = sRect.W;
-            _h = sRect.H;
-
-            _shell = new SLinearRing(sRect.Shell.Points);
-
-            var holes = new SLinearRing[sRect.Holes.Length];
-            Array.Copy(sRect.Holes, holes, holes.Length);
-            _holes = holes;
-
-            _definingObject = this;
-        }
-
         #endregion Constructors
 
         #region Properties
@@ -137,8 +115,8 @@ namespace SPEA.Geometry.Primitives
         /// <inheritdoc/>
         public override SLinearRing[] Holes => _holes;
 
-        /// <inheritdoc/>
-        public override SRect DefiningObject => _definingObject;
+        /////// <inheritdoc/>
+        ////public override SRect DefiningObject => _definingObject;
 
         /// <summary>
         /// Gets the rectangle w.
@@ -150,24 +128,15 @@ namespace SPEA.Geometry.Primitives
         /// </summary>
         public double H => _h;
 
-        /// <summary>
-        /// Gets the signed area of a closed ring.
-        /// </summary>
-        public double A0 => Shell.As;
-
-        /// <summary>
-        /// Gets the unsigned area of a closed ring.
-        /// </summary>
-        public double A => Shell.A;
-
-        /// <summary>
-        /// Gets the centroid location.
-        /// </summary>
-        public SPoint Centroid => Shell.Centroid;
-
         #endregion Properties
 
         #region Methods
+
+        /// <inheritdoc/>
+        public override BoundingBox GetBoundingBox()
+        {
+            return base.GetBoundingBox();
+        }
 
         // Generates a rectangle geometry using its w and h.
         private static SLinearRing GenerateGeometry(double w, double h)

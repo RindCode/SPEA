@@ -12,12 +12,10 @@ namespace SPEA.Geometry.Transform
     /// <summary>
     /// Represents a translation transform.
     /// </summary>
-    public sealed class TranslationTransformation : AffineTransformation
+    public sealed class TranslationTransformation : GeneralTransformation
     {
         #region Fields
 
-        private readonly DenseRectMatrix _value;
-        private readonly bool _isIdentity;
         private readonly double _x;
         private readonly double _y;
 
@@ -29,9 +27,9 @@ namespace SPEA.Geometry.Transform
         /// Initializes a new instance of the <see cref="TranslationTransformation"/> class.
         /// </summary>
         public TranslationTransformation()
+            : base()
         {
-            _value = IdentityTransform;
-            _isIdentity = true;
+            // Blank.
         }
 
         /// <summary>
@@ -40,13 +38,8 @@ namespace SPEA.Geometry.Transform
         /// <param name="x">The displacement along the X axis.</param>
         /// <param name="y">The displacement along the Y axis.</param>
         public TranslationTransformation(double x, double y)
+            : base(BuildMatrix(x, y))
         {
-            var matrix = IdentityTransform;
-            matrix[0, 2] = x;
-            matrix[1, 2] = y;
-
-            _value = matrix;
-            _isIdentity = false;
             _x = x;
             _y = y;
         }
@@ -54,12 +47,6 @@ namespace SPEA.Geometry.Transform
         #endregion Constructors
 
         #region Properties
-
-        /// <inheritdoc/>
-        public override DenseRectMatrix Value => _value;
-
-        /// <inheritdoc/>
-        public override bool IsIdentity => _isIdentity;
 
         /// <summary>
         /// Gets the displacement along the X axis.
@@ -72,5 +59,19 @@ namespace SPEA.Geometry.Transform
         public double Y => _y;
 
         #endregion Properties
+
+        #region Methods
+
+        // Generates a new matrix.
+        private static DenseRectMatrix BuildMatrix(double x, double y)
+        {
+            var matrix = DenseRectMatrix.Build.DenseIdentity(AffineMatrixDim, AffineMatrixDim);
+            matrix[0, 2] = x;
+            matrix[1, 2] = y;
+
+            return matrix;
+        }
+
+        #endregion Methods
     }
 }

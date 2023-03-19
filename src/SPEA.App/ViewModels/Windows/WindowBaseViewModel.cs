@@ -11,6 +11,7 @@ namespace SPEA.App.ViewModels.Windows
     using System.Windows;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
+    using CommunityToolkit.Mvvm.Messaging;
     using SPEA.App.Commands;
     using SPEA.App.ViewModels.Interfaces;
 
@@ -22,11 +23,12 @@ namespace SPEA.App.ViewModels.Windows
     {
         #region Fields
 
+        private readonly IMessenger _messenger;
+        private readonly CommandsManager _commandsManager;
         private readonly string _minimizeWindowCmd = "MinimizeWindow";
         private readonly string _maximizeWindowCmd = "MaximizeWindow";
         private readonly string _restoreWindowCmd = "RestoreWindow";
         private readonly string _closeWindowCmd = "CloseWindow";
-        private readonly CommandsManager _commandsManager;
         private bool _disposed;
 
         #endregion Fields
@@ -36,10 +38,13 @@ namespace SPEA.App.ViewModels.Windows
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowBaseViewModel"/> class.
         /// </summary>
+        /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
         /// <param name="commandsManager">A reference to <see cref="Commands.CommandsManager"/> instance.</param>
         public WindowBaseViewModel(
+            IMessenger messenger,
             CommandsManager commandsManager)
         {
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
             _commandsManager = commandsManager ?? throw new ArgumentNullException(nameof(commandsManager));
 
             _commandsManager.RegisterCommand(_minimizeWindowCmd, new RelayCommand<Window>(ExecuteMinimizeWindow));
@@ -86,6 +91,11 @@ namespace SPEA.App.ViewModels.Windows
         #endregion IDisposable
 
         #region Properties
+
+        /// <summary>
+        /// Gets a messenger reference.
+        /// </summary>
+        public IMessenger Messenger => _messenger;
 
         /// <summary>
         /// Gets a commands manager reference.

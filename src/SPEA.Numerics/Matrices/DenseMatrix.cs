@@ -53,7 +53,7 @@ namespace SPEA.Numerics.Matrices
         #region Properties
 
         /// <inheritdoc/>
-        public override RectMatrixBuilder Build => _builder;
+        public override RectMatrixBuilder Builder => _builder;
 
         #endregion Properties
 
@@ -62,7 +62,7 @@ namespace SPEA.Numerics.Matrices
         /// <inheritdoc/>
         public override DenseMatrix DeepCopy()
         {
-            var result = Build.SameAs(this);
+            var result = Builder.SameAs(this);
             Storage.CopyToUnchecked(result.Storage);
             return result;
         }

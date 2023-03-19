@@ -7,8 +7,9 @@
 
 namespace SPEA.Geometry.Core
 {
+    using SPEA.Geometry.Misc;
+    using SPEA.Geometry.Systems;
     using SPEA.Geometry.Transform;
-    using SPEA.Numerics.Matrices;
 
     /// <summary>
     /// Represents valid internal types.
@@ -39,7 +40,6 @@ namespace SPEA.Geometry.Core
         public const SEntityType InternalType = SEntityType.SOBJECT;
 
         private readonly Guid guid = Guid.NewGuid();
-        private readonly AppliedTransformations _appliedTransformations = new AppliedTransformations();
 
         #endregion Fields
 
@@ -55,6 +55,11 @@ namespace SPEA.Geometry.Core
         public Guid Guid => guid;
 
         /// <summary>
+        /// Gets the <see cref="SObject"/> local coordinate system defined in GCS.
+        /// </summary>
+        public abstract CartesianSystem LocalSystem { get; }
+
+        /// <summary>
         /// Gets a value of the origin location.
         /// </summary>
         public abstract SPoint Origin { get; }
@@ -63,17 +68,6 @@ namespace SPEA.Geometry.Core
         /// Gets a value indicating whether the current <see cref="SObject"/> can be treated as empty.
         /// </summary>
         public abstract bool IsEmpty { get; }
-
-        /// <summary>
-        /// Gets the initial geometry (with no transformations applied)
-        /// of the <see cref="SObject"/> or of a type of a derived class.
-        /// </summary>
-        public abstract SObject DefiningObject { get; }
-
-        /////// <summary>
-        /////// Gets an object that wraps all applied transformations.
-        /////// </summary>
-        ////public AppliedTransformations AppliedTransformations => _appliedTransformations;
 
         #endregion Properties
 
@@ -141,87 +135,31 @@ namespace SPEA.Geometry.Core
             return false;
         }
 
-        /////// <summary>
-        /////// Creates a deep copy of the object.
-        /////// </summary>
-        /////// <returns>A deep copy of the object.</returns>
-        ////public abstract SObject DeepCopy();
-
         /// <summary>
-        /// Moves the origin to the speicfied location.
+        /// Transforms the current <see cref="SObject"/> coordinate system in a local <paramref name="system"/> coordinates.
         /// </summary>
-        /// <param name="point">A new origin location.</param>
-        public virtual void MoveOriginTo(SPoint point)
+        /// <param name="system">Another coordinate system the transformation is set in.</param>
+        /// <param name="transform">A transformation to apply.</param>
+        public void TransformIn(CartesianSystem system, GeneralTransformation transform)
         {
-            MoveOriginTo(point.X, point.Y);
+            LocalSystem.TransformIn(system, transform);
         }
 
         /// <summary>
-        /// Moves the origin to the speicfied location.
+        /// Transforms the current <see cref="SObject"/> coordinate system in global coordinates.
         /// </summary>
-        /// <param name="x">The X coordination of a new oorigin location.</param>
-        /// <param name="y">The Y coordination of a new oorigin location.</param>
-        public void MoveOriginTo(double x, double y)
+        /// <param name="transform">A transformation to apply.</param>
+        /// <param name="action">The way how the <paramref name="transform"/> will be applied.</param>
+        public void TransformInGlobal(GeneralTransformation transform, TransformAction action = TransformAction.Append)
         {
-            var dx = x - Origin.X;
-            var dy = y - Origin.Y;
-            Translate(dx, dy);
+            LocalSystem.TransformInGlobal(transform, action);
         }
 
         /// <summary>
-        /// Applies an affine transformation to the <see cref="SObject"/>.
+        /// Calculates the bounding box in local coordinate system.
         /// </summary>
-        /// <param name="transform">An affine transformation to be applied.</param>
-        /// <param name="transformationType">The transformation type.</param>
-        public abstract void ApplyTransformation(AffineTransformation transform, TransformationType transformationType);
-
-        /// <summary>
-        /// Translates the current <see cref="SObject"/>.
-        /// </summary>
-        /// <param name="x">The displacement along the X axis.</param>
-        /// <param name="y">The displacement along the Y axis.</param>
-        /// <param name="transformationType">The transformation type.</param>
-        public void Translate(double x, double y, TransformationType transformationType = TransformationType.RelativeToCurrent)
-        {
-            var transform = new TranslationTransformation(x, y);
-            ////AppliedTransformations.Translate = transform;
-            ApplyTransformation(transform, transformationType);
-        }
-
-        /// <summary>
-        /// Rotates the current <see cref="SObject"/>.
-        /// </summary>
-        /// <param name="angle">The angle of rotation.</param>
-        /// <param name="rotateAround">The location of a rotation point.</param>
-        /// <param name="transformationType">The transformation type.</param>
-        public void Rotate(double angle, SPoint rotateAround = default, TransformationType transformationType = TransformationType.RelativeToCurrent)
-        {
-            if (rotateAround == default)
-            {
-                var transform = new RotateTransformation(angle);
-                ////AppliedTransformations.Rotate = transform;
-                ApplyTransformation(transform, transformationType);
-            }
-            else
-            {
-                var d = rotateAround;
-                var translateBackMatrix = new TranslationTransformation(d.X, d.Y).Value;
-                var rotateMatrix = new RotateTransformation(angle).Value;
-                var translateMatrix = new TranslationTransformation(-d.X, -d.Y).Value;
-                var transform = new CompositeTransformation(translateBackMatrix * rotateMatrix * translateMatrix);
-                ////AppliedTransformations.Composite = transform;
-                ApplyTransformation(transform, transformationType);
-            }
-        }
-
-        /// <summary>
-        /// Provides a derived object an opportunity to invalidate its calculated
-        /// (cached) values. Typically it happens when the object was transformed.
-        /// </summary>
-        protected virtual void InvalidateCache()
-        {
-            // Blank.
-        }
+        /// <returns>The <see cref="SObject"/> bouding box in local coordinate system.</returns>
+        public abstract BoundingBox GetBoundingBox();
 
         #endregion Methods
     }

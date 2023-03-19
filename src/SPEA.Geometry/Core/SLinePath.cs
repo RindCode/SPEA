@@ -7,7 +7,8 @@
 
 namespace SPEA.Geometry.Core
 {
-    using SPEA.Geometry.Transform;
+    using SPEA.Geometry.Misc;
+    using SPEA.Geometry.Systems;
 
     /// <summary>
     /// Represents a sequence of two or more points.
@@ -21,7 +22,7 @@ namespace SPEA.Geometry.Core
         /// </summary>
         public new const SEntityType InternalType = SEntityType.SLINEPATH;
 
-        private readonly SLinePath _definingObject;
+        private readonly CartesianSystem _system = new CartesianSystem();
         private SPoint[] _points;
 
         #endregion Fields
@@ -34,7 +35,6 @@ namespace SPEA.Geometry.Core
         public SLinePath()
         {
             _points = Array.Empty<SPoint>();
-            _definingObject = new SLinePath(this);
         }
 
         /// <summary>
@@ -53,20 +53,6 @@ namespace SPEA.Geometry.Core
             }
 
             _points = points.ToArray();
-            _definingObject = new SLinePath(this);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SLinePath"/> class.
-        /// </summary>
-        /// <param name="sLinePath"><see cref="SLinePath"/> object used for a "copy".</param>
-        protected SLinePath(SLinePath sLinePath)
-        {
-            var points = new SPoint[sLinePath.Points.Length];
-            Array.Copy(sLinePath.Points, points, points.Length);
-            _points = sLinePath.Points;
-
-            _definingObject = this;
         }
 
         #endregion Constructors
@@ -79,16 +65,16 @@ namespace SPEA.Geometry.Core
         public SPoint[] Points => _points;
 
         /// <inheritdoc/>
-        public override SPoint Origin => IsEmpty ? default(SPoint) : _points[0];
+        public override CartesianSystem LocalSystem => _system;
+
+        /// <inheritdoc/>
+        public override SPoint Origin => LocalSystem.Origin;
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="SLinePath"/> is empty
         /// and contains no points in it.
         /// </summary>
         public override bool IsEmpty => _points.Length == 0;
-
-        /// <inheritdoc/>
-        public override SLinePath DefiningObject => _definingObject;
 
         /// <summary>
         /// Gets a value indicating whether the currect <see cref="SLinePath"/> is closed.
@@ -120,44 +106,23 @@ namespace SPEA.Geometry.Core
 
         #region Methods
 
-        /////// <inheritdoc/>
-        ////public override SLinePath DeepCopy()
-        ////{
-        ////    var points = new SPoint[Points.Length];
-        ////    Array.Copy(Points, points, points.Length);
-        ////    return new SLinePath(points);
-        ////}
-
         /// <inheritdoc/>
-        public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
+        public override BoundingBox GetBoundingBox()
         {
-            ArgumentNullException.ThrowIfNull(transform, nameof(transform));
+            var minX = double.MaxValue;
+            var minY = double.MaxValue;
+            var maxX = double.MinValue;
+            var maxY = double.MinValue;
 
-            if (transform.IsIdentity)
+            for (int i = 0; i < Points.Length; i++)
             {
-                return;
+                minX = Math.Min(minX, Points[i].X);
+                minY = Math.Min(minY, Points[i].Y);
+                maxX = Math.Max(maxX, Points[i].X);
+                maxY = Math.Max(maxY, Points[i].Y);
             }
 
-            if (transformationType == TransformationType.RelativeToInitial)
-            {
-                var initial = new SPoint[Points.Length];
-                Array.Copy(Points, initial, initial.Length);
-                for (int i = 0; i < initial.Length; i++)
-                {
-                    initial[i] = initial[i].Transform(transform);
-                }
-
-                _points = initial;
-            }
-            else
-            {
-                for (int i = 0; i < Points.Length; i++)
-                {
-                    Points[i] = Points[i].Transform(transform);
-                }
-            }
-
-            InvalidateCache();
+            return new BoundingBox(minX, maxY, maxX, minY);
         }
 
         #endregion Methods

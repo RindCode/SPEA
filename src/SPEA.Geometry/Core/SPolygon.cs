@@ -7,6 +7,8 @@
 
 namespace SPEA.Geometry.Core
 {
+    using SPEA.Geometry.Misc;
+    using SPEA.Geometry.Systems;
     using SPEA.Geometry.Transform;
 
     /// <summary>
@@ -21,10 +23,8 @@ namespace SPEA.Geometry.Core
         /// </summary>
         public new const SEntityType InternalType = SEntityType.SPOLYGON;
 
-        private readonly SPolygon _definingObject;
         private readonly SLinearRing _shell;
         private readonly SLinearRing[] _holes;
-        ////private SPoint _origin;
 
         #endregion Fields
 
@@ -81,37 +81,15 @@ namespace SPEA.Geometry.Core
         ////    _origin = shell.Origin;
         ////}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SPolygon"/> class.
-        /// </summary>
-        public SPolygon()
-        {
-            ////_shell = new SLinearRing();
-            ////_holes = new SLinearRing[0];
-            ////_definingObject = new SPolygon(this);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SPolygon"/> class.
-        /// </summary>
-        /// <param name="sPolygon"><see cref="SPolygon"/> object used for a "copy".</param>
-        protected SPolygon(SPolygon sPolygon)
-        {
-            _shell = new SLinearRing(sPolygon.Shell.Points);
-
-            var holes = new SLinearRing[sPolygon.Holes.Length];
-            Array.Copy(sPolygon.Holes, holes, holes.Length);
-            _holes = holes;
-
-            _definingObject = sPolygon.DefiningObject;
-        }
-
         #endregion Constructors
 
         #region Properties
 
         /// <inheritdoc/>
-        public override SPoint Origin => Shell.Origin;
+        public override CartesianSystem LocalSystem => Shell.LocalSystem;
+
+        /// <inheritdoc/>
+        public override SPoint Origin => Shell.LocalSystem.Origin;
 
         /// <summary>
         /// Gets the polygon shell.
@@ -129,28 +107,14 @@ namespace SPEA.Geometry.Core
         /// </summary>
         public override bool IsEmpty => Shell.IsEmpty;
 
-        /// <inheritdoc/>
-        public override SPolygon DefiningObject => _definingObject;
-
         #endregion Properties
 
         #region Methods
 
         /// <inheritdoc/>
-        public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
+        public override BoundingBox GetBoundingBox()
         {
-            ArgumentNullException.ThrowIfNull(transform, nameof(transform));
-
-            if (transform.IsIdentity)
-            {
-                return;
-            }
-
-            Shell.ApplyTransformation(transform, transformationType);
-            foreach (var hole in Holes)
-            {
-                hole.ApplyTransformation(transform, transformationType);
-            }
+            return Shell.GetBoundingBox();
         }
 
         #endregion Methods

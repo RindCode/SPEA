@@ -5,8 +5,10 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Core.CrossSection
+namespace SPEA.Core.Factories
 {
+    using SPEA.Core.CrossSections;
+
     /// <summary>
     /// An abstract factory of various implementations of a built-up cross-section.
     /// </summary>

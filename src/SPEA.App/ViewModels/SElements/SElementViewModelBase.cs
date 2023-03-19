@@ -9,10 +9,11 @@ namespace SPEA.App.ViewModels.SElements
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Windows.Media;
     using CommunityToolkit.Mvvm.ComponentModel;
-    using SPEA.App.Models.SElements;
+    using CommunityToolkit.Mvvm.Messaging;
     using SPEA.Geometry.Core;
-    using SPEA.Geometry.Primitives;
+    using SPEA.Geometry.Transform;
 
     /// <summary>
     /// Represents a base class for all cross-section elements view models.
@@ -21,6 +22,7 @@ namespace SPEA.App.ViewModels.SElements
     {
         #region Fields
 
+        private readonly IMessenger _messenger;
         private bool _disposed;
         ////private double _top;
         ////private double _left;
@@ -34,9 +36,10 @@ namespace SPEA.App.ViewModels.SElements
         /// <summary>
         /// Initializes a new instance of the <see cref="SElementViewModelBase"/> class.
         /// </summary>
-        protected SElementViewModelBase()
+        /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
+        protected SElementViewModelBase(IMessenger messenger)
         {
-            // Blank.
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
         }
 
         #endregion Constructors
@@ -86,10 +89,28 @@ namespace SPEA.App.ViewModels.SElements
         #region Properties
 
         /// <summary>
+        /// Gets a messenger reference.
+        /// </summary>
+        public IMessenger Messenger => _messenger;
+
+        /// <summary>
+        /// Gets a model object.
+        /// </summary>
+        public abstract SObject Model { get; }
+
+        /// <summary>
         /// Gets the collection of element's entity info by mapping its properties
         /// and some additional metadata related to its underlying model.
         /// </summary>
-        public abstract ObservableCollection<SElementInfo> EntityInfoItems { get; }
+        public abstract ObservableCollection<SElementInfoViewModel> EntityInfoItems { get; }
+
+        /// <summary>
+        /// Gets or sets the UI transformation matrix.
+        /// </summary>
+        /// <remarks>
+        /// This matrix is different from the model one, which is defined in GCS.
+        /// </remarks>
+        public abstract Matrix TransformMatrix { get; set; }
 
         /// <summary>
         /// Gets or sets the X-coordinate of the element's origin.
@@ -160,6 +181,57 @@ namespace SPEA.App.ViewModels.SElements
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Sets the shape origin position based on given input values.
+        /// </summary>
+        /// <param name="x">The origin X coordinate.</param>
+        /// <param name="y">The origin Y coordinate.</param>
+        /// <param name="angle">
+        /// The rotation angle around the origin.
+        /// The positive direction is counter clockwise.
+        /// </param>
+        protected virtual void MoveOrigin(double x, double y, double angle)
+        {
+            // Blank.
+        }
+
+        /// <summary>
+        /// Rotates the current shape around its bounding box center.
+        /// </summary>
+        /// <param name="angle">
+        /// The rotation angle around the center of the bounding box.
+        /// The positive direction is counter clockwise.
+        /// </param>
+        protected virtual void RotateAroundCenter(double angle)
+        {
+            // Blank.
+        }
+
+        /// <summary>
+        /// Converts the model transformation object into a UI (screen) matrix suitable for binding.
+        /// </summary>
+        /// <param name="matrix"><see cref="GeneralTransformation"/> matrix used for creation of the UI <see cref="Matrix"/>.</param>
+        /// <returns><see cref="Matrix"/> object.</returns>
+        protected virtual Matrix ConvertToScreenTransformMatrix(GeneralTransformation matrix)
+        {
+            // We transpose the matrix and reflect it to convert it
+            // from global coordinates into screen coordinates.
+
+            var uiMatrix = new Matrix()
+            {
+                M11 = matrix.M00,
+                M12 = matrix.M10,
+                M21 = matrix.M01,
+                M22 = matrix.M11,
+                OffsetX = matrix.M02,
+                OffsetY = matrix.M12,
+            };
+
+            uiMatrix.Scale(1, -1);
+
+            return uiMatrix;
+        }
 
         #endregion Methods
     }

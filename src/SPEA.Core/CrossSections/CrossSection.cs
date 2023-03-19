@@ -5,9 +5,10 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Core.CrossSection
+namespace SPEA.Core.CrossSections
 {
     using System;
+    using SPEA.Core.Factories;
     using SPEA.Core.Geometry;
     using SPEA.Geometry.Core;
 
@@ -19,7 +20,7 @@ namespace SPEA.Core.CrossSection
     {
         #region Fields
 
-        private static readonly Dictionary<Type, object> _registeredFactories = new ();
+        private static readonly Dictionary<Type, object> _registeredFactories = new Dictionary<Type, object>();
         private readonly Guid _guid;
         private readonly CrossSectionGeometry _geometry;
         private bool _disposed;

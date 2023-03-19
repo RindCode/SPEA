@@ -11,9 +11,10 @@ namespace SPEA.App.ViewModels.SDocument
     using System.Collections.ObjectModel;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
+    using CommunityToolkit.Mvvm.Messaging;
     using SPEA.App.Commands;
     using SPEA.App.ViewModels.SElements;
-    using SPEA.Core.CrossSection;
+    using SPEA.Core.CrossSections;
     using SPEA.Geometry.Primitives;
 
     /// <summary>
@@ -24,6 +25,7 @@ namespace SPEA.App.ViewModels.SDocument
     {
         #region Fields
 
+        private readonly IMessenger _messenger;
         private readonly CommandsManager _commandsManager;
         private readonly SDocumentsManagerViewModel _sDocumentsManager;
         private readonly string _requestCloseDocumentCmd = "RequestCloseDocument";
@@ -44,14 +46,17 @@ namespace SPEA.App.ViewModels.SDocument
         /// <summary>
         /// Initializes a new instance of the <see cref="SDocumentViewModel"/> class.
         /// </summary>
+        /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager.CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         /// <param name="model">A reference to the model instance.</param>
         public SDocumentViewModel(
+            IMessenger messenger,
             CommandsManager commandsManager,
             SDocumentsManagerViewModel sDocumentsManager,
             CrossSection model)
         {
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
             _commandsManager = commandsManager ?? throw new ArgumentNullException(nameof(commandsManager));
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
 
@@ -70,7 +75,7 @@ namespace SPEA.App.ViewModels.SDocument
 
             // TODO: REMOVE CODE
             var rect = new SRect(0, 0, 200, 300);
-            var vm = new SRectViewModel(rect);
+            var vm = new SRectViewModel(messenger, rect);
             AddElement(vm);
         }
 
@@ -141,6 +146,11 @@ namespace SPEA.App.ViewModels.SDocument
         #endregion Events
 
         #region Properties
+
+        /// <summary>
+        /// Gets a messenger reference.
+        /// </summary>
+        public IMessenger Messenger => _messenger;
 
         /// <summary>
         /// Gets a commands manager reference.

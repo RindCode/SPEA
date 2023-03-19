@@ -10,10 +10,11 @@ namespace SPEA.App.ViewModels.Windows
     using System;
     using System.Collections.Generic;
     using CommunityToolkit.Mvvm.Input;
+    using CommunityToolkit.Mvvm.Messaging;
     using SPEA.App.Commands;
     using SPEA.App.Utils.Helpers;
     using SPEA.App.ViewModels.SDocument;
-    using SPEA.Core.CrossSection;
+    using SPEA.Core.CrossSections;
 
     /// <summary>
     /// A view model used by "create new section" window.
@@ -39,12 +40,14 @@ namespace SPEA.App.ViewModels.Windows
         /// <summary>
         /// Initializes a new instance of the <see cref="NewSectionViewModel"/> class.
         /// </summary>
+        /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         public NewSectionViewModel(
+            IMessenger messenger,
             CommandsManager commandsManager,
             SDocumentsManagerViewModel sDocumentsManager)
-            : base(commandsManager)
+            : base(messenger, commandsManager)
         {
             _sDocumentsManager = sDocumentsManager ?? throw new ArgumentNullException(nameof(sDocumentsManager));
 
@@ -129,7 +132,7 @@ namespace SPEA.App.ViewModels.Windows
             if (_selectedSectionDefinition == definition)
             {
                 var cs = CrossSection.Create<MetallicCrossSection>(SectionName);
-                var vm = new SDocumentMetallicViewModel(CommandsManager, _sDocumentsManager, cs);
+                var vm = new SDocumentMetallicViewModel(Messenger, CommandsManager, _sDocumentsManager, cs);
                 _sDocumentsManager.AddDocument(vm);
             }
             else

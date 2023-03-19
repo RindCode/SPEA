@@ -23,7 +23,7 @@ namespace SPEA.App.Utils.Helpers
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomWindowAutomationPeer"/> class.
         /// </summary>
-        /// <param name="owner">Owner reference.</param>
+        /// <param name="owner">ParentViewModel reference.</param>
         public CustomWindowAutomationPeer(FrameworkElement owner)
             : base(owner)
         {

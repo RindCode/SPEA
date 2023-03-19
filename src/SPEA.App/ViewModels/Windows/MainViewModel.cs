@@ -10,6 +10,7 @@ namespace SPEA.App.ViewModels.Windows
     using System;
     using System.ComponentModel;
     using CommunityToolkit.Mvvm.Input;
+    using CommunityToolkit.Mvvm.Messaging;
     using SPEA.App.Commands;
     using SPEA.App.ViewModels;
     using SPEA.App.ViewModels.SDocument;
@@ -38,18 +39,20 @@ namespace SPEA.App.ViewModels.Windows
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
+        /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
         /// <param name="commandsManager">A reference to <see cref="CommandsManager"/> instance.</param>
         /// <param name="sDocumentsManager">A reference to <see cref="SDocumentsManagerViewModel"/> instance.</param>
         /// <param name="mainMenuViewModel">A reference to <see cref="MainMenuViewModel"/> instance.</param>
         /// <param name="projectTreeViewModel">A reference to <see cref="ProjectTreeViewModel"/> instance.</param>
         /// <param name="addGeometryViewModel">A reference to <see cref="AddGeometryViewModel"/> instance.</param>
         public MainViewModel(
+            IMessenger messenger,
             CommandsManager commandsManager,
             SDocumentsManagerViewModel sDocumentsManager,
             MainMenuViewModel mainMenuViewModel,
             ProjectTreeViewModel projectTreeViewModel,
             AddGeometryViewModel addGeometryViewModel)
-            : base(commandsManager)
+            : base(messenger, commandsManager)
         {
             Current = this;
 

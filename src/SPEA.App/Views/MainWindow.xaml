@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist"
+    xmlns:behaviors="clr-namespace:SPEA.App.Extensions.Behaviors"
     xmlns:converters="clr-namespace:SPEA.App.Utils.Converters"
     xmlns:ctrl="clr-namespace:SPEA.App.Controls"
     xmlns:ctrl_svp="clr-namespace:SPEA.App.Controls.SViewport"
@@ -21,6 +22,7 @@
     xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d"
     assist:WindowAssist.MinimizeWindowCommand="{Binding CommandsManager[MinimizeWindow].Command, Mode=OneTime}"
     assist:WindowAssist.MaximizeWindowCommand="{Binding CommandsManager[MaximizeWindow].Command, Mode=OneTime}"
@@ -251,17 +253,10 @@
                                                         Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level3.Inverted}"
                                                         Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
                                                         StrokeThickness="2"
-                                                        ctrl_svp:SElementItemContainer.ApplyTransform="{DynamicResource TransformGroup}">
+                                                        ctrl_svp:SElementItemContainer.ApplyTransform="{DynamicResource SRectPrimitive.ShapeTransform}">
                                                         <shapes:SRectPrimitive.Resources>
-                                                            <TransformGroup x:Key="TransformGroup">
-                                                                <TranslateTransform
-                                                                    X="{Binding Path=X0, Mode=TwoWay}"
-                                                                    Y="{Binding Path=Y0, Mode=TwoWay, Converter={StaticResource InverseDoubleConverter}}"/>
-                                                                <RotateTransform
-                                                                    Angle="{Binding Path=Angle, Mode=TwoWay}"
-                                                                    CenterX="{Binding Path=Cx, Mode=OneWay}"
-                                                                    CenterY="{Binding Path=Cy, Mode=OneWay, Converter={StaticResource InverseDoubleConverter}}"/>
-                                                                <ScaleTransform/>
+                                                            <TransformGroup x:Key="SRectPrimitive.ShapeTransform">
+                                                                <MatrixTransform Matrix="{Binding Path=TransformMatrix, Mode=OneWay}"/>
                                                             </TransformGroup>
                                                         </shapes:SRectPrimitive.Resources>
                                                     </shapes:SRectPrimitive>
@@ -368,14 +363,40 @@
                                                         FontFamily="Consolas"
                                                         Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Name}"
                                                         Binding="{Binding Name, Mode=OneWay}"
-                                                        IsReadOnly="True" EditingElementStyle="{StaticResource DataGridTextBoxStyle}"
+                                                        IsReadOnly="True"
+                                                        EditingElementStyle="{StaticResource DataGridTextBoxStyle}"
                                                         CellStyle="{StaticResource ReadOnlyDataGridCellStyle}"/>
-                                                    <DataGridTextColumn
-                                                        FontFamily="Consolas"
-                                                        Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Value}"
-                                                        Binding="{Binding Value, Mode=TwoWay}"
-                                                        IsReadOnly="False" Width="*" EditingElementStyle="{StaticResource DataGridTextBoxStyle}"
-                                                        CellStyle="{StaticResource ReadOnlyDataGridCellStyle}"/>
+                                                    <DataGridTemplateColumn
+                                                        Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Name}"
+                                                        IsReadOnly="False" Width="*"
+                                                        CellStyle="{StaticResource ReadOnlyDataGridCellStyle}">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Border
+                                                                    x:Name="CellBorder"
+                                                                    Margin="2,0,2,0"
+                                                                    Background="Transparent">
+                                                                    <ContentControl
+                                                                        x:Name="CellContent"
+                                                                        FontFamily="Consolas"
+                                                                        FocusVisualStyle="{x:Null}"
+                                                                        Content="{Binding Value, Mode=OneWay}"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                                            <DataTemplate>
+                                                                <TextBox
+                                                                    Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                                                    FontFamily="Consolas"
+                                                                    Style="{StaticResource DataGridTextBoxStyle}">
+                                                                    <i:Interaction.Behaviors>
+                                                                        <behaviors:TextBoxSelectAllOnFocusBehavior/>
+                                                                    </i:Interaction.Behaviors>
+                                                                </TextBox>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                                    </DataGridTemplateColumn>
                                                 </DataGrid.Columns>
                                             </DataGrid>
                                         </Grid>

@@ -172,15 +172,8 @@ namespace SPEA.App.Commands
                 throw new ArgumentNullException($"Invalid command name: {nameof(name)}");
             }
 
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            if (metadata == null)
-            {
-                throw new ArgumentNullException(nameof(metadata));
-            }
+            ArgumentNullException.ThrowIfNull(command, nameof(command));
+            ArgumentNullException.ThrowIfNull(metadata, nameof(metadata));
 
             var rc = new RegisteredCommand(command, metadata);
             if (_registeredCommands.ContainsKey(name))

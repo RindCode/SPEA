@@ -7,11 +7,11 @@
 
 namespace SPEA.App.Controls.SViewport
 {
-    using SPEA.App.Utils.Helpers;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
+    using SPEA.App.Utils.Helpers;
 
     /// <summary>
     /// Represents a UI container (basically - a bounding box) for an element

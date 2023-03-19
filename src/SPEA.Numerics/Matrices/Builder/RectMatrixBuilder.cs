@@ -55,13 +55,13 @@ namespace SPEA.Numerics.Matrices.Builder
         }
 
         /// <inheritdoc/>
-        public override DenseRectMatrix Dense(int rows, int columns, MatrixDataOrderType orderType)
+        public override DenseRectMatrix Dense(int rows, int columns, MatrixDataOrderType orderType = MatrixDataOrderType.ColumMajor)
         {
             return (DenseRectMatrix)base.Dense(rows, columns, orderType);
         }
 
         /// <inheritdoc/>
-        public override Matrix DenseIdentity(int rows, int columns, MatrixDataOrderType orderType)
+        public override DenseRectMatrix DenseIdentity(int rows, int columns, MatrixDataOrderType orderType = MatrixDataOrderType.ColumMajor)
         {
             return (DenseRectMatrix)base.DenseIdentity(rows, columns, orderType);
         }

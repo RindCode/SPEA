@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="StealsFocusOnClickBehavior.cs" company="Dmitry Poberezhnyy">
+// <copyright file="TextBoxSelectAllOnFocusBehavior.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -8,21 +8,23 @@
 namespace SPEA.App.Extensions.Behaviors
 {
     using System.Windows;
-    using System.Windows.Input;
+    using System.Windows.Controls;
     using Microsoft.Xaml.Behaviors;
 
+    // TODO: Not working in DataGrid?
+
     /// <summary>
-    /// Defines a behavior that allows to steal focus when clicked on the element it was attached to.
+    /// Defines a behavior that allows to select all content of the <see cref="TextBox"/> it was attached to.
     /// </summary>
-    public class StealsFocusOnClickBehavior : Behavior<FrameworkElement>
+    public class TextBoxSelectAllOnFocusBehavior : Behavior<TextBox>
     {
         /// <inheritdoc/>
         protected override void OnAttached()
         {
             if (AssociatedObject != null)
             {
+                AssociatedObject.GotFocus += AssociatedObject_GotFocus;
                 base.OnAttached();
-                AssociatedObject.MouseDown += AssociatedObject_MouseDown;
             }
         }
 
@@ -31,19 +33,17 @@ namespace SPEA.App.Extensions.Behaviors
         {
             if (AssociatedObject != null)
             {
-                base.OnAttached();
-                AssociatedObject.MouseDown -= AssociatedObject_MouseDown;
+                AssociatedObject.GotFocus -= AssociatedObject_GotFocus;
+                base.OnDetaching();
             }
         }
 
-        // Clears focus.
-        private static void AssociatedObject_MouseDown(object sender, MouseButtonEventArgs e)
+        // Selects all.
+        private void AssociatedObject_GotFocus(object sender, RoutedEventArgs routedEventArgs)
         {
-            // Keyboard.ClearFocus();
-            var element = sender as FrameworkElement;
-            if (element != null)
+            if (AssociatedObject != null)
             {
-                element.Focus();
+                AssociatedObject.SelectAll();
             }
         }
     }

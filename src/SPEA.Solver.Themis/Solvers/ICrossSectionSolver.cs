@@ -1,16 +1,17 @@
 ﻿// ==================================================================================================
-// <copyright file="SectionProperty.cs" company="Dmitry Poberezhnyy">
+// <copyright file="ICrossSectionSolver.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Core
+namespace SPEA.Solver.Themis.Solvers
 {
-    public struct SectionProperty
+    /// <summary>
+    /// Provides a contract for all cross-sectional solvers.
+    /// </summary>
+    public interface ICrossSectionSolver
     {
-        public string Name { get; init; }
-
-        public double Value { get; init; }
+        // Blank.
     }
 }

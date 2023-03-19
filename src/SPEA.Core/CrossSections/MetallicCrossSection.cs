@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Core.CrossSection
+namespace SPEA.Core.CrossSections
 {
     /// <summary>
     /// Represents a metallic built-up cross-section model.

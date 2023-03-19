@@ -7,6 +7,8 @@
 
 namespace SPEA.Geometry.Core
 {
+    using SPEA.Geometry.Misc;
+    using SPEA.Geometry.Systems;
     using SPEA.Geometry.Transform;
 
     /// <summary>
@@ -23,7 +25,6 @@ namespace SPEA.Geometry.Core
         /// </summary>
         public new const SEntityType InternalType = SEntityType.SOBJECTCOL;
 
-        private readonly SObjectCollection<T> _definingObject;
         private readonly List<T> _items;
 
         #endregion Fields
@@ -36,7 +37,6 @@ namespace SPEA.Geometry.Core
         public SObjectCollection()
         {
             _items = new List<T>();
-            _definingObject = new SObjectCollection<T>(this);
         }
 
         /// <summary>
@@ -55,7 +55,6 @@ namespace SPEA.Geometry.Core
             }
 
             _items = new List<T>(objects);
-            _definingObject = new SObjectCollection<T>(this);
         }
 
         /// <summary>
@@ -65,7 +64,6 @@ namespace SPEA.Geometry.Core
         protected SObjectCollection(SObjectCollection<T> sObjectCollection)
         {
             _items = sObjectCollection.Items;
-            _definingObject = this;
         }
 
         #endregion Constructors
@@ -76,6 +74,23 @@ namespace SPEA.Geometry.Core
         /// Gets a list of <see cref="T"/> elements.
         /// </summary>
         public List<T> Items => _items;
+
+        /// <inheritdoc/>
+        public override CartesianSystem LocalSystem
+        {
+            get
+            {
+                foreach (var item in Items)
+                {
+                    if (!item.IsEmpty)
+                    {
+                        return item.LocalSystem;
+                    }
+                }
+
+                return null;  // TODO: If all empty, what type of CS to return?
+            }
+        }
 
         /// <inheritdoc/>
         /// <remarks>
@@ -97,7 +112,7 @@ namespace SPEA.Geometry.Core
                 {
                     if (!item.IsEmpty)
                     {
-                        origin = item.Origin;
+                        origin = item.LocalSystem.Origin;
                         break;
                     }
                 }
@@ -130,52 +145,28 @@ namespace SPEA.Geometry.Core
             }
         }
 
-        // TODO: DefiningObject currently returns "this".
-        //       However all objects in the collection store their initial states,
-        //       so we can quickly restore it by iterating items.
-
-        /// <inheritdoc/>
-        public override SObjectCollection<T> DefiningObject => _definingObject;
-
         #endregion Properties
 
         #region Methods
 
         /// <inheritdoc/>
-        public override void MoveOriginTo(SPoint point)
+        public override BoundingBox GetBoundingBox()
         {
-            if (Origin == point)
+            var minX = double.MaxValue;
+            var minY = double.MaxValue;
+            var maxX = double.MinValue;
+            var maxY = double.MinValue;
+
+            for (int i = 0; i < Items.Count; i++)
             {
-                return;
+                var bb = Items[i].GetBoundingBox();
+                minX = Math.Min(minX, bb.Left);
+                minY = Math.Min(minY, bb.Bottom);
+                maxX = Math.Max(maxX, bb.Right);
+                maxY = Math.Max(maxY, bb.Top);
             }
 
-            var d = point - Origin;
-            foreach (var item in Items)
-            {
-                if (!item.IsEmpty)
-                {
-                    Translate(d.X, d.Y);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Applies an affine transformation to all <see cref="T"/> elements in the sObjectCollection.
-        /// </summary>
-        /// <param name="transform">An affine transformation to be applied.</param>
-        public override void ApplyTransformation(AffineTransformation transform, TransformationType transformationType)
-        {
-            ArgumentNullException.ThrowIfNull(transform, nameof(transform));
-
-            if (transform.IsIdentity)
-            {
-                return;
-            }
-
-            foreach (var item in Items)
-            {
-                item.ApplyTransformation(transform, transformationType);
-            }
+            return new BoundingBox(minX, maxY, maxX, minY);
         }
 
         #endregion Methods

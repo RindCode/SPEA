@@ -12,20 +12,17 @@ namespace SPEA.Geometry.Transform
     /// <summary>
     /// Defines the applied transformation type.
     /// </summary>
-    public enum TransformationType
+    public enum TransformAction
     {
         /// <summary>
-        /// The transformation will be applied relative
-        /// to the initial state. Normally the initial state
-        /// contains no transofrmations.
+        /// The transformation will replace the existing one.
         /// </summary>
-        RelativeToInitial,
+        Replace,
 
         /// <summary>
-        /// The transformation will be applied relative
-        /// to the current transformation (appended).
+        /// The transformation will be applied (appended) relative to the current transformation.
         /// </summary>
-        RelativeToCurrent,
+        Append,
     }
 
     /// <summary>
@@ -33,6 +30,8 @@ namespace SPEA.Geometry.Transform
     /// </summary>
     public abstract class TransformationBase
     {
+        #region Properties
+
         /// <summary>
         /// Gets the current transformation matrix.
         /// </summary>
@@ -42,5 +41,7 @@ namespace SPEA.Geometry.Transform
         /// Gets a value indicating whether the transformation matrix is an identity matrix.
         /// </summary>
         public abstract bool IsIdentity { get; }
+
+        #endregion Properties
     }
 }

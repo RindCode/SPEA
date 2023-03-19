@@ -31,7 +31,7 @@ namespace SPEA.App.Utils.Services
             var services = new ServiceCollection();
 
             // Services.
-            ////services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+            services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
             // Controllers
             services.AddSingleton<SDocumentsManagerViewModel>();

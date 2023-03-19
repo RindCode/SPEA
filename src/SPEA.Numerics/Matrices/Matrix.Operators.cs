@@ -116,7 +116,7 @@ namespace SPEA.Numerics.Matrices
                 return DeepCopy();
             }
 
-            var result = Build.SameAs(this);
+            var result = Builder.SameAs(this);
             DoAdd(scalar, result);
             return result;
         }
@@ -136,7 +136,7 @@ namespace SPEA.Numerics.Matrices
                     nameof(other));
             }
 
-            var result = Build.SameAs(this, other, RowCount, ColumnCount);
+            var result = Builder.SameAs(this, other, RowCount, ColumnCount);
             DoAdd(other, result);
             return result;
         }
@@ -147,7 +147,7 @@ namespace SPEA.Numerics.Matrices
         /// <returns>A new resulting matrix.</returns>
         public Matrix Negate()
         {
-            var result = Build.SameAs(this);
+            var result = Builder.SameAs(this);
             DoNegate(result);
             return result;
         }
@@ -164,7 +164,7 @@ namespace SPEA.Numerics.Matrices
                 return DeepCopy();
             }
 
-            var result = Build.SameAs(this);
+            var result = Builder.SameAs(this);
             DoSubtract(scalar, result);
             return result;
         }
@@ -184,7 +184,7 @@ namespace SPEA.Numerics.Matrices
                     nameof(other));
             }
 
-            var result = Build.SameAs(this, other, RowCount, ColumnCount);
+            var result = Builder.SameAs(this, other, RowCount, ColumnCount);
             DoSubtract(other, result);
             return result;
         }
@@ -198,7 +198,7 @@ namespace SPEA.Numerics.Matrices
         {
             if (scalar == 0.0d)
             {
-                return Build.SameAs(this);
+                return Builder.SameAs(this);
             }
 
             if (scalar == 1.0d)
@@ -206,7 +206,7 @@ namespace SPEA.Numerics.Matrices
                 return DeepCopy();
             }
 
-            var result = Build.SameAs(this);
+            var result = Builder.SameAs(this);
             DoMultiply(scalar, result);
             return result;
         }
@@ -227,7 +227,7 @@ namespace SPEA.Numerics.Matrices
                     nameof(other));
             }
 
-            var result = Build.SameAs(this);
+            var result = Builder.SameAs(this);
             DoMultiply(other, result);
             return result;
         }

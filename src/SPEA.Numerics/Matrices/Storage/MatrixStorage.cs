@@ -99,6 +99,15 @@ namespace SPEA.Numerics.Matrices.Storage
         /// </summary>
         public int ColumnCount => _columns;
 
+        /// <summary>
+        /// Gets a value indicating whether the storage represents the identity matrix.
+        /// </summary>
+        /// <remarks>
+        /// Accessing this property will result in looping through all matrix elements
+        /// to check if they meet the condition.
+        /// </remarks>
+        public bool IsIdentity => CheckIsIdentity();
+
         #endregion Properties
 
         #region Indexers
@@ -142,6 +151,49 @@ namespace SPEA.Numerics.Matrices.Storage
         /// <param name="value">The value to be set.</param>
         public abstract void At(int row, int column, double value);
 
+        #region Copy
+
+        /// <summary>
+        /// Copies values of the current storage to the <paramref name="target"/>.
+        /// </summary>
+        /// <param name="target">A target storage values are copied to.</param>
+        public void CopyTo(MatrixStorage target)
+        {
+            ArgumentNullException.ThrowIfNull(target, nameof(target));
+
+            if (ReferenceEquals(this, target))
+            {
+                return;
+            }
+
+            ThrowArgumentExceptionIfDimMismatch(target);
+
+            CopyToUnchecked(target);
+        }
+
+        /// <summary>
+        /// Copies values of the current storage to the <paramref name="target"/>.
+        /// </summary>
+        /// <remarks>
+        /// This method exists for optimization purposes and will NOT check storages boundaries.
+        /// </remarks>
+        /// <param name="target">A target storage values are copied to.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Is thrown when the rows and columns have different sizes.</exception>
+        internal virtual void CopyToUnchecked(MatrixStorage target)
+        {
+            for (int c = 0; c < ColumnCount; c++)
+            {
+                for (int r = 0; r < RowCount; r++)
+                {
+                    target.At(r, c, At(r, c));
+                }
+            }
+        }
+
+        #endregion Copy
+
+        #region Fill
+
         /// <summary>
         /// Sets all matrix entries using a defined fill function.
         /// </summary>
@@ -156,32 +208,31 @@ namespace SPEA.Numerics.Matrices.Storage
                 throw new ArgumentNullException(nameof(func));
             }
 
-            for (int r = 0; r < RowCount; r++)
+            for (int c = 0; c < ColumnCount; c++)
             {
-                for (int c = 0; c < ColumnCount; c++)
+                for (int r = 0; r < ColumnCount; r++)
                 {
                     At(r, c, func(r, c));
                 }
             }
         }
 
+        #endregion Fill
+
+        #region Map
+
         /// <summary>
-        /// Copies values of the current storage to the <paramref name="target"/>.
+        /// Applies a function to each value of the current storage
+        /// and sets <paramref name="target"/> values using the function returned value.
         /// </summary>
-        /// <param name="target">A target storage values are copied to.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Is thrown when the rows and columns have different sizes.</exception>
-        public void CopyTo(MatrixStorage target)
+        /// <param name="function">A function to be applied.</param>
+        /// <param name="target">The target storage the function is applied to.</param>
+        public void MapTo(Func<double, double> function, MatrixStorage target)
         {
             ArgumentNullException.ThrowIfNull(target, nameof(target));
+            ThrowArgumentExceptionIfDimMismatch(target);
 
-            if (ReferenceEquals(this, target))
-            {
-                return;
-            }
-
-            ThrowArgumentOutOfRangeExceptionIfDimMismatch(target);
-
-            CopyToUnchecked(target);
+            MapToUnchecked(function, target);
         }
 
         /// <summary>
@@ -190,27 +241,13 @@ namespace SPEA.Numerics.Matrices.Storage
         /// <param name="function">A function to be applied.</param>
         public void MapInplace(Func<double, double> function)
         {
-            for (int r = 0; r < RowCount; r++)
+            for (int c = 0; c < ColumnCount; c++)
             {
-                for (int c = 0; c < ColumnCount; c++)
+                for (int r = 0; r < ColumnCount; r++)
                 {
                     At(r, c, function(At(r, c)));
                 }
             }
-        }
-
-        /// <summary>
-        /// Applies a function to each value of the current storage
-        /// and sets <paramref name="result"/> values using the function returned value.
-        /// </summary>
-        /// <param name="function">A function to be applied.</param>
-        /// <param name="target">The target storage the function is applied to.</param>
-        public void MapTo(Func<double, double> function, MatrixStorage target)
-        {
-            ArgumentNullException.ThrowIfNull(target, nameof(target));
-            ThrowArgumentOutOfRangeExceptionIfDimMismatch(target);
-
-            MapToUnchecked(function, target);
         }
 
         /// <summary>
@@ -225,29 +262,10 @@ namespace SPEA.Numerics.Matrices.Storage
         {
             ArgumentNullException.ThrowIfNull(other, nameof(other));
             ArgumentNullException.ThrowIfNull(target, nameof(target));
-            ThrowArgumentOutOfRangeExceptionIfDimMismatch(other);
-            ThrowArgumentOutOfRangeExceptionIfDimMismatch(target);
+            ThrowArgumentExceptionIfDimMismatch(other);
+            ThrowArgumentExceptionIfDimMismatch(target);
 
-            Map2Unchecked(function, other, target);
-        }
-
-        /// <summary>
-        /// Copies values of the current storage to the <paramref name="target"/>.
-        /// </summary>
-        /// <remarks>
-        /// This method exists for optimization purposes and will NOT check storages boundaries.
-        /// </remarks>
-        /// <param name="target">A target storage values are copied to.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Is thrown when the rows and columns have different sizes.</exception>
-        internal void CopyToUnchecked(MatrixStorage target)
-        {
-            for (int r = 0; r < RowCount; r++)
-            {
-                for (int c = 0; c < ColumnCount; c++)
-                {
-                    target.At(r, c, At(r, c));
-                }
-            }
+            Map2ToUnchecked(function, other, target);
         }
 
         /// <summary>
@@ -259,11 +277,11 @@ namespace SPEA.Numerics.Matrices.Storage
         /// </remarks>
         /// <param name="function">A function to be applied.</param>
         /// <param name="target">The target storage the function is applied to.</param>
-        internal void MapToUnchecked(Func<double, double> function, MatrixStorage target)
+        internal virtual void MapToUnchecked(Func<double, double> function, MatrixStorage target)
         {
-            for (int r = 0; r < RowCount; r++)
+            for (int c = 0; c < ColumnCount; c++)
             {
-                for (int c = 0; c < ColumnCount; c++)
+                for (int r = 0; r < RowCount; r++)
                 {
                     target.At(r, c, function(At(r, c)));
                 }
@@ -272,24 +290,94 @@ namespace SPEA.Numerics.Matrices.Storage
 
         /// <summary>
         /// Applies a function to each value pair of two storages (the current one and <paramref name="other"/>),
-        /// and sets <paramref name="result"/> values using the function returned value.
+        /// and sets <paramref name="target"/> values using the function returned value.
         /// </summary>
         /// <remarks>
         /// This method exists for optimization purposes and will NOT check storages boundaries.
         /// </remarks>
         /// <param name="function">A function to be applied.</param>
         /// <param name="other">Another storage used for mapping.</param>
-        /// <param name="result">The resulting storage the function is applied to.</param>
-        internal void Map2Unchecked(Func<double, double, double> function, MatrixStorage other, MatrixStorage result)
+        /// <param name="target">The resulting storage the function is applied to.</param>
+        internal void Map2ToUnchecked(Func<double, double, double> function, MatrixStorage other, MatrixStorage target)
         {
-            for (int r = 0; r < RowCount; r++)
+            for (int c = 0; c < ColumnCount; c++)
             {
-                for (int c = 0; c < ColumnCount; c++)
+                for (int r = 0; r < RowCount; r++)
                 {
-                    result.At(r, c, function(At(r, c), other.At(r, c)));
+                    target.At(r, c, function(At(r, c), other.At(r, c)));
                 }
             }
         }
+
+        #endregion Map
+
+        #region Transpose
+
+        /// <summary>
+        /// Transposes the current matrix storage and saves the result to <paramref name="target"/>.
+        /// </summary>
+        /// <param name="target">The resulting transposed storage.</param>
+        public void TransposeTo(MatrixStorage target)
+        {
+            ArgumentNullException.ThrowIfNull(target, nameof(target));
+
+            if (RowCount != target.ColumnCount || ColumnCount != target.RowCount)
+            {
+                throw new ArgumentException(
+                    $"Incompatible storage dimensions for transpose operation: this={RowCount}x{ColumnCount}, {nameof(target)}={target.RowCount}x{target.ColumnCount}",
+                    nameof(target));
+            }
+
+            // If both source and target are the same storage instance
+            // AND this.RowCount == target.ColumnCount && this.ColumnCount == target.RowCount,
+            // they this is a square matrix storage and we can transpose inplace.
+            if (ReferenceEquals(this, target))
+            {
+                return;
+            }
+
+            TransposeToUnchecked(target);
+        }
+
+        /// <summary>
+        /// Transposes the current matrix storage and saves the result to <paramref name="target"/>.
+        /// </summary>
+        /// <remarks>
+        /// This method exists for optimization purposes and will NOT check storages boundaries.
+        /// </remarks>
+        /// <param name="target">The resulting transposed sotrage.</param>
+        internal void TransposeToUnchecked(MatrixStorage target)
+        {
+            for (int c = 0; c < ColumnCount; c++)
+            {
+                for (int r = 0; r < RowCount; r++)
+                {
+                    target.At(r, c, At(c, r));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs inplace transpose for a square matrix storage.
+        /// </summary>
+        /// <remarks>
+        /// This method exists for optimization purposes and will NOT check storages boundaries.
+        /// </remarks>
+        /// <param name="target">The resulting transposed sotrage.</param>
+        internal void TransposeSquareInplaceUnchecked(MatrixStorage target)
+        {
+            for (int c = 0; c < ColumnCount; c++)
+            {
+                for (int r = 0; r < RowCount; r++)
+                {
+                    double temp = At(r, c);
+                    At(r, c, At(c, r));
+                    At(r, c, temp);
+                }
+            }
+        }
+
+        #endregion Transpose
 
         #region IEquatable interface
 
@@ -344,7 +432,6 @@ namespace SPEA.Numerics.Matrices.Storage
                 return false;
             }
 
-            // The order doesn't matter, we check all elements.
             for (int r = 0; r < left.RowCount; r++)
             {
                 for (int c = 0; c < left.ColumnCount; c++)
@@ -359,18 +446,40 @@ namespace SPEA.Numerics.Matrices.Storage
             return true;
         }
 
-        // Throws ArgumentOutOfRangeException if rows and columns don't match.
-        private void ThrowArgumentOutOfRangeExceptionIfDimMismatch(MatrixStorage target)
+        #endregion IEquatable interface
+
+        // Throws ArgumentException if rows and columns don't match.
+        private void ThrowArgumentExceptionIfDimMismatch(MatrixStorage target)
         {
             if (RowCount != target.RowCount || ColumnCount != target.ColumnCount)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(target),
-                    $"Incompatible storage dimensions: this={RowCount}x{ColumnCount}, {nameof(target)}={target.RowCount}x{target.ColumnCount}");
+                throw new ArgumentException(
+                    $"Incompatible storage dimensions: this={RowCount}x{ColumnCount}, {nameof(target)}={target.RowCount}x{target.ColumnCount}",
+                    nameof(target));
             }
         }
 
-        #endregion IEquatable interface
+        // Check if the storage represents the identity matrix.
+        private bool CheckIsIdentity()
+        {
+            if (RowCount != ColumnCount)
+            {
+                return false;
+            }
+
+            for (int r = 0; r < RowCount; r++)
+            {
+                for (int c = 0; c < ColumnCount; c++)
+                {
+                    if ((r == c && At(r, c) != 1.0) || (r != c && At(r, c) != 0.0d))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
 
         #endregion Methods
     }

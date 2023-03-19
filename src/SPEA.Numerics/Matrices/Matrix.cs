@@ -63,7 +63,7 @@ namespace SPEA.Numerics.Matrices
         /// <summary>
         /// Gets a matrix builder instance.
         /// </summary>
-        public abstract MatrixBuilder Build { get; }
+        public abstract MatrixBuilder Builder { get; }
 
         /// <summary>
         /// Gets the number of matrix rows.
@@ -90,6 +90,14 @@ namespace SPEA.Numerics.Matrices
         /// </summary>
         public MatrixStorage Storage => _storage;
 
+        /// <summary>
+        /// Gets a value indicating whether the storage represents the identity matrix.
+        /// </summary>
+        /// <remarks>
+        /// Accessing this property will result in looping through all matrix elements
+        /// to check if they meet the condition.
+        /// </remarks>
+        public bool IsIdentity => Storage.IsIdentity;
 
         #endregion Properties
 
@@ -150,21 +158,66 @@ namespace SPEA.Numerics.Matrices
         /// <returns>A deep copy of the matrix.</returns>
         public virtual Matrix DeepCopy()
         {
-            var result = Build.SameAs(this);
+            var result = Builder.SameAs(this);
             Storage.CopyToUnchecked(result.Storage);
             return result;
         }
 
         /// <summary>
+        /// Copies values of the current matrix to the <paramref name="target"/>.
+        /// </summary>
+        /// <param name="target">A target matrix values are copied to.</param>
+        public void CopyTo(Matrix target)
+        {
+            Storage.CopyTo(target.Storage);
+        }
+
+        /// <summary>
         /// Sets all matrix entries using a defined fill function.
         /// </summary>
-        /// <remarks>
-        /// This method takes into acccount the storage order type.
-        /// </remarks>
         /// <param name="func">Fill function.</param>
         public void Fill(Func<int, int, double> func)
         {
             Storage.Fill(func);
+        }
+
+        /// <summary>
+        /// Applies a function to each value of the current matrix
+        /// and sets <paramref name="target"/> values using the function returned value.
+        /// </summary>
+        /// <param name="function">A function to be applied.</param>
+        /// <param name="target">The target matrix the function is applied to.</param>
+        public void MapTo(Func<double, double> function, Matrix target)
+        {
+            if (ReferenceEquals(this, target))
+            {
+                Storage.MapInplace(function);
+            }
+            else
+            {
+                Storage.MapTo(function, target.Storage);
+            }
+        }
+
+        /// <summary>
+        /// Applies a function to each value pair of two matrices (the current one and <paramref name="other"/>,
+        /// and sets <paramref name="target"/> values using the function returned value.
+        /// </summary>
+        /// <param name="function">A function to be applied.</param>
+        /// <param name="other">Another matrix used for mapping.</param>
+        /// <param name="target">The target matrix the function is applied to.</param>
+        public void Map2To(Func<double, double, double> function, Matrix other, Matrix target)
+        {
+            Storage.Map2To(function, other.Storage, target.Storage);
+        }
+
+        /// <summary>
+        /// Transposes the current matrix and saves the result to <paramref name="target"/>.
+        /// </summary>
+        /// <param name="target">The resulting transposed matrix.</param>
+        public void TransposeTo(Matrix target)
+        {
+            Storage.TransposeTo(target.Storage);
         }
 
         /// <inheritdoc/>

@@ -144,6 +144,50 @@ namespace SPEA.Numerics.Matrices.Storage
             Data[(column * RowCount) + row] = value;
         }
 
+        #region Copy
+
+        /// <inheritdoc/>
+        internal override void CopyToUnchecked(MatrixStorage target)
+        {
+            // If the target storage is the same type.
+            if (target.StorageType == MatrixStorageType.Dense && target.OrderType == MatrixDataOrderType.ColumMajor)
+            {
+                Array.Copy(Data, 0, target.Data, 0, Data.Length);
+                return;
+            }
+
+            base.CopyToUnchecked(target);
+        }
+
+        #endregion Copy
+
+        #region Map
+
+        /// <inheritdoc/>
+        internal override void MapToUnchecked(Func<double, double> function, MatrixStorage target)
+        {
+            // If the target storage is the same type.
+            var data = Data;
+            if (target.StorageType == MatrixStorageType.Dense && target.OrderType == MatrixDataOrderType.ColumMajor)
+            {
+                var targetData = target.Data;
+                for (int i = 0; i < targetData.Length; i++)
+                {
+                    targetData[i] = function(data[i]);
+                }
+
+                return;
+            }
+
+            base.MapToUnchecked(function, target);
+        }
+
+        #endregion Map
+
+        #region Transpose
+
+        #endregion Transpose
+
         #endregion Methods
     }
 }

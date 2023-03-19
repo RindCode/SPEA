@@ -122,8 +122,8 @@ namespace SPEA.App.Shapes
             Point[] points = new Point[3]
             {
                 new Point(W, start.Y),
-                new Point(W, -H),
-                new Point(start.X, -H),
+                new Point(W, H),
+                new Point(start.X, H),
             };
 
             var pathFigure = new PathFigure();
