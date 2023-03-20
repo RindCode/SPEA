@@ -7,6 +7,7 @@
 
 namespace SPEA.Geometry.Core
 {
+    using SPEA.Geometry.Events;
     using SPEA.Geometry.Misc;
     using SPEA.Geometry.Systems;
     using SPEA.Geometry.Transform;
@@ -27,6 +28,8 @@ namespace SPEA.Geometry.Core
         SVECTOR,
     }
 
+    public delegate void LocationChangedEventHandler(object sender, LocationChangedEventArgs e);
+
     /// <summary>
     /// Represents the base class for various geometric entities.
     /// </summary>
@@ -46,6 +49,15 @@ namespace SPEA.Geometry.Core
         #region Constructors
 
         #endregion Constructors
+
+        #region Events
+
+        /// <summary>
+        /// Occurs whenever the <see cref="SObject"/> location is changed.
+        /// </summary>
+        public event LocationChangedEventHandler? LocationChanged;
+
+        #endregion Events
 
         #region Properties
 
@@ -136,30 +148,94 @@ namespace SPEA.Geometry.Core
         }
 
         /// <summary>
-        /// Transforms the current <see cref="SObject"/> coordinate system in a local <paramref name="system"/> coordinates.
+        /// Calculates the bounding box in local coordinate system.
+        /// </summary>
+        /// <returns>The <see cref="SObject"/> bouding box in local coordinate system.</returns>
+        public abstract BoundingBox GetBoundingBox();
+
+        /// <summary>
+        /// Transforms the current <see cref="SObject"/> coordinate system into another local <paramref name="system"/> coordinates.
         /// </summary>
         /// <param name="system">Another coordinate system the transformation is set in.</param>
         /// <param name="transform">A transformation to apply.</param>
         public void TransformIn(CartesianSystem system, GeneralTransformation transform)
         {
+            var oldOrigin = LocalSystem.Origin;
+            var oldAngle = LocalSystem.Angle;
+
             LocalSystem.TransformIn(system, transform);
+
+            OnLocationChanged(new LocationChangedEventArgs(oldOrigin, LocalSystem.Origin, oldAngle, LocalSystem.Angle));
         }
 
         /// <summary>
-        /// Transforms the current <see cref="SObject"/> coordinate system in global coordinates.
+        /// Transforms the current <see cref="SObject"/> coordinate system into global coordinate system.
         /// </summary>
         /// <param name="transform">A transformation to apply.</param>
         /// <param name="action">The way how the <paramref name="transform"/> will be applied.</param>
         public void TransformInGlobal(GeneralTransformation transform, TransformAction action = TransformAction.Append)
         {
+            var oldOrigin = LocalSystem.Origin;
+            var oldAngle = LocalSystem.Angle;
+
             LocalSystem.TransformInGlobal(transform, action);
+
+            OnLocationChanged(new LocationChangedEventArgs(oldOrigin, LocalSystem.Origin, oldAngle, LocalSystem.Angle));
         }
 
         /// <summary>
-        /// Calculates the bounding box in local coordinate system.
+        /// Sets the shape origin position based on given input values.
         /// </summary>
-        /// <returns>The <see cref="SObject"/> bouding box in local coordinate system.</returns>
-        public abstract BoundingBox GetBoundingBox();
+        /// <param name="x">The origin X coordinate.</param>
+        /// <param name="y">The origin Y coordinate.</param>
+        /// The rotation angle around the origin.
+        /// The positive direction is counter clockwise.
+        /// </param>
+        public void MoveOrigin(double x, double y)
+        {
+            var oldOrigin = LocalSystem.Origin;
+            var oldAngle = LocalSystem.Angle;
+
+            var rotate = new RotateTransformation(LocalSystem.Angle);
+            var translate = new TranslationTransformation(x, y);
+            var transform = new GeneralTransformation(rotate.Value * translate.Value);
+
+            TransformInGlobal(transform, TransformAction.Replace);
+
+            OnLocationChanged(new LocationChangedEventArgs(oldOrigin, LocalSystem.Origin, oldAngle, LocalSystem.Angle));
+        }
+
+        /// <summary>
+        /// Rotates the current shape around its bounding box center.
+        /// </summary>
+        /// <param name="angle">
+        /// The rotation angle around the center of the bounding box.
+        /// The positive direction is counter clockwise.
+        /// </param>
+        public void RotateAroundCenter(double angle)
+        {
+            var oldOrigin = LocalSystem.Origin;
+            var oldAngle = LocalSystem.Angle;
+
+            var rc = GetBoundingBox().Center;
+            var rotate = new RotateTransformation(angle - LocalSystem.Angle, rc);
+            var transform = new GeneralTransformation(rotate.Value);
+
+            TransformInGlobal(transform, TransformAction.Append);
+
+            OnLocationChanged(new LocationChangedEventArgs(oldOrigin, LocalSystem.Origin, oldAngle, LocalSystem.Angle));
+        }
+
+        /// <summary>
+        /// Raises <see cref="LocationChanged"/> event to indicate that <see cref="LocalSystem"/>
+        /// transformation may have changed.
+        /// </summary>
+        /// <param name="e">Events arguments data.</param>
+        protected virtual void OnLocationChanged(LocationChangedEventArgs e)
+        {
+            var handler = LocationChanged;
+            handler?.Invoke(this, e);
+        }
 
         #endregion Methods
     }

@@ -12,7 +12,10 @@ namespace SPEA.App.ViewModels.SElements
     using System.Windows.Media;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Messaging;
+    using CommunityToolkit.Mvvm.Messaging.Messages;
     using SPEA.Geometry.Core;
+    using SPEA.Geometry.Events;
+    using SPEA.Geometry.Primitives;
     using SPEA.Geometry.Transform;
 
     /// <summary>
@@ -24,10 +27,7 @@ namespace SPEA.App.ViewModels.SElements
 
         private readonly IMessenger _messenger;
         private bool _disposed;
-        ////private double _top;
-        ////private double _left;
-        ////private double _width;
-        ////private double _height;
+        private bool _isUpdatingFromModel = false;
 
         #endregion Fields
 
@@ -130,53 +130,15 @@ namespace SPEA.App.ViewModels.SElements
         /// </summary>
         public abstract double Angle { get; set; }
 
-        /////// <summary>
-        /////// Gets or sets the top-most bound of the S-element bounding box.
-        /////// </summary>
-        ////public double Top
-        ////{
-        ////    get => _top;
-        ////    set
-        ////    {
-        ////        SetProperty(ref _top, value);
-        ////    }
-        ////}
-
-        /////// <summary>
-        /////// Gets or sets the left-most bound of the S-element bounding box.
-        /////// </summary>
-        ////public double Left
-        ////{
-        ////    get => _left;
-        ////    set
-        ////    {
-        ////        SetProperty(ref _left, value);
-        ////    }
-        ////}
-
-        /////// <summary>
-        /////// Gets or sets the width of the S-element bounding box.
-        /////// </summary>
-        ////public double W
-        ////{
-        ////    get => _width;
-        ////    set
-        ////    {
-        ////        SetProperty(ref _width, value);
-        ////    }
-        ////}
-
-        /////// <summary>
-        /////// Gets or sets the heigh of the S-element bounding box.
-        /////// </summary>
-        ////public double H
-        ////{
-        ////    get => _height;
-        ////    set
-        ////    {
-        ////        SetProperty(ref _height, value);
-        ////    }
-        ////}
+        /// <summary>
+        /// Gets or sets a value indicating whether the view model
+        /// is being updated from the model data, and not from some other view model.
+        /// </summary>
+        protected bool IsUpdatingFromModel
+        {
+            get => _isUpdatingFromModel;
+            set => _isUpdatingFromModel = value;
+        }
 
         #endregion Properties
 
@@ -193,7 +155,7 @@ namespace SPEA.App.ViewModels.SElements
         /// </param>
         protected virtual void MoveOrigin(double x, double y, double angle)
         {
-            // Blank.
+            Model.MoveOrigin(x, y);
         }
 
         /// <summary>
@@ -205,7 +167,7 @@ namespace SPEA.App.ViewModels.SElements
         /// </param>
         protected virtual void RotateAroundCenter(double angle)
         {
-            // Blank.
+            Model.RotateAroundCenter(angle);
         }
 
         /// <summary>
@@ -215,9 +177,7 @@ namespace SPEA.App.ViewModels.SElements
         /// <returns><see cref="Matrix"/> object.</returns>
         protected virtual Matrix ConvertToScreenTransformMatrix(GeneralTransformation matrix)
         {
-            // We transpose the matrix and reflect it to convert it
-            // from global coordinates into screen coordinates.
-
+            // Transpose.
             var uiMatrix = new Matrix()
             {
                 M11 = matrix.M00,
@@ -231,6 +191,28 @@ namespace SPEA.App.ViewModels.SElements
             uiMatrix.Scale(1, -1);
 
             return uiMatrix;
+        }
+
+        /// <summary>
+        /// Provides an opportunity to override <see cref="SObject.LocationChanged"/> event handling.
+        /// </summary>
+        /// <param name="sender">A reference to the oject which raised the event.</param>
+        /// <param name="e">Events arguments data.</param>
+        protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
+        {
+            TransformMatrix = ConvertToScreenTransformMatrix(Model.LocalSystem.GlobalTransform);
+
+            _isUpdatingFromModel = true;
+
+            X0 = Model.LocalSystem.Origin.X;
+            Y0 = Model.LocalSystem.Origin.Y;
+            Angle = Model.LocalSystem.Angle;
+
+            _isUpdatingFromModel = false;
+
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(X0), e.OldOrigin.X, Model.LocalSystem.Origin.X));
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Y0), e.OldOrigin.Y, Model.LocalSystem.Origin.Y));
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Angle), e.OldOrigin, Model.LocalSystem.Angle));
         }
 
         #endregion Methods

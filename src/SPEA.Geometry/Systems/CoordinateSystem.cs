@@ -27,7 +27,7 @@ namespace SPEA.Geometry.Systems
         public abstract GeneralTransformation GlobalTransform { get; protected set; }
 
         /// <summary>
-        /// Transforms the current coordinate system in a local <paramref name="system"/> coordinates.
+        /// Transforms the current <see cref="SObject"/> coordinate system into another local <paramref name="system"/> coordinates.
         /// </summary>
         /// <param name="system">Another coordinate system the transformation is set in.</param>
         /// <param name="transform">A transformation to apply.</param>
@@ -38,7 +38,7 @@ namespace SPEA.Geometry.Systems
         }
 
         /// <summary>
-        /// Transforms the current coordinate system in global coordinates.
+        /// Transforms the current <see cref="SObject"/> coordinate system into global coordinate system.
         /// </summary>
         /// <param name="transform">A transformation to apply.</param>
         /// <param name="action">The way how the <paramref name="transform"/> will be applied.</param>

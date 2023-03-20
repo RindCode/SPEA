@@ -13,8 +13,8 @@ namespace SPEA.App.ViewModels.SElements
     using CommunityToolkit.Mvvm.Messaging;
     using CommunityToolkit.Mvvm.Messaging.Messages;
     using SPEA.App.Utils.Helpers;
+    using SPEA.Geometry.Events;
     using SPEA.Geometry.Primitives;
-    using SPEA.Geometry.Transform;
 
     /// <summary>
     /// Represents a view model for <see cref="Shapes.SRectPrimitive"/> shape.
@@ -25,7 +25,6 @@ namespace SPEA.App.ViewModels.SElements
 
         private readonly ObservableCollection<SElementInfoViewModel> _entityInfoItems = new ObservableCollection<SElementInfoViewModel>();
         private readonly string _internalTypePropName = ResourcesHelper.GetApplicationResource<string>("S.SElements.EntityInfo.Common.InternalType");
-        private bool _isUpdatingFromModel = false;
         private bool _disposed;
         private SRect _model;
         private Matrix _transformMatrix;
@@ -49,9 +48,8 @@ namespace SPEA.App.ViewModels.SElements
             SRect rect)
             : base(messenger)
         {
-            ArgumentNullException.ThrowIfNull(rect, nameof(rect));
+            _model = rect ?? throw new ArgumentNullException(nameof(messenger));
 
-            _model = rect;
             _x0 = rect.LocalSystem.Origin.X;
             _y0 = rect.LocalSystem.Origin.Y;
             _angle = rect.LocalSystem.Angle;
@@ -62,6 +60,8 @@ namespace SPEA.App.ViewModels.SElements
             InitializeEntityInfoItems(rect);
 
             Messenger.Register<PropertyChangedMessage<object>>(this, (r, m) => OnValueUpdated(m));
+
+            Model.LocationChanged += OnLocationChanged;
         }
 
         #endregion Constructors
@@ -90,7 +90,7 @@ namespace SPEA.App.ViewModels.SElements
             get => _x0;
             set
             {
-                if (_isUpdatingFromModel)
+                if (IsUpdatingFromModel)
                 {
                     SetProperty(ref _x0, value);
                 }
@@ -107,7 +107,7 @@ namespace SPEA.App.ViewModels.SElements
             get => _model.Origin.Y;
             set
             {
-                if (_isUpdatingFromModel)
+                if (IsUpdatingFromModel)
                 {
                     SetProperty(ref _y0, value);
                 }
@@ -124,7 +124,7 @@ namespace SPEA.App.ViewModels.SElements
             get => _angle;
             set
             {
-                if (_isUpdatingFromModel)
+                if (IsUpdatingFromModel)
                 {
                     SetProperty(ref _angle, value);
                 }
@@ -203,56 +203,6 @@ namespace SPEA.App.ViewModels.SElements
         #endregion Initializers
 
         #region Methods
-
-        /// <inheritdoc/>
-        protected override void MoveOrigin(double x, double y, double angle)
-        {
-            var rotate = new RotateTransformation(angle);
-            var translate = new TranslationTransformation(x, y);
-            var transform = new GeneralTransformation(rotate.Value * translate.Value);
-
-            Model.LocalSystem.TransformInGlobal(transform, TransformAction.Replace);
-
-            SendMessagesOnPropertyChanged();
-            UpdateDataFromModel();
-        }
-
-        /// <inheritdoc/>
-        protected override void RotateAroundCenter(double angle)
-        {
-            var rc = Model.GetBoundingBox().Center;
-            var rotate = new RotateTransformation(angle - Model.LocalSystem.Angle, rc);
-            var transform = new GeneralTransformation(rotate.Value);
-
-            Model.LocalSystem.TransformInGlobal(transform, TransformAction.Append);
-
-            SendMessagesOnPropertyChanged();
-            UpdateDataFromModel();
-        }    
-
-        private void SendMessagesOnPropertyChanged()
-        {
-            var oldX0 = _x0;
-            var oldY0 = _y0;
-            var oldAngle = _angle;
-
-            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(X0), oldX0, Model.LocalSystem.Origin.X));
-            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Y0), oldY0, Model.LocalSystem.Origin.Y));
-            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Angle), oldAngle, Model.LocalSystem.Angle));
-        }
-
-        private void UpdateDataFromModel()
-        {
-            _isUpdatingFromModel = true;
-
-            TransformMatrix = ConvertToScreenTransformMatrix(Model.LocalSystem.GlobalTransform);
-
-            X0 = Model.LocalSystem.Origin.X;
-            Y0 = Model.LocalSystem.Origin.Y;
-            Angle = Model.LocalSystem.Angle;
-
-            _isUpdatingFromModel = false;
-        }
 
         // Updates a property value when the update request comes from messaging.
         private void OnValueUpdated(PropertyChangedMessage<object> message)
