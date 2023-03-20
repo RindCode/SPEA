@@ -15,7 +15,6 @@ namespace SPEA.App.ViewModels.SElements
     using CommunityToolkit.Mvvm.Messaging.Messages;
     using SPEA.Geometry.Core;
     using SPEA.Geometry.Events;
-    using SPEA.Geometry.Primitives;
     using SPEA.Geometry.Transform;
 
     /// <summary>
@@ -40,6 +39,8 @@ namespace SPEA.App.ViewModels.SElements
         protected SElementViewModelBase(IMessenger messenger)
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+
+            Messenger.Register<PropertyChangedMessage<object>>(this, (r, m) => OnPropertyChangeMessageReceived(m));
         }
 
         #endregion Constructors
@@ -191,6 +192,60 @@ namespace SPEA.App.ViewModels.SElements
             uiMatrix.Scale(1, -1);
 
             return uiMatrix;
+        }
+
+        /// <summary>
+        /// Provides derived classes an opportunity to implement its own logic on updating their
+        /// properties in response to <see cref="PropertyChangedMessage{T}"/> message.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method is mainly used for <see cref="EntityInfoItems"/> sync purposes.
+        /// </para>
+        /// <para>
+        /// A base implementation must be called when overridden.
+        /// </para>
+        /// </remarks>
+        /// <param name="message">A property changed object.</param>
+        protected virtual void OnPropertyChangeMessageReceived(PropertyChangedMessage<object> message)
+        {
+            var sender = message.Sender as SElementInfoViewModel;
+            var targetProperty = message.PropertyName;
+            if (sender == null || string.IsNullOrEmpty(targetProperty))
+            {
+                return;
+            }
+
+            switch (targetProperty)
+            {
+                case nameof(X0):
+                    if (sender.DataType == typeof(double))
+                    {
+                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
+                        X0 = value != X0 ? value : X0;
+                    }
+
+                    break;
+                case nameof(Y0):
+                    if (sender.DataType == typeof(double))
+                    {
+                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
+                        Y0 = value != Y0 ? value : Y0;
+                    }
+
+                    break;
+                case nameof(Angle):
+                    if (sender.DataType == typeof(double))
+                    {
+                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
+                        Angle = value != Angle ? value : Angle;
+                    }
+
+                    break;
+
+                default:
+                    return;
+            }
         }
 
         /// <summary>

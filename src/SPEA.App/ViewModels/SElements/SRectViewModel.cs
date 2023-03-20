@@ -59,8 +59,6 @@ namespace SPEA.App.ViewModels.SElements
 
             InitializeEntityInfoItems(rect);
 
-            Messenger.Register<PropertyChangedMessage<object>>(this, (r, m) => OnValueUpdated(m));
-
             Model.LocationChanged += OnLocationChanged;
         }
 
@@ -204,9 +202,11 @@ namespace SPEA.App.ViewModels.SElements
 
         #region Methods
 
-        // Updates a property value when the update request comes from messaging.
-        private void OnValueUpdated(PropertyChangedMessage<object> message)
+        /// <inheritdoc/>
+        protected override void OnPropertyChangeMessageReceived(PropertyChangedMessage<object> message)
         {
+            base.OnPropertyChangeMessageReceived(message);
+
             var sender = message.Sender as SElementInfoViewModel;
             var targetProperty = message.PropertyName;
             if (sender == null || string.IsNullOrEmpty(targetProperty))
@@ -216,30 +216,6 @@ namespace SPEA.App.ViewModels.SElements
 
             switch (targetProperty)
             {
-                case nameof(X0):
-                    if (sender.DataType == typeof(double))
-                    {
-                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
-                        X0 = value != X0 ? value : X0;
-                    }
-
-                    break;
-                case nameof(Y0):
-                    if (sender.DataType == typeof(double))
-                    {
-                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
-                        Y0 = value != Y0 ? value : Y0;
-                    }
-
-                    break;
-                case nameof(Angle):
-                    if (sender.DataType == typeof(double))
-                    {
-                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
-                        Angle = value != Angle ? value : Angle;
-                    }
-
-                    break;
                 case nameof(W):
                     if (sender.DataType == typeof(double))
                     {
@@ -256,6 +232,7 @@ namespace SPEA.App.ViewModels.SElements
                     }
 
                     break;
+
                 default:
                     return;
             }
