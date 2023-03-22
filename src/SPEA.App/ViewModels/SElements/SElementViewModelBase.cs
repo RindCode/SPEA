@@ -13,6 +13,7 @@ namespace SPEA.App.ViewModels.SElements
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Messaging;
     using CommunityToolkit.Mvvm.Messaging.Messages;
+    using SPEA.App.Messaging.Tokens;
     using SPEA.Geometry.Core;
     using SPEA.Geometry.Events;
     using SPEA.Geometry.Transform;
@@ -25,6 +26,7 @@ namespace SPEA.App.ViewModels.SElements
         #region Fields
 
         private readonly IMessenger _messenger;
+        private readonly SElementViewModelToken _entityInfoMessageToken;
         private bool _disposed;
         private bool _isUpdatingFromModel = false;
 
@@ -39,8 +41,9 @@ namespace SPEA.App.ViewModels.SElements
         protected SElementViewModelBase(IMessenger messenger)
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _entityInfoMessageToken = new SElementViewModelToken(Guid.NewGuid());
 
-            Messenger.Register<PropertyChangedMessage<object>>(this, (r, m) => OnPropertyChangeMessageReceived(m));
+            Messenger.Register<PropertyChangedMessage<object>, SElementViewModelToken>(this, _entityInfoMessageToken, (r, m) => OnPropertyChangeMessageReceived(m));
         }
 
         #endregion Constructors
@@ -93,6 +96,11 @@ namespace SPEA.App.ViewModels.SElements
         /// Gets a messenger reference.
         /// </summary>
         public IMessenger Messenger => _messenger;
+
+        /// <summary>
+        /// Gets a messenger token for communicating with <see cref="SElementInfoViewModel"/> instances.
+        /// </summary>
+        public SElementViewModelToken EntityInfoMessageToken => _entityInfoMessageToken;
 
         /// <summary>
         /// Gets a model object.
@@ -150,11 +158,10 @@ namespace SPEA.App.ViewModels.SElements
         /// </summary>
         /// <param name="x">The origin X coordinate.</param>
         /// <param name="y">The origin Y coordinate.</param>
-        /// <param name="angle">
         /// The rotation angle around the origin.
         /// The positive direction is counter clockwise.
         /// </param>
-        protected virtual void MoveOrigin(double x, double y, double angle)
+        protected virtual void MoveOrigin(double x, double y)
         {
             Model.MoveOrigin(x, y);
         }
@@ -249,25 +256,43 @@ namespace SPEA.App.ViewModels.SElements
         }
 
         /// <summary>
-        /// Provides an opportunity to override <see cref="SObject.LocationChanged"/> event handling.
+        /// Provides derived classes an opportunity to override <see cref="SObject.LocationChanged"/> event handling.
         /// </summary>
         /// <param name="sender">A reference to the oject which raised the event.</param>
         /// <param name="e">Events arguments data.</param>
-        protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
+        protected virtual void Model_LocationChanged(object sender, LocationChangedEventArgs e)
         {
             TransformMatrix = ConvertToScreenTransformMatrix(Model.LocalSystem.GlobalTransform);
 
-            _isUpdatingFromModel = true;
+            IsUpdatingFromModel = true;
 
             X0 = Model.LocalSystem.Origin.X;
             Y0 = Model.LocalSystem.Origin.Y;
             Angle = Model.LocalSystem.Angle;
 
-            _isUpdatingFromModel = false;
+            IsUpdatingFromModel = false;
 
-            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(X0), e.OldOrigin.X, Model.LocalSystem.Origin.X));
-            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Y0), e.OldOrigin.Y, Model.LocalSystem.Origin.Y));
-            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Angle), e.OldOrigin, Model.LocalSystem.Angle));
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(X0), e.OldOrigin.X, Model.LocalSystem.Origin.X), EntityInfoMessageToken);
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Y0), e.OldOrigin.Y, Model.LocalSystem.Origin.Y), EntityInfoMessageToken);
+            Messenger.Send(new PropertyChangedMessage<object>(this, nameof(Angle), e.OldOrigin, Model.LocalSystem.Angle), EntityInfoMessageToken);
+        }
+
+        /// <summary>
+        /// Provides derived classes an opportunity to use a centralized way
+        /// to subscribe to the model's events.
+        /// </summary>
+        protected virtual void SubscribeModelEvents()
+        {
+            ArgumentNullException.ThrowIfNull(nameof(Model));
+        }
+
+        /// <summary>
+        /// Provides derived classes an opportunity to use a centralized way
+        /// to unsubscribe from the model's events.
+        /// </summary>
+        protected virtual void UnsubscribeModelEvents()
+        {
+            ArgumentNullException.ThrowIfNull(nameof(Model));
         }
 
         #endregion Methods

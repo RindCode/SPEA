@@ -27,8 +27,6 @@ namespace SPEA.Geometry.Transform
 
         private readonly DenseRectMatrix _value;
         private readonly bool _isIdentity;
-        private readonly SPoint _extractedTranslate;
-        private readonly double _extractedAngle;
 
         #endregion Fields
 

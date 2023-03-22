@@ -115,9 +115,6 @@ namespace SPEA.Geometry.Primitives
         /// <inheritdoc/>
         public override SLinearRing[] Holes => _holes;
 
-        /////// <inheritdoc/>
-        ////public override SRect DefiningObject => _definingObject;
-
         /// <summary>
         /// Gets the rectangle w.
         /// </summary>

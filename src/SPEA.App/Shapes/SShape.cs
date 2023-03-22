@@ -97,6 +97,29 @@ namespace SPEA.App.Shapes
             set { SetValue(StrokeThicknessProperty, value); }
         }
 
+        /// <summary>
+        /// DependencyProperty for <see cref="Scale"/> property.
+        /// </summary>
+        public static readonly DependencyProperty ScaleProperty =
+            DependencyProperty.Register(
+                "Scale",
+                typeof(double),
+                typeof(SShape),
+                new FrameworkPropertyMetadata(
+                    1.0d,
+                    FrameworkPropertyMetadataOptions.AffectsRender |
+                    FrameworkPropertyMetadataOptions.AffectsMeasure |
+                    FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender));
+
+        /// <summary>
+        /// Gets or sets a uniform scale factor.
+        /// </summary>
+        public double Scale
+        {
+            get { return (double)GetValue(ScaleProperty); }
+            set { SetValue(ScaleProperty, value); }
+        }
+
         #endregion Dependency Properties
 
         #region Properties
@@ -306,7 +329,7 @@ namespace SPEA.App.Shapes
             ((SShape)d).Pen = null;
         }
 
-        // Coerces the stroke thickness value.
+        // Coerces the stroke scale value.
         private static object CoerceStrokeThickness(DependencyObject d, object value)
         {
             var thickness = (double)value;

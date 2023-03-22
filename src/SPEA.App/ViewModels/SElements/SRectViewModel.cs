@@ -13,7 +13,6 @@ namespace SPEA.App.ViewModels.SElements
     using CommunityToolkit.Mvvm.Messaging;
     using CommunityToolkit.Mvvm.Messaging.Messages;
     using SPEA.App.Utils.Helpers;
-    using SPEA.Geometry.Events;
     using SPEA.Geometry.Primitives;
 
     /// <summary>
@@ -41,25 +40,24 @@ namespace SPEA.App.ViewModels.SElements
         /// <summary>
         /// Initializes a new instance of the <see cref="SRectViewModel"/> class.
         /// </summary>
-        /// <param name="rect"><see cref="SRect"/> model reference.</param>
+        /// <param name="model"><see cref="SRect"/> model reference.</param>
         /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
         public SRectViewModel(
             IMessenger messenger,
-            SRect rect)
+            SRect model)
             : base(messenger)
         {
-            _model = rect ?? throw new ArgumentNullException(nameof(messenger));
+            _model = model ?? throw new ArgumentNullException(nameof(messenger));
 
-            _x0 = rect.LocalSystem.Origin.X;
-            _y0 = rect.LocalSystem.Origin.Y;
-            _angle = rect.LocalSystem.Angle;
-            _h = rect.H;
-            _w = rect.W;
             _transformMatrix = ConvertToScreenTransformMatrix(_model.LocalSystem.GlobalTransform);
+            _x0 = model.LocalSystem.Origin.X;
+            _y0 = model.LocalSystem.Origin.Y;
+            _angle = model.LocalSystem.Angle;
+            _h = model.H;
+            _w = model.W;
 
-            InitializeEntityInfoItems(rect);
-
-            Model.LocationChanged += OnLocationChanged;
+            InitializeEntityInfoItems(model);
+            SubscribeModelEvents();
         }
 
         #endregion Constructors
@@ -94,7 +92,7 @@ namespace SPEA.App.ViewModels.SElements
                 }
                 else
                 {
-                    MoveOrigin(value, Y0, Angle);
+                    MoveOrigin(value, Y0);
                 }
             }
         }
@@ -111,7 +109,7 @@ namespace SPEA.App.ViewModels.SElements
                 }
                 else
                 {
-                    MoveOrigin(X0, value, Angle);
+                    MoveOrigin(X0, value);
                 }
             }
         }
@@ -141,9 +139,14 @@ namespace SPEA.App.ViewModels.SElements
             get => _w;
             set
             {
+                UnsubscribeModelEvents();
                 _model = new SRect(_model.Origin, value, H);
-                Messenger.Send(new PropertyChangedMessage<object>(this, nameof(W), _w, _model.W));
-                SetProperty(ref _w, _model.H);
+                SubscribeModelEvents();
+
+                Messenger.Send(new PropertyChangedMessage<object>(this, nameof(W), _w, _model.W), EntityInfoMessageToken);
+
+                SetProperty(ref _w, _model.W);
+                OnPropertyChanged(nameof(TransformMatrix));  // to invoke item container measure/arrange pass
             }
         }
 
@@ -155,9 +158,14 @@ namespace SPEA.App.ViewModels.SElements
             get => _h;
             set
             {
+                UnsubscribeModelEvents();
                 _model = new SRect(_model.Origin, W, value);
-                Messenger.Send(new PropertyChangedMessage<object>(this, nameof(H), _h, _model.H));
+                SubscribeModelEvents();
+
+                Messenger.Send(new PropertyChangedMessage<object>(this, nameof(H), _h, _model.H), EntityInfoMessageToken);
+
                 SetProperty(ref _h, _model.H);
+                OnPropertyChanged(nameof(TransformMatrix));  // to invoke item container measure/arrange pass
             }
         }
 
@@ -173,6 +181,8 @@ namespace SPEA.App.ViewModels.SElements
                 if (disposing)
                 {
                     // Dispose managed state (managed objects)
+                    UnsubscribeModelEvents();
+                    _model = null;
                 }
 
                 // Free unmanaged resources (unmanaged objects) and override finalizer
@@ -190,12 +200,12 @@ namespace SPEA.App.ViewModels.SElements
         // Elements will appear in the table in the following order.
         private void InitializeEntityInfoItems(SRect model)
         {
-            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, _internalTypePropName, typeof(string), SRect.InternalType, true));
-            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(X0), typeof(double), _x0));
-            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(Y0), typeof(double), _y0));
-            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(Angle), typeof(double), _angle));
-            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(W), typeof(double), model.W));
-            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, nameof(H), typeof(double), model.H));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, EntityInfoMessageToken, _internalTypePropName, typeof(string), SRect.InternalType, true));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, EntityInfoMessageToken, nameof(X0), typeof(double), model.LocalSystem.Origin.X));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, EntityInfoMessageToken, nameof(Y0), typeof(double), model.LocalSystem.Origin.Y));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, EntityInfoMessageToken, nameof(Angle), typeof(double), model.LocalSystem.Angle));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, EntityInfoMessageToken, nameof(W), typeof(double), model.W));
+            _entityInfoItems.Add(new SElementInfoViewModel(Messenger, EntityInfoMessageToken, nameof(H), typeof(double), model.H));
         }
 
         #endregion Initializers
@@ -236,6 +246,22 @@ namespace SPEA.App.ViewModels.SElements
                 default:
                     return;
             }
+        }
+
+        /// <inheritdoc/>
+        protected override void SubscribeModelEvents()
+        {
+            base.SubscribeModelEvents();
+
+            Model.LocationChanged += Model_LocationChanged;
+        }
+
+        /// <inheritdoc/>
+        protected override void UnsubscribeModelEvents()
+        {
+            base.UnsubscribeModelEvents();
+
+            Model.LocationChanged -= Model_LocationChanged;
         }
 
         #endregion Methods

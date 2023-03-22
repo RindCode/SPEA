@@ -9,7 +9,6 @@ namespace SPEA.Geometry.Core
 {
     using SPEA.Geometry.Misc;
     using SPEA.Geometry.Systems;
-    using SPEA.Geometry.Transform;
 
     /// <summary>
     /// Represents an extendable sObjectCollection of <see cref="T"/> elements.
@@ -88,7 +87,7 @@ namespace SPEA.Geometry.Core
                     }
                 }
 
-                return null;  // TODO: If all empty, what type of CS to return?
+                return new CartesianSystem();
             }
         }
 

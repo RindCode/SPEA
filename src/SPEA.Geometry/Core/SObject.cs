@@ -11,6 +11,15 @@ namespace SPEA.Geometry.Core
     using SPEA.Geometry.Misc;
     using SPEA.Geometry.Systems;
     using SPEA.Geometry.Transform;
+    using System.Diagnostics;
+
+    /// <summary>
+    /// Describes a signature of event handling methods
+    /// which can be invoked in response to LocationChanged event.
+    /// </summary>
+    /// <param name="sender">A reference to the oject which raised the event.</param>
+    /// <param name="e">Events arguments data.</param>
+    public delegate void LocationChangedEventHandler(object sender, LocationChangedEventArgs e);
 
     /// <summary>
     /// Represents valid internal types.
@@ -27,8 +36,6 @@ namespace SPEA.Geometry.Core
         SRECT,
         SVECTOR,
     }
-
-    public delegate void LocationChangedEventHandler(object sender, LocationChangedEventArgs e);
 
     /// <summary>
     /// Represents the base class for various geometric entities.
@@ -193,16 +200,11 @@ namespace SPEA.Geometry.Core
         /// </param>
         public void MoveOrigin(double x, double y)
         {
-            var oldOrigin = LocalSystem.Origin;
-            var oldAngle = LocalSystem.Angle;
-
             var rotate = new RotateTransformation(LocalSystem.Angle);
             var translate = new TranslationTransformation(x, y);
             var transform = new GeneralTransformation(rotate.Value * translate.Value);
 
             TransformInGlobal(transform, TransformAction.Replace);
-
-            OnLocationChanged(new LocationChangedEventArgs(oldOrigin, LocalSystem.Origin, oldAngle, LocalSystem.Angle));
         }
 
         /// <summary>
@@ -214,16 +216,11 @@ namespace SPEA.Geometry.Core
         /// </param>
         public void RotateAroundCenter(double angle)
         {
-            var oldOrigin = LocalSystem.Origin;
-            var oldAngle = LocalSystem.Angle;
-
             var rc = GetBoundingBox().Center;
             var rotate = new RotateTransformation(angle - LocalSystem.Angle, rc);
             var transform = new GeneralTransformation(rotate.Value);
 
             TransformInGlobal(transform, TransformAction.Append);
-
-            OnLocationChanged(new LocationChangedEventArgs(oldOrigin, LocalSystem.Origin, oldAngle, LocalSystem.Angle));
         }
 
         /// <summary>

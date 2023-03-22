@@ -15,8 +15,14 @@ namespace SPEA.Geometry.Systems
     /// </summary>
     public sealed class CartesianSystem : CoordinateSystem
     {
+        #region Fields
+
         private GeneralTransformation _globalTransform;
         private double _angle;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CartesianSystem"/> class.
@@ -36,6 +42,10 @@ namespace SPEA.Geometry.Systems
             _globalTransform = new TranslationTransformation(x, y);
         }
 
+        #endregion Constructors
+
+        #region Properties
+
         /// <inheritdoc/>
         public override GeneralTransformation GlobalTransform
         {
@@ -51,5 +61,7 @@ namespace SPEA.Geometry.Systems
         /// Gets the angle from the defined <see cref="GlobalTransform"/> value.
         /// </summary>
         public double Angle => _angle;
+
+        #endregion Properties
     }
 }

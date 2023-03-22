@@ -384,14 +384,17 @@ namespace SPEA.Numerics.Matrices.Storage
         /// <inheritdoc/>
         public bool Equals(MatrixStorage? other)
         {
-            if (ReferenceEquals(other, null))
+            if (other is null)
             {
                 return false;
             }
-            else
+
+            if (ReferenceEquals(this, other))
             {
-                return EqualsInternal(this, other);
+                return true;
             }
+
+            return EqualsInternal(this, other);
         }
 
         /// <inheritdoc/>
@@ -412,15 +415,8 @@ namespace SPEA.Numerics.Matrices.Storage
         // Performs an equality complete check.
         private static bool EqualsInternal(MatrixStorage left, MatrixStorage right)
         {
-            if (left == null)
-            {
-                throw new ArgumentNullException(nameof(left));
-            }
-
-            if (right == null)
-            {
-                throw new ArgumentNullException(nameof(right));
-            }
+            ArgumentNullException.ThrowIfNull(left, nameof(left));
+            ArgumentNullException.ThrowIfNull(right, nameof(right));
 
             if (left.RowCount != right.RowCount)
             {

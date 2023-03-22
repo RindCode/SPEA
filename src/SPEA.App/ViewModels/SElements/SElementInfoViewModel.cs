@@ -11,14 +11,20 @@ namespace SPEA.App.ViewModels.SElements
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Messaging;
     using CommunityToolkit.Mvvm.Messaging.Messages;
+    using SPEA.App.Messaging.Tokens;
 
     /// <summary>
     /// Represents <see cref="Shapes.SRectPrimitive"/> entity information and acts
     /// as a data wrapper for binding purposes.
     /// </summary>
+    /// <remarks>
+    /// This view model is intended to be connected with the <see cref="SElementViewModelBase"/> view model and
+    /// only acts as a loosely referenced object, synchronized with the main view model instance.
+    /// </remarks>
     public class SElementInfoViewModel : ObservableObject
     {
         private readonly IMessenger _messenger;
+        private readonly SElementViewModelToken _token;
         private bool _isUpdatingFromMessage = false;
         private string _name;
         private Type _dataType;
@@ -29,13 +35,15 @@ namespace SPEA.App.ViewModels.SElements
         /// Initializes a new instance of the <see cref="SElementInfoViewModel"/> class.
         /// </summary>
         /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
+        /// <param name="token">A unique token requied for messaging communication with the main <see cref="SElementViewModelBase"/>.</param>
         /// <param name="name">The item's name.</param>
         /// <param name="dataType">The data type.</param>
         /// <param name="value">The item's value.</param>
         /// <param name="isReadOnly">The item is read-only.</param>
-        public SElementInfoViewModel(IMessenger messenger, string name, Type dataType, object value, bool isReadOnly = false)
+        public SElementInfoViewModel(IMessenger messenger, SElementViewModelToken token, string name, Type dataType, object value, bool isReadOnly = false)
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _token = token;
             ArgumentException.ThrowIfNullOrEmpty(nameof(name), name);
 
             _name = name;
@@ -43,13 +51,18 @@ namespace SPEA.App.ViewModels.SElements
             _value = value;
             _isReadOnly = isReadOnly;
 
-            Messenger.Register<PropertyChangedMessage<object>>(this, (r, m) => OnValueUpdated(m));
+            Messenger.Register<PropertyChangedMessage<object>, SElementViewModelToken>(this, token, (r, m) => OnValueUpdated(m));
         }
 
         /// <summary>
         /// Gets a messenger reference.
         /// </summary>
         public IMessenger Messenger => _messenger;
+
+        /// <summary>
+        /// Gets the message unique token.
+        /// </summary>
+        public SElementViewModelToken Token => _token;
 
         /// <summary>
         /// Gets or sets entry name.
@@ -84,9 +97,9 @@ namespace SPEA.App.ViewModels.SElements
                 }
                 else
                 {
-                    // The request comes from the UI layer (propagate, no actual update here).
+                    // The request comes from the UI layer (propagate, no actual update here yet).
                     var oldValue = Convert.ChangeType(_value, DataType);
-                    Messenger.Send(new PropertyChangedMessage<object>(this, Name, oldValue, value));
+                    Messenger.Send(new PropertyChangedMessage<object>(this, Name, oldValue, value), Token);
                 }
             }
         }
@@ -100,6 +113,7 @@ namespace SPEA.App.ViewModels.SElements
             set => SetProperty(ref _isReadOnly, value);
         }
 
+        // Handles PropertyChangedMessage message.
         private void OnValueUpdated(PropertyChangedMessage<object> message)
         {
             _isUpdatingFromMessage = true;

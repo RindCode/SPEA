@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="LocalSystem.cs" company="Dmitry Poberezhnyy">
+// <copyright file="CoordinateSystem.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -15,10 +15,16 @@ namespace SPEA.Geometry.Systems
     /// </summary>
     public abstract class CoordinateSystem
     {
+        #region Properties
+
         /// <summary>
         /// Gets the coordinate system origin in GCS.
         /// </summary>
         public SPoint Origin => new SPoint(GlobalTransform.M02, GlobalTransform.M12);
+
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
         /// Gets or sets a transformation matrix representing a transformation of the current
@@ -55,5 +61,7 @@ namespace SPEA.Geometry.Systems
                 GlobalTransform = transform;
             }
         }
+
+        #endregion Methods
     }
 }

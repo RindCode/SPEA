@@ -128,10 +128,7 @@ namespace SPEA.App.Commands
         /// <exception cref="InvalidOperationException">If a given name (key) is not registered.</exception>
         public RegisteredCommand? GetRegisteredCommand(string name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException($"Invalid command name: {nameof(name)}");
-            }
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 
             var isRegistered = _registeredCommands.TryGetValue(name, out RegisteredCommand? value);
             if (!isRegistered)
@@ -167,11 +164,7 @@ namespace SPEA.App.Commands
         // Adds a new command into a dictionary of registered commands.
         private void AddCommand(string name, ICommand command, CommandMetadata metadata)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException($"Invalid command name: {nameof(name)}");
-            }
-
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentNullException.ThrowIfNull(command, nameof(command));
             ArgumentNullException.ThrowIfNull(metadata, nameof(metadata));
 

@@ -12,11 +12,8 @@ namespace SPEA.App.Controls.SViewport
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
-    using System.Windows.Input;
     using System.Windows.Media;
-    using System.Xml.Linq;
     using SPEA.App.Utils.Extensions;
-    using SPEA.App.Utils.Helpers;
 
     /// <summary>
     /// Provides scrolling functionality by implementing <see cref="IScrollInfo"/> interface,
@@ -167,13 +164,16 @@ namespace SPEA.App.Controls.SViewport
         /// <inheritdoc/>
         public override void OnApplyTemplate()
         {
+            Debug.WriteLine($"PANEL APPLY TEMPLATE");
+
             base.OnApplyTemplate();
 
             _content = _itemsOwner?.Template.FindName(ItemsHostPartName, _itemsOwner) as FrameworkElement;
             if (_content != null)
             {
                 _translateTransform = new TranslateTransform();
-                _scaleTransform = _itemsOwner == null ? new ScaleTransform() : new ScaleTransform(_itemsOwner.ContentScale, _itemsOwner.ContentScale);
+                _scaleTransform = new ScaleTransform();
+                ////_scaleTransform = _itemsOwner == null ? new ScaleTransform() : new ScaleTransform(_itemsOwner.ContentScale, _itemsOwner.ContentScale);
 
                 var trasnformGroup = new TransformGroup();
                 trasnformGroup.Children.Add(_translateTransform);
@@ -225,12 +225,16 @@ namespace SPEA.App.Controls.SViewport
         /// <inheritdoc/>
         protected override Size MeasureOverride(Size availableSize)
         {
+            Debug.WriteLine($"PANEL MEASURE OVERRIDE = {availableSize}");
+
             return base.MeasureOverride(availableSize);
         }
 
         /// <inheritdoc/>
         protected override Size ArrangeOverride(Size finalSize)
         {
+            Debug.WriteLine($"PANEL ARRANGE OVERRIDE = {finalSize}");
+
             if (ScrollOwner != null)
             {
                 if (_viewport != finalSize)

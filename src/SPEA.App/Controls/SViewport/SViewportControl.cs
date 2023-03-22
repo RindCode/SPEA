@@ -7,12 +7,11 @@
 
 namespace SPEA.App.Controls.SViewport
 {
-    using System;
     using System.Collections.Specialized;
-    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
+    using System.Windows.Input;
 
     /// <summary>
     /// Defines a flexible area with infinite panning and zooming capabilities.
@@ -34,6 +33,7 @@ namespace SPEA.App.Controls.SViewport
         ////private readonly List<int> _containersIndexes = new List<int>();
         private InfinitePanel? _infinitePanel = null;
         private SViewportItemsHostControl? _itemsHost = null;
+        private bool _isPanning = false;
 
         #endregion Fields
 
@@ -209,15 +209,24 @@ namespace SPEA.App.Controls.SViewport
             set { SetValue(MajorGridViewportProperty, value); }
         }
 
-        /////// <summary>
-        /////// DependencyProperty for <see cref="PanningKey"/> property.
-        /////// </summary>
-        ////public static readonly DependencyProperty PanningKeyProperty =
-        ////    DependencyProperty.Register(
-        ////        "PanningKey",
-        ////        typeof(Key),
-        ////        typeof(SViewportControl),
-        ////        new PropertyMetadata(Key.None));
+        /// <summary>
+        /// DependencyProperty for <see cref="PanningKey"/> property.
+        /// </summary>
+        public static readonly DependencyProperty PanningKeyProperty =
+            DependencyProperty.Register(
+                "PanningKey",
+                typeof(Key),
+                typeof(SViewportControl),
+                new PropertyMetadata(Key.None));
+
+        /// <summary>
+        /// Gets or sets <see cref="Key"/> that activates panning mode.
+        /// </summary>
+        public Key PanningKey
+        {
+            get { return (Key)GetValue(PanningKeyProperty); }
+            set { SetValue(PanningKeyProperty, value); }
+        }
 
         #endregion Dependency Properties
 
@@ -227,6 +236,16 @@ namespace SPEA.App.Controls.SViewport
         /// Gets the items host control.
         /// </summary>
         public SViewportItemsHostControl? ItemsHost => _itemsHost;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="SViewportControl"/>
+        /// is in panning mode.
+        /// </summary>
+        internal bool IsPanning
+        {
+            get => _isPanning;
+            set => _isPanning = value;
+        }
 
         /////// <summary>
         /////// Gets or sets the value of a minor grid spacing.
@@ -244,15 +263,6 @@ namespace SPEA.App.Controls.SViewport
         ////{
         ////    get { return (double)GetValue(MajorGridSpacingProperty); }
         ////    set { SetValue(MajorGridSpacingProperty, value); }
-        ////}
-
-        /////// <summary>
-        /////// Gets or sets <see cref="Key"/> that activates panning mode.
-        /////// </summary>
-        ////public Key PanningKey
-        ////{
-        ////    get { return (Key)GetValue(PanningKeyProperty); }
-        ////    set { SetValue(PanningKeyProperty, value); }
         ////}
 
         #endregion Properties
@@ -283,7 +293,7 @@ namespace SPEA.App.Controls.SViewport
         protected override DependencyObject GetContainerForItemOverride() => new SElementItemContainer();
 
         /// <summary>
-        /// Is used by <see cref="ItemContainerGenerator"/> to check whether a given item is 
+        /// Is used by <see cref="ItemContainerGenerator"/> to check whether a given item is
         /// already a type of <see cref="SElementItemContainer"/> before asking <see cref="ItemsControl"/>
         /// to create a new container using <see cref="GetContainerForItemOverride"/>.
         /// </summary>
@@ -310,6 +320,27 @@ namespace SPEA.App.Controls.SViewport
             ////        _containersIndexes.Add(e.NewStartingIndex);
             ////    }
             ////}
+        }
+
+        /// <inheritdoc/>
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Middle && e.ButtonState == MouseButtonState.Pressed)
+            {
+                IsPanning = true;
+                Cursor = Cursors.ScrollAll;
+            }
+        }
+
+        /// <inheritdoc/>
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            if (IsPanning)
+            {
+                Cursor = Cursors.Arrow;
+            }
+
+            IsPanning = false;
         }
 
         // CanSelectMultipleItemsProperty DP callback.

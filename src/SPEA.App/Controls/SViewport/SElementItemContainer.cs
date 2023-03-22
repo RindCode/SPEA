@@ -202,7 +202,7 @@ namespace SPEA.App.Controls.SViewport
             base.OnApplyTemplate();
         }
 
-        // Is called when the element transform has changed.
+        // Is called when the element's transform has changed.
         private static void OnApplyTransformChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var source = (UIElement)d;

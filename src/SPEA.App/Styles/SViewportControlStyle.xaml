@@ -6,6 +6,7 @@
     xmlns:assist="clr-namespace:SPEA.App.Extensions.Assist">
 
     <Style x:Key="SViewportControlStyle" TargetType="{x:Type ctrl_svp:SViewportControl}">
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrl_svp:SViewportControl}">
@@ -50,7 +51,7 @@
                                 Background="Transparent"
                                 Focusable="False">
                                 <ctrl_svp:SViewportItemsHostControl
-                                    x:Name="PART_ItemsHost" Background="DarkSlateGray" Opacity="1"
+                                    x:Name="PART_ItemsHost" Background="DarkSlateGray" Opacity="0.5"
                                     IsItemsHost="True"/>
                             </ctrl_svp:InfinitePanel>
                             <!--<Grid>

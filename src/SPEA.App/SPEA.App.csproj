@@ -86,11 +86,6 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Messaging\" />
-    <Folder Include="Models\SElements\" />
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="rmdir /S /Q &quot;$(OutputPath)\ca-ES&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\cs-CZ&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\de&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\es&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\fr&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\hu&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\it&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\ja&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\ko&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\nl-BE&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\pl&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\pt&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\ro&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\ru&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\sv&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\zh-Hans&quot;&#xD;&#xA;rmdir /S /Q &quot;$(OutputPath)\zh-Hant&quot;" />
   </Target>

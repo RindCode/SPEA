@@ -121,9 +121,9 @@ namespace SPEA.App.Shapes
             var start = new Point(0, 0);
             Point[] points = new Point[3]
             {
-                new Point(W, start.Y),
-                new Point(W, H),
-                new Point(start.X, H),
+                new Point(W * Scale, start.Y * Scale),
+                new Point(W * Scale, H * Scale),
+                new Point(start.X * Scale, H * Scale),
             };
 
             var pathFigure = new PathFigure();

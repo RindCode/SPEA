@@ -223,14 +223,17 @@ namespace SPEA.Numerics.Matrices
         /// <inheritdoc/>
         public bool Equals(Matrix? other)
         {
-            if (ReferenceEquals(other, null))
+            if (other is null)
             {
                 return false;
             }
-            else
+
+            if (ReferenceEquals(this, other))
             {
-                return EqualsInternal(this, other);
+                return true;
             }
+
+            return EqualsInternal(this, other);
         }
 
         /// <inheritdoc/>
@@ -240,25 +243,20 @@ namespace SPEA.Numerics.Matrices
         }
 
         /// <inheritdoc/>
-        /// <remarks>
-        /// Always throws <see cref="NotImplementedException"/>.
-        /// </remarks>
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return base.GetHashCode();
         }
 
         // Performs an equality complete check.
         private static bool EqualsInternal(Matrix left, Matrix right)
         {
-            if (left == null)
-            {
-                throw new ArgumentNullException(nameof(left));
-            }
+            ArgumentNullException.ThrowIfNull(left, nameof(left));
+            ArgumentNullException.ThrowIfNull(right, nameof(right));
 
-            if (right == null)
+            if (left.StorageType != right.StorageType)
             {
-                throw new ArgumentNullException(nameof(right));
+                return false;
             }
 
             if (left.OrderType != right.OrderType)

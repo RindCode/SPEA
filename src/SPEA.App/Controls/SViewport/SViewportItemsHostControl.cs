@@ -8,7 +8,6 @@
 namespace SPEA.App.Controls.SViewport
 {
     using System;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
@@ -47,6 +46,8 @@ namespace SPEA.App.Controls.SViewport
         /// <inheritdoc/>
         protected override Size MeasureOverride(Size constraint)
         {
+            Debug.WriteLine($"ITEMSHOST MEASURE OVERRIDE = {constraint}");
+
             foreach (UIElement child in InternalChildren)
             {
                 var container = child as SElementItemContainer;
@@ -59,6 +60,8 @@ namespace SPEA.App.Controls.SViewport
         /// <inheritdoc/>
         protected override Size ArrangeOverride(Size finalSize)
         {
+            Debug.WriteLine($"ITEMSHOST ARRANGE OVERRIDE = {finalSize}");
+
             var minX = double.MaxValue;
             var minY = double.MaxValue;
             var maxX = double.MinValue;
@@ -68,8 +71,8 @@ namespace SPEA.App.Controls.SViewport
             {
                 if (child is SElementItemContainer container)
                 {
-                    var rect = new Rect(new Point(container.Left, container.Top), container.DesiredSize);
-                    child.Arrange(rect);
+                    Debug.WriteLine($"Arranging container: left={container.Left}, top={container.Top}, desired={container.DesiredSize}");
+                    child.Arrange(new Rect(new Point(container.Left, container.Top), container.DesiredSize));
 
                     ////if (!container.IsValid)
                     ////{
@@ -103,7 +106,7 @@ namespace SPEA.App.Controls.SViewport
                         BottomMostElement = container;
                     }
 
-                    Debug.WriteLine($"bounds: x0={container.BoundingBox.Left,8:F3}, y0={container.BoundingBox.Top,8:F3}, x1={container.BoundingBox.Right,8:F3}, y0={container.BoundingBox.Bottom,8:F3}");
+                    Debug.WriteLine($"bounds: left={container.BoundingBox.Left,8:F3}, top={container.BoundingBox.Top,8:F3}, right={container.BoundingBox.Right,8:F3}, bottom={container.BoundingBox.Bottom,8:F3}");
                 }
             }
 

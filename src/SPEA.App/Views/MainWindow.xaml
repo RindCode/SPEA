@@ -241,7 +241,7 @@
                                             ContentScale="1.0"
                                             MajorGridEnabled="True"
                                             MinorGridEnabled="True"
-                                            Background="Transparent"
+                                            PanningKey="None"
                                             Style="{StaticResource SViewportControlStyle}">
                                             <ctrl_svp:SViewportControl.Resources>
                                                 <DataTemplate DataType="{x:Type vm_se:SRectViewModel}">
@@ -250,9 +250,10 @@
                                                         SnapsToDevicePixels="True"
                                                         W="{Binding Path=W, Mode=TwoWay}"
                                                         H="{Binding Path=H, Mode=TwoWay}"
+                                                        StrokeThickness="2"
                                                         Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level3.Inverted}"
                                                         Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
-                                                        StrokeThickness="2"
+                                                        Scale="{Binding Path=ContentScale, Mode=OneWay, ElementName=SectionEditorViewport}"
                                                         ctrl_svp:SElementItemContainer.ApplyTransform="{DynamicResource SRectPrimitive.ShapeTransform}">
                                                         <shapes:SRectPrimitive.Resources>
                                                             <TransformGroup x:Key="SRectPrimitive.ShapeTransform">

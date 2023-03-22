@@ -15,6 +15,37 @@ namespace SPEA.Numerics.Matrices
         #region Methods
 
         /// <summary>
+        /// Returns <see langword="true"/> if the left matrix is equal to the right one,
+        /// otherwise returns <see langword="false"/>.
+        /// </summary>
+        /// <param name="left">The left matrix to compare.</param>
+        /// <param name="right">The right matrix to compare.</param>
+        /// <returns><see langword="true"/> if the matrices are equal, otherwise returns <see langword="false"/>.</returns>
+        public static bool operator ==(Matrix left, Matrix right)
+        {
+            if (left is null)
+            {
+                if (right is null)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Returns <see langword="true"/> if the left matrix is NOT equal to the right one,
+        /// otherwise returns <see langword="false"/>.
+        /// </summary>
+        /// <param name="left">The left matrix to compare.</param>
+        /// <param name="right">The right matrix to compare.</param>
+        /// <returns><see langword="true"/> if the matrices are NOT equal, otherwise returns <see langword="false"/>.</returns>
+        public static bool operator !=(Matrix left, Matrix right) => !(left == right);
+
+        /// <summary>
         /// Returns a matrix containing the same values as <paramref name="right"/>.
         /// </summary>
         /// <remarks>
