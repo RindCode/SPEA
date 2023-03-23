@@ -11,7 +11,6 @@ namespace SPEA.Geometry.Core
     using SPEA.Geometry.Misc;
     using SPEA.Geometry.Systems;
     using SPEA.Geometry.Transform;
-    using System.Diagnostics;
 
     /// <summary>
     /// Describes a signature of event handling methods
@@ -52,10 +51,6 @@ namespace SPEA.Geometry.Core
         private readonly Guid guid = Guid.NewGuid();
 
         #endregion Fields
-
-        #region Constructors
-
-        #endregion Constructors
 
         #region Events
 

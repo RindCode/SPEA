@@ -21,7 +21,7 @@ namespace SPEA.App.Utils.TemplateSelectors
         /// <summary>
         /// Gets or sets AvalonDock tabs style <see cref="DataTemplate"/>.
         /// </summary>
-        public Style AvalonDocumentTabStyle { get; set; }
+        public Style? AvalonDocumentTabStyle { get; set; }
 
         #endregion properties
 

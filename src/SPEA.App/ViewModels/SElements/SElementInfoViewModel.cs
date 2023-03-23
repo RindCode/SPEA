@@ -8,6 +8,7 @@
 namespace SPEA.App.ViewModels.SElements
 {
     using System;
+    using System.Diagnostics;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Messaging;
     using CommunityToolkit.Mvvm.Messaging.Messages;
@@ -23,6 +24,13 @@ namespace SPEA.App.ViewModels.SElements
     /// </remarks>
     public class SElementInfoViewModel : ObservableObject
     {
+        // This class should not be used as a standalone view model,
+        // neither should update any data (Value prop) directly, but rather
+        // from a message coming from the main view model, since the validation
+        // is also done it there.
+
+        #region Fields
+
         private readonly IMessenger _messenger;
         private readonly SElementViewModelToken _token;
         private bool _isUpdatingFromMessage = false;
@@ -30,6 +38,10 @@ namespace SPEA.App.ViewModels.SElements
         private Type _dataType;
         private object _value;
         private bool _isReadOnly;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SElementInfoViewModel"/> class.
@@ -53,6 +65,10 @@ namespace SPEA.App.ViewModels.SElements
 
             Messenger.Register<PropertyChangedMessage<object>, SElementViewModelToken>(this, token, (r, m) => OnValueUpdated(m));
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         /// <summary>
         /// Gets a messenger reference.
@@ -98,7 +114,7 @@ namespace SPEA.App.ViewModels.SElements
                 else
                 {
                     // The request comes from the UI layer (propagate, no actual update here yet).
-                    var oldValue = Convert.ChangeType(_value, DataType);
+                    var oldValue = Convert.ChangeType(_value, DataType);  // copy
                     Messenger.Send(new PropertyChangedMessage<object>(this, Name, oldValue, value), Token);
                 }
             }
@@ -113,6 +129,10 @@ namespace SPEA.App.ViewModels.SElements
             set => SetProperty(ref _isReadOnly, value);
         }
 
+        #endregion Properties
+
+        #region Methods
+
         // Handles PropertyChangedMessage message.
         private void OnValueUpdated(PropertyChangedMessage<object> message)
         {
@@ -125,5 +145,7 @@ namespace SPEA.App.ViewModels.SElements
 
             _isUpdatingFromMessage = false;
         }
+
+        #endregion Methods
     }
 }

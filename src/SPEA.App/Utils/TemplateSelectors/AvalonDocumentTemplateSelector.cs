@@ -21,7 +21,7 @@ namespace SPEA.App.Utils.TemplateSelectors
         /// <summary>
         /// Gets or sets AvalonDock document <see cref="DataTemplate"/>.
         /// </summary>
-        public DataTemplate AvalonDocumentMetallicDataTemplate { get; set; }
+        public DataTemplate? AvalonDocumentMetallicDataTemplate { get; set; }
 
         #endregion Properties
 

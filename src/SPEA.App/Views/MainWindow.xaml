@@ -391,9 +391,9 @@
                                                                     Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                                                                     FontFamily="Consolas"
                                                                     Style="{StaticResource DataGridTextBoxStyle}">
-                                                                    <i:Interaction.Behaviors>
+                                                                    <!--<i:Interaction.Behaviors>
                                                                         <behaviors:TextBoxSelectAllOnFocusBehavior/>
-                                                                    </i:Interaction.Behaviors>
+                                                                    </i:Interaction.Behaviors>-->
                                                                 </TextBox>
                                                             </DataTemplate>
                                                         </DataGridTemplateColumn.CellEditingTemplate>

@@ -9,11 +9,14 @@ namespace SPEA.App.ViewModels.SElements
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Net.Mime;
     using System.Windows.Media;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Messaging;
     using CommunityToolkit.Mvvm.Messaging.Messages;
     using SPEA.App.Messaging.Tokens;
+    using SPEA.App.Utils.Helpers;
     using SPEA.Geometry.Core;
     using SPEA.Geometry.Events;
     using SPEA.Geometry.Transform;
@@ -228,24 +231,24 @@ namespace SPEA.App.ViewModels.SElements
                 case nameof(X0):
                     if (sender.DataType == typeof(double))
                     {
-                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
-                        X0 = value != X0 ? value : X0;
+                        var isConverted = DoubleUtilHelper.SafeConvert(message.NewValue, out var value);
+                        X0 = (isConverted == true && value != X0) ? value : X0;
                     }
 
                     break;
                 case nameof(Y0):
                     if (sender.DataType == typeof(double))
                     {
-                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
-                        Y0 = value != Y0 ? value : Y0;
+                        var isConverted = DoubleUtilHelper.SafeConvert(message.NewValue, out var value);
+                        Y0 = (isConverted == true && value != Y0) ? value : Y0;
                     }
 
                     break;
                 case nameof(Angle):
                     if (sender.DataType == typeof(double))
                     {
-                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
-                        Angle = value != Angle ? value : Angle;
+                        var isConverted = DoubleUtilHelper.SafeConvert(message.NewValue, out var value);
+                        Angle = (isConverted == true && value != Angle) ? value : Angle;
                     }
 
                     break;

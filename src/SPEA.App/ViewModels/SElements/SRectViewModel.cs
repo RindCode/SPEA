@@ -139,6 +139,11 @@ namespace SPEA.App.ViewModels.SElements
             get => _w;
             set
             {
+                if (!IsSizeValid(value))
+                {
+                    return;
+                }
+
                 UnsubscribeModelEvents();
                 _model = new SRect(_model.Origin, value, H);
                 SubscribeModelEvents();
@@ -158,6 +163,11 @@ namespace SPEA.App.ViewModels.SElements
             get => _h;
             set
             {
+                if (!IsSizeValid(value))
+                {
+                    return;
+                }
+
                 UnsubscribeModelEvents();
                 _model = new SRect(_model.Origin, W, value);
                 SubscribeModelEvents();
@@ -229,16 +239,16 @@ namespace SPEA.App.ViewModels.SElements
                 case nameof(W):
                     if (sender.DataType == typeof(double))
                     {
-                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
-                        W = value != W ? value : W;
+                        var isConverted = DoubleUtilHelper.SafeConvert(message.NewValue, out var value);
+                        W = (isConverted == true && value != W) ? value : W;
                     }
 
                     break;
                 case nameof(H):
                     if (sender.DataType == typeof(double))
                     {
-                        var value = (double)Convert.ChangeType(message.NewValue, sender.DataType);
-                        H = value != H ? value : H;
+                        var isConverted = DoubleUtilHelper.SafeConvert(message.NewValue, out var value);
+                        H = (isConverted == true && value != H) ? value : H;
                     }
 
                     break;
@@ -262,6 +272,17 @@ namespace SPEA.App.ViewModels.SElements
             base.UnsubscribeModelEvents();
 
             Model.LocationChanged -= Model_LocationChanged;
+        }
+
+        // Determines if a given double is valid for being used as a shape size.
+        private bool IsSizeValid(double value)
+        {
+            if (double.IsNaN(value) || double.IsPositiveInfinity(value) || value <= 0)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion Methods
