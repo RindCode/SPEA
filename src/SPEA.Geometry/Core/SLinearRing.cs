@@ -5,10 +5,10 @@
 // </copyright>
 // ==================================================================================================
 
+using SPEA.Geometry.Transform;
+
 namespace SPEA.Geometry.Core
 {
-    using SPEA.Geometry.Misc;
-
     /// <summary>
     /// Represents a closed linear path.
     /// </summary>
@@ -57,6 +57,13 @@ namespace SPEA.Geometry.Core
             {
                 throw new ArgumentOutOfRangeException(nameof(points), "The array must contain zero or more than two elements (0 or 3+).");
             }
+        }
+
+        // Copy constructor.
+        private SLinearRing(SLinearRing template)
+            : this(template.Points)
+        {
+            LocalSystem.TransformInGlobal(template.LocalSystem.GlobalTransform, TransformAction.Replace);
         }
 
         #endregion Constructors
@@ -135,6 +142,12 @@ namespace SPEA.Geometry.Core
         #endregion Properties
 
         #region Methods
+
+        /// <inheritdoc/>
+        public override SLinearRing DeepCopy()
+        {
+            return new SLinearRing(this);
+        }
 
         /////// <inheritdoc/>
         ////protected override void InvalidateCache()

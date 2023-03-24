@@ -149,6 +149,13 @@ namespace SPEA.Geometry.Core
         #region Methods
 
         /// <inheritdoc/>
+        public override SObjectCollection<T> DeepCopy()
+        {
+            // TODO: Implementation.
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
         public override BoundingBox GetBoundingBox()
         {
             var minX = double.MaxValue;

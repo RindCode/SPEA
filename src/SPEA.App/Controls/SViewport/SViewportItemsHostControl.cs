@@ -11,6 +11,7 @@ namespace SPEA.App.Controls.SViewport
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Media;
     using SPEA.App.Utils.Extensions;
 
     /// <summary>
@@ -71,15 +72,14 @@ namespace SPEA.App.Controls.SViewport
             {
                 if (child is SElementItemContainer container)
                 {
-                    Debug.WriteLine($"Arranging container: left={container.Left}, top={container.Top}, desired={container.DesiredSize}");
-                    child.Arrange(new Rect(new Point(container.Left, container.Top), container.DesiredSize));
+                    container.BoundingBox = container.GetBoundingBox(this);  // extension method
+
+                    child.Arrange(new Rect(new Point(0, 0), container.DesiredSize));
 
                     ////if (!container.IsValid)
                     ////{
                     ////    continue;
                     ////}
-
-                    container.BoundingBox = container.GetBoundingBox(this);  // extension method
 
                     minX = Math.Min(minX, container.BoundingBox.Left);
                     minY = Math.Min(minY, container.BoundingBox.Top);

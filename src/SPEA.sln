@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPEA.Numerics", "SPEA.Numerics\SPEA.Numerics.csproj", "{4F921989-D502-46F6-9D54-1A2E2D19964F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPEA.Solver.Themis", "SPEA.Solver.Themis\SPEA.Solver.Themis.csproj", "{B33AEBA2-9590-4184-B8BF-AE34C6B83005}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPEA.COSMOS", "SPEA.Solver.Themis\SPEA.COSMOS.csproj", "{B33AEBA2-9590-4184-B8BF-AE34C6B83005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

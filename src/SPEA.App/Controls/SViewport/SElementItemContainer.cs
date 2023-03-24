@@ -62,45 +62,45 @@ namespace SPEA.App.Controls.SViewport
             obj.SetValue(ApplyTransformProperty, value);
         }
 
-        /// <summary>
-        /// DependencyProperty for <see cref="Left"/> property.
-        /// </summary>
-        public static readonly DependencyProperty LeftProperty =
-            DependencyProperty.Register(
-                nameof(Left),
-                typeof(double),
-                typeof(SElementItemContainer),
-                new FrameworkPropertyMetadata(0.0d));
+        /////// <summary>
+        /////// DependencyProperty for <see cref="Left"/> property.
+        /////// </summary>
+        ////public static readonly DependencyProperty LeftProperty =
+        ////    DependencyProperty.Register(
+        ////        nameof(Left),
+        ////        typeof(double),
+        ////        typeof(SElementItemContainer),
+        ////        new FrameworkPropertyMetadata(0.0d));
 
-        /// <summary>
-        /// Gets or sets a location of the left bound for the current <see cref="SElementItemContainer"/>
-        /// in <see cref="SViewportControl.ItemsHost"/> coordinates.
-        /// </summary>
-        public double Left
-        {
-            get { return (double)GetValue(LeftProperty); }
-            set { SetValue(LeftProperty, value); }
-        }
+        /////// <summary>
+        /////// Gets or sets a location of the left bound for the current <see cref="SElementItemContainer"/>
+        /////// in <see cref="SViewportControl.ItemsHost"/> coordinates.
+        /////// </summary>
+        ////public double Left
+        ////{
+        ////    get { return (double)GetValue(LeftProperty); }
+        ////    set { SetValue(LeftProperty, value); }
+        ////}
 
-        /// <summary>
-        /// DependencyProperty for <see cref="Top"/> property.
-        /// </summary>
-        public static readonly DependencyProperty TopProperty =
-            DependencyProperty.Register(
-                nameof(Top),
-                typeof(double),
-                typeof(SElementItemContainer),
-                new FrameworkPropertyMetadata(0.0d));
+        /////// <summary>
+        /////// DependencyProperty for <see cref="Top"/> property.
+        /////// </summary>
+        ////public static readonly DependencyProperty TopProperty =
+        ////    DependencyProperty.Register(
+        ////        nameof(Top),
+        ////        typeof(double),
+        ////        typeof(SElementItemContainer),
+        ////        new FrameworkPropertyMetadata(0.0d));
 
-        /// <summary>
-        /// Gets or sets a location of the top bound for the current <see cref="SElementItemContainer"/>
-        /// in <see cref="SViewportControl.ItemsHost"/> coordinates.
-        /// </summary>
-        public double Top
-        {
-            get { return (double)GetValue(TopProperty); }
-            set { SetValue(TopProperty, value); }
-        }
+        /////// <summary>
+        /////// Gets or sets a location of the top bound for the current <see cref="SElementItemContainer"/>
+        /////// in <see cref="SViewportControl.ItemsHost"/> coordinates.
+        /////// </summary>
+        ////public double Top
+        ////{
+        ////    get { return (double)GetValue(TopProperty); }
+        ////    set { SetValue(TopProperty, value); }
+        ////}
 
         /////// <summary>
         /////// DependencyProperty for <see cref="Right"/> property.

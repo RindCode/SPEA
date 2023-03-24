@@ -9,6 +9,7 @@ namespace SPEA.Geometry.Core
 {
     using SPEA.Geometry.Misc;
     using SPEA.Geometry.Systems;
+    using SPEA.Geometry.Transform;
 
     /// <summary>
     /// Represents a sequence of two or more points.
@@ -53,6 +54,13 @@ namespace SPEA.Geometry.Core
             }
 
             _points = points.ToArray();
+        }
+
+        // Copy constructor.
+        private SLinePath(SLinePath template)
+            : this(template.Points)
+        {
+            LocalSystem.TransformInGlobal(template.LocalSystem.GlobalTransform, TransformAction.Replace);
         }
 
         #endregion Constructors
@@ -105,6 +113,12 @@ namespace SPEA.Geometry.Core
         #endregion Properties
 
         #region Methods
+
+        /// <inheritdoc/>
+        public override SLinePath DeepCopy()
+        {
+            return new SLinePath(this);
+        }
 
         /// <inheritdoc/>
         public override BoundingBox GetBoundingBox()

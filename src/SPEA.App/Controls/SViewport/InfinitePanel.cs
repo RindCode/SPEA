@@ -42,7 +42,7 @@ namespace SPEA.App.Controls.SViewport
 
         private const double _defaultContentScale = 1.0;
         private const double _defaultScrollFactor = 0.05;
-        private const double _defaultZoomFactor = 1.0;
+        private const double _defaultZoomFactor = 1.1;
 
         private TranslateTransform? _translateTransform;
         private ScaleTransform? _scaleTransform;

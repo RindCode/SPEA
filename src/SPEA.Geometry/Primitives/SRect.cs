@@ -105,6 +105,13 @@ namespace SPEA.Geometry.Primitives
             // Blank.
         }
 
+        // Copy constructor.
+        private SRect(SRect template)
+            : this(template.Origin.X, template.Origin.Y, template.W, template.H)
+        {
+            LocalSystem.TransformInGlobal(template.LocalSystem.GlobalTransform, TransformAction.Replace);
+        }
+
         #endregion Constructors
 
         #region Properties
@@ -128,6 +135,31 @@ namespace SPEA.Geometry.Primitives
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Creates a new <see cref="SRect"/> object similar to a provided one,
+        /// but using different width and height.
+        /// </summary>
+        /// <remarks>
+        /// A new object's transformation and origin location will be preserved.
+        /// </remarks>
+        /// <param name="example">An object used as an example.</param>
+        /// <param name="w">A new width.</param>
+        /// <param name="h">A new height.</param>
+        /// <returns>A new <see cref="SRect"/> object.</returns>
+        public static SRect SameAs(SRect example, double w, double h)
+        {
+            var result = new SRect(example.Origin.X, example.Origin.Y, w, h);
+            result.LocalSystem.TransformInGlobal(example.LocalSystem.GlobalTransform, TransformAction.Replace);
+
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public override SRect DeepCopy()
+        {
+            return new SRect(this);
+        }
 
         /// <inheritdoc/>
         public override BoundingBox GetBoundingBox()

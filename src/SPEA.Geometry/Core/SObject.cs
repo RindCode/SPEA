@@ -8,6 +8,7 @@
 namespace SPEA.Geometry.Core
 {
     using SPEA.Geometry.Events;
+    using SPEA.Geometry.Interfaces;
     using SPEA.Geometry.Misc;
     using SPEA.Geometry.Systems;
     using SPEA.Geometry.Transform;
@@ -39,7 +40,7 @@ namespace SPEA.Geometry.Core
     /// <summary>
     /// Represents the base class for various geometric entities.
     /// </summary>
-    public abstract class SObject
+    public abstract class SObject : IDeepCloneable<SObject>
     {
         #region Fields
 
@@ -148,6 +149,9 @@ namespace SPEA.Geometry.Core
 
             return false;
         }
+
+        /// <inheritdoc/>
+        public abstract SObject DeepCopy();
 
         /// <summary>
         /// Calculates the bounding box in local coordinate system.

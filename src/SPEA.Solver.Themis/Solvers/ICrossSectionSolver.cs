@@ -5,7 +5,7 @@
 // </copyright>
 // ==================================================================================================
 
-namespace SPEA.Solver.Themis.Solvers
+namespace SPEA.COSMOS.Solvers
 {
     /// <summary>
     /// Provides a contract for all cross-sectional solvers.

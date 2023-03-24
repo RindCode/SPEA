@@ -139,13 +139,13 @@ namespace SPEA.App.ViewModels.SElements
             get => _w;
             set
             {
-                if (!IsSizeValid(value))
+                if (!ValidateSize(value))
                 {
                     return;
                 }
 
                 UnsubscribeModelEvents();
-                _model = new SRect(_model.Origin, value, H);
+                _model = SRect.SameAs(_model, value, _model.H);
                 SubscribeModelEvents();
 
                 Messenger.Send(new PropertyChangedMessage<object>(this, nameof(W), _w, _model.W), EntityInfoMessageToken);
@@ -163,13 +163,13 @@ namespace SPEA.App.ViewModels.SElements
             get => _h;
             set
             {
-                if (!IsSizeValid(value))
+                if (!ValidateSize(value))
                 {
                     return;
                 }
 
                 UnsubscribeModelEvents();
-                _model = new SRect(_model.Origin, W, value);
+                _model = SRect.SameAs(_model, _model.W, value);
                 SubscribeModelEvents();
 
                 Messenger.Send(new PropertyChangedMessage<object>(this, nameof(H), _h, _model.H), EntityInfoMessageToken);
@@ -192,7 +192,6 @@ namespace SPEA.App.ViewModels.SElements
                 {
                     // Dispose managed state (managed objects)
                     UnsubscribeModelEvents();
-                    _model = null;
                 }
 
                 // Free unmanaged resources (unmanaged objects) and override finalizer
@@ -275,7 +274,7 @@ namespace SPEA.App.ViewModels.SElements
         }
 
         // Determines if a given double is valid for being used as a shape size.
-        private bool IsSizeValid(double value)
+        private bool ValidateSize(double value)
         {
             if (double.IsNaN(value) || double.IsPositiveInfinity(value) || value <= 0)
             {
