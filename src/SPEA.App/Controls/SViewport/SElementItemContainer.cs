@@ -7,7 +7,7 @@
 
 namespace SPEA.App.Controls.SViewport
 {
-    using System.Linq;
+    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
@@ -177,15 +177,15 @@ namespace SPEA.App.Controls.SViewport
         ////    }
         ////}
 
-        /// <summary>
-        /// Gets the <see cref="SElementItemContainer"/> translate transform.
-        /// </summary>
-        public TranslateTransform? TranslateTransform => RenderTransform is TransformGroup group ? group.Children.OfType<TranslateTransform>().FirstOrDefault() : null;
+        /////// <summary>
+        /////// Gets the <see cref="SElementItemContainer"/> translate transform.
+        /////// </summary>
+        ////public TranslateTransform? TranslateTransform => RenderTransform is TransformGroup group ? group.Children.OfType<TranslateTransform>().FirstOrDefault() : null;
 
-        /// <summary>
-        /// Gets the <see cref="SElementItemContainer"/> scale transform.
-        /// </summary>
-        public ScaleTransform? ScaleTransform => RenderTransform is TransformGroup group ? group.Children.OfType<ScaleTransform>().FirstOrDefault() : null;
+        /////// <summary>
+        /////// Gets the <see cref="SElementItemContainer"/> scale transform.
+        /////// </summary>
+        ////public ScaleTransform? ScaleTransform => RenderTransform is TransformGroup group ? group.Children.OfType<ScaleTransform>().FirstOrDefault() : null;
 
         /// <summary>
         /// Gets the <see cref="SViewportControl"/> that owns <see cref="SElementItemContainer"/> items container type.
@@ -208,10 +208,10 @@ namespace SPEA.App.Controls.SViewport
             var source = (UIElement)d;
             var parent = VisualTreeHelperEx.FindParent<SElementItemContainer>(d);
 
-            var newValue = (Transform)e.NewValue;
-            if (newValue != source.RenderTransform)
+            var transform = (Transform)e.NewValue;
+            if (transform != source.RenderTransform)
             {
-                parent?.UpdateTransform(newValue);
+                parent?.UpdateTransform(transform);
             }
         }
 
@@ -219,8 +219,8 @@ namespace SPEA.App.Controls.SViewport
         private void UpdateTransform(Transform transform)
         {
             // Call Arrange() on ItemsHost to re-calculate the bounding box.
-            RenderTransform = transform.Clone();
-            _itemsOwner?.ItemsHost?.InvalidateArrange();
+            RenderTransform = transform == null ? Transform.Identity : transform.Clone();
+            ItemsOwner?.ItemsHost?.InvalidateArrange();
         }
 
         #endregion Methods

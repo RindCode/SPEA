@@ -151,7 +151,6 @@ namespace SPEA.App.ViewModels.SElements
                 Messenger.Send(new PropertyChangedMessage<object>(this, nameof(W), _w, _model.W), EntityInfoMessageToken);
 
                 SetProperty(ref _w, _model.W);
-                OnPropertyChanged(nameof(TransformMatrix));  // to invoke item container measure/arrange pass
             }
         }
 
@@ -175,7 +174,6 @@ namespace SPEA.App.ViewModels.SElements
                 Messenger.Send(new PropertyChangedMessage<object>(this, nameof(H), _h, _model.H), EntityInfoMessageToken);
 
                 SetProperty(ref _h, _model.H);
-                OnPropertyChanged(nameof(TransformMatrix));  // to invoke item container measure/arrange pass
             }
         }
 

@@ -11,6 +11,8 @@ namespace SPEA.App.Controls
     using System.Windows;
     using System.Windows.Controls;
 
+    // TODO: Remove?
+
     /// <summary>
     /// Reprsents an extended <see cref="TextBox"/> control.
     /// </summary>

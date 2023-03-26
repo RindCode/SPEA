@@ -253,13 +253,18 @@
                                                         StrokeThickness="2"
                                                         Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level3.Inverted}"
                                                         Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
-                                                        Scale="{Binding Path=ContentScale, Mode=OneWay, ElementName=SectionEditorViewport}"
-                                                        ctrl_svp:SElementItemContainer.ApplyTransform="{DynamicResource SRectPrimitive.ShapeTransform}">
-                                                        <shapes:SRectPrimitive.Resources>
-                                                            <TransformGroup x:Key="SRectPrimitive.ShapeTransform">
-                                                                <MatrixTransform Matrix="{Binding Path=TransformMatrix, Mode=OneWay}"/>
-                                                            </TransformGroup>
-                                                        </shapes:SRectPrimitive.Resources>
+                                                        Scale="{Binding Path=ContentScale, Mode=OneWay, ElementName=SectionEditorViewport}">
+                                                        <shapes:SRectPrimitive.Style>
+                                                            <Style>
+                                                                <Setter Property="ctrl_svp:SElementItemContainer.ApplyTransform">
+                                                                    <Setter.Value>
+                                                                        <TransformGroup>
+                                                                            <MatrixTransform Matrix="{Binding Path=TransformMatrix, Mode=OneWay}"/>
+                                                                        </TransformGroup>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </shapes:SRectPrimitive.Style>
                                                     </shapes:SRectPrimitive>
                                                 </DataTemplate>
                                             </ctrl_svp:SViewportControl.Resources>

@@ -49,11 +49,11 @@ namespace SPEA.App.Utils.Helpers
         /// Performs a safe conversion to <see cref="double"/> type without throwing an exception.
         /// If the conversion succeeds, then stores the converted <paramref name="result"/>
         /// and returns <see langword="true"/>. If the conversion fails, doesn't throw any exceptions,
-        /// stores a default value for <see cref="double"/> type and returns <see langword="true"/>.
+        /// stores a default value for <see cref="double"/> type and returns <see langword="false"/>.
         /// </summary>
         /// <param name="value">A value to convert.</param>
         /// <param name="result">The converted value.</param>
-        /// <returns><see langword="true"/> if the conversion was successful, otherwise <see langword="true"/>.</returns>
+        /// <returns><see langword="true"/> if the conversion was successful, otherwise <see langword="false"/>.</returns>
         public static bool SafeConvert(object value, out double result)
         {
             try
