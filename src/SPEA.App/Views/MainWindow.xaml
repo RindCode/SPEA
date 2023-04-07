@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:SPEA.App.Utils.Converters"
     xmlns:ctrl="clr-namespace:SPEA.App.Controls"
     xmlns:ctrl_svp="clr-namespace:SPEA.App.Controls.SViewport"
+    xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
     xmlns:exten="clr-namespace:SPEA.App.Extensions.AttachedProperties"
     xmlns:helpers="clr-namespace:SPEA.App.Utils.Helpers"
     xmlns:temselectors="clr-namespace:SPEA.App.Utils.TemplateSelectors"
@@ -47,7 +48,7 @@
         <converters:AvalonActiveContentConverter x:Key="AvalonActiveContentConverter"/>
         <converters:InverseDoubleConverter x:Key="InverseDoubleConverter"/>
         <CollectionViewSource
-            x:Key="EntityInfoCollection"
+            x:Key="EntityInfoSource"
             Source="{Binding Path=SDocumentsManagerViewModelInstance.SelectedDocument.SelectedElement.EntityInfoItems, Mode=OneWay}"/>
     </Window.Resources>
 
@@ -246,7 +247,6 @@
                                             <ctrl_svp:SViewportControl.Resources>
                                                 <DataTemplate DataType="{x:Type vm_se:SRectViewModel}">
                                                     <shapes:SRectPrimitive
-                                                        x:Name="SRectPrimitive"
                                                         SnapsToDevicePixels="True"
                                                         W="{Binding Path=W, Mode=TwoWay}"
                                                         H="{Binding Path=H, Mode=TwoWay}"
@@ -254,17 +254,11 @@
                                                         Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level3.Inverted}"
                                                         Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
                                                         Scale="{Binding Path=ContentScale, Mode=OneWay, ElementName=SectionEditorViewport}">
-                                                        <shapes:SRectPrimitive.Style>
-                                                            <Style>
-                                                                <Setter Property="ctrl_svp:SElementItemContainer.ApplyTransform">
-                                                                    <Setter.Value>
-                                                                        <TransformGroup>
-                                                                            <MatrixTransform Matrix="{Binding Path=TransformMatrix, Mode=OneWay}"/>
-                                                                        </TransformGroup>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </Style>
-                                                        </shapes:SRectPrimitive.Style>
+                                                        <shapes:SRectPrimitive.RenderTransform>
+                                                            <TransformGroup>
+                                                                <MatrixTransform Matrix="{Binding Path=TransformMatrix, Mode=OneWay}"/>
+                                                            </TransformGroup>
+                                                        </shapes:SRectPrimitive.RenderTransform>
                                                     </shapes:SRectPrimitive>
                                                 </DataTemplate>
                                             </ctrl_svp:SViewportControl.Resources>
@@ -355,7 +349,7 @@
                                             <DataGrid
                                                 x:Name="EntityInfoDataGrid"
                                                 Margin="1"
-                                                ItemsSource="{Binding Source={StaticResource EntityInfoCollection}, Mode=OneWay}"
+                                                ItemsSource="{Binding Source={StaticResource EntityInfoSource}, Mode=OneWay}"
                                                 AutoGenerateColumns="False"
                                                 HeadersVisibility="All"
                                                 GridLinesVisibility="None"   
@@ -373,7 +367,7 @@
                                                         EditingElementStyle="{StaticResource DataGridTextBoxStyle}"
                                                         CellStyle="{StaticResource ReadOnlyDataGridCellStyle}"/>
                                                     <DataGridTemplateColumn
-                                                        Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Name}"
+                                                        Header="{StaticResource S.App.DockPanel.EntityInfo.DataGrid.ColHeader.Value}"
                                                         IsReadOnly="False" Width="*"
                                                         CellStyle="{StaticResource ReadOnlyDataGridCellStyle}">
                                                         <DataGridTemplateColumn.CellTemplate>
@@ -396,9 +390,6 @@
                                                                     Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                                                                     FontFamily="Consolas"
                                                                     Style="{StaticResource DataGridTextBoxStyle}">
-                                                                    <!--<i:Interaction.Behaviors>
-                                                                        <behaviors:TextBoxSelectAllOnFocusBehavior/>
-                                                                    </i:Interaction.Behaviors>-->
                                                                 </TextBox>
                                                             </DataTemplate>
                                                         </DataGridTemplateColumn.CellEditingTemplate>

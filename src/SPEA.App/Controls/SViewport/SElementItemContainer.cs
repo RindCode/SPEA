@@ -7,7 +7,8 @@
 
 namespace SPEA.App.Controls.SViewport
 {
-    using System.Diagnostics;
+    using System;
+    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
@@ -27,40 +28,50 @@ namespace SPEA.App.Controls.SViewport
 
         #endregion Fields
 
-        #region Dependency Properties
-
-        /// <summary>
-        /// <see cref="DependencyProperty"/> for <see cref="GetApplyTransform(DependencyObject)"/> getter
-        /// and <see cref="SetApplyTransform(DependencyObject, Transform)"/> setter.
-        /// </summary>
-        public static readonly DependencyProperty ApplyTransformProperty =
-            DependencyProperty.RegisterAttached(
-                "ApplyTransform",
-                typeof(Transform),
+        static SElementItemContainer()
+        {
+            // To track changed in RenderTransform DP.
+            RenderTransformProperty.OverrideMetadata(
                 typeof(SElementItemContainer),
                 new FrameworkPropertyMetadata(
-                    default(Transform),
-                    new PropertyChangedCallback(OnApplyTransformChanged)));
-
-        /// <summary>
-        /// Gets the value of <see cref="ApplyTransformProperty"/>.
-        /// </summary>
-        /// <param name="obj">An object the value is get from.</param>
-        /// <returns>Transform value.</returns>
-        public static Transform GetApplyTransform(DependencyObject obj)
-        {
-            return (Transform)obj.GetValue(ApplyTransformProperty);
+                    RenderTransformProperty.GetMetadata(typeof(SElementItemContainer)).DefaultValue,
+                    new PropertyChangedCallback(OnRenderTransformChanged)));
         }
 
-        /// <summary>
-        /// Sets the value of <see cref="ApplyTransformProperty"/>.
-        /// </summary>
-        /// <param name="obj">An object the value is set to.</param>
-        /// <param name="value">Transform value.</param>
-        public static void SetApplyTransform(DependencyObject obj, Transform value)
-        {
-            obj.SetValue(ApplyTransformProperty, value);
-        }
+        #region Dependency Properties
+
+        /////// <summary>
+        /////// <see cref="DependencyProperty"/> for <see cref="GetAppliedTransform(DependencyObject)"/> getter
+        /////// and <see cref="SetAppliedTransform(DependencyObject, Transform)"/> setter.
+        /////// </summary>
+        ////public static readonly DependencyProperty AppliedTransformProperty =
+        ////    DependencyProperty.RegisterAttached(
+        ////        "AppliedTransform",
+        ////        typeof(Transform),
+        ////        typeof(SElementItemContainer),
+        ////        new FrameworkPropertyMetadata(
+        ////            default(Transform),
+        ////            new PropertyChangedCallback(OnRenderTransformChanged)));
+
+        /////// <summary>
+        /////// Gets the value of <see cref="AppliedTransformProperty"/>.
+        /////// </summary>
+        /////// <param name="obj">An object the value is get from.</param>
+        /////// <returns>Transform value.</returns>
+        ////public static Transform GetAppliedTransform(DependencyObject obj)
+        ////{
+        ////    return (Transform)obj.GetValue(AppliedTransformProperty);
+        ////}
+
+        /////// <summary>
+        /////// Sets the value of <see cref="AppliedTransformProperty"/>.
+        /////// </summary>
+        /////// <param name="obj">An object the value is set to.</param>
+        /////// <param name="value">Transform value.</param>
+        ////public static void SetAppliedTransform(DependencyObject obj, Transform value)
+        ////{
+        ////    obj.SetValue(AppliedTransformProperty, value);
+        ////}
 
         /////// <summary>
         /////// DependencyProperty for <see cref="Left"/> property.
@@ -202,8 +213,8 @@ namespace SPEA.App.Controls.SViewport
             base.OnApplyTemplate();
         }
 
-        // Is called when the element's transform has changed.
-        private static void OnApplyTransformChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        // Is called when the element's render transform has changed.
+        private static void OnRenderTransformChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var source = (UIElement)d;
             var parent = VisualTreeHelperEx.FindParent<SElementItemContainer>(d);
@@ -211,16 +222,15 @@ namespace SPEA.App.Controls.SViewport
             var transform = (Transform)e.NewValue;
             if (transform != source.RenderTransform)
             {
-                parent?.UpdateTransform(transform);
+                parent?.UpdateRenderTransform(transform);
             }
         }
 
-        // Updates the current transform.
-        private void UpdateTransform(Transform transform)
+        // Updates the current render transform.
+        private void UpdateRenderTransform(Transform transform)
         {
-            // Call Arrange() on ItemsHost to re-calculate the bounding box.
             RenderTransform = transform == null ? Transform.Identity : transform.Clone();
-            ItemsOwner?.ItemsHost?.InvalidateArrange();
+            ItemsOwner?.ItemsHost?.InvalidateArrange();  // call Arrange() on ItemsHost to re-calculate the bounding box
         }
 
         #endregion Methods

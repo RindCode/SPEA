@@ -9,8 +9,6 @@ namespace SPEA.App.ViewModels.SElements
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Net.Mime;
     using System.Windows.Media;
     using CommunityToolkit.Mvvm.ComponentModel;
     using CommunityToolkit.Mvvm.Messaging;

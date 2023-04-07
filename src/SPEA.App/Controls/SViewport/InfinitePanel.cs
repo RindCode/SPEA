@@ -107,7 +107,7 @@ namespace SPEA.App.Controls.SViewport
             var calculatedOffset = _offset.Width + value;
 
             // The viewport border is moved outside the extent border (negative or positive direction).
-            // Therefore we adjust the extent, but clamp the offset in a valid range (coerce part).
+            // Therefore we adjust the extent, but clamp the offset in a valid range.
             var isOutsideExtent = calculatedOffset + _viewport.Width > _extent.Width;
             if (calculatedOffset < 0 || isOutsideExtent)
             {
@@ -235,15 +235,22 @@ namespace SPEA.App.Controls.SViewport
         {
             Debug.WriteLine($"PANEL ARRANGE OVERRIDE = {finalSize}");
 
-            if (ScrollOwner != null)
+            if (_viewport != finalSize)
             {
-                if (_viewport != finalSize)
-                {
-                    _viewport = finalSize;
-                }
+                _viewport = finalSize;
 
-                ScrollOwner.InvalidateScrollInfo();
+                if (LeftMostBoundary.HasValue && TopMostBoundary.HasValue && RightMostBoundary.HasValue && BottomMostBoundary.HasValue)
+                {
+                    _extent.Width = RightMostBoundary.Value - LeftMostBoundary.Value;
+                    _extent.Height = BottomMostBoundary.Value - TopMostBoundary.Value;
+                }
+                else
+                {
+                    _extent = finalSize;
+                }
             }
+
+            ScrollOwner?.InvalidateScrollInfo();
 
             Debug.WriteLine($"extent:   w={_extent.Width,8:F3}, h={_extent.Height,8:F3}");
             Debug.WriteLine($"offset:   w={_offset.Width,8:F3}, h={_offset.Height,8:F3}");
