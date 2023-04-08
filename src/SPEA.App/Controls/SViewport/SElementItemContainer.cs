@@ -7,8 +7,6 @@
 
 namespace SPEA.App.Controls.SViewport
 {
-    using System;
-    using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
@@ -30,7 +28,7 @@ namespace SPEA.App.Controls.SViewport
 
         static SElementItemContainer()
         {
-            // To track changed in RenderTransform DP.
+            // To track changed in RenderTransform DP. See https://stackoverflow.com/a/29608443
             RenderTransformProperty.OverrideMetadata(
                 typeof(SElementItemContainer),
                 new FrameworkPropertyMetadata(

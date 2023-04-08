@@ -19,7 +19,7 @@ namespace SPEA.App.ViewModels.SElements
     /// as a data wrapper for binding purposes.
     /// </summary>
     /// <remarks>
-    /// This view model is intended to be connected with the <see cref="SElementViewModelBase"/> view model and
+    /// This view model is intended to be connected with the <see cref="SElementViewModel"/> view model and
     /// only acts as a loosely referenced object, synchronized with the main view model instance.
     /// </remarks>
     public class SElementInfoViewModel : ObservableObject
@@ -47,7 +47,7 @@ namespace SPEA.App.ViewModels.SElements
         /// Initializes a new instance of the <see cref="SElementInfoViewModel"/> class.
         /// </summary>
         /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
-        /// <param name="token">A unique token requied for messaging communication with the main <see cref="SElementViewModelBase"/>.</param>
+        /// <param name="token">A unique token requied for messaging communication with the main <see cref="SElementViewModel"/>.</param>
         /// <param name="name">The item's name.</param>
         /// <param name="dataType">The data type.</param>
         /// <param name="value">The item's value.</param>
@@ -138,7 +138,7 @@ namespace SPEA.App.ViewModels.SElements
         {
             _isUpdatingFromMessage = true;
 
-            if (message.Sender is SElementViewModelBase && message.PropertyName == Name)
+            if (message.Sender is SElementViewModel && message.PropertyName == Name)
             {
                 Value = message.NewValue;
             }

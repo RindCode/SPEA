@@ -1,5 +1,5 @@
 ﻿// ==================================================================================================
-// <copyright file="SElementViewModelBase.cs" company="Dmitry Poberezhnyy">
+// <copyright file="SElementViewModel.cs" company="Dmitry Poberezhnyy">
 // Copyright (c) Dmitry Poberezhnyy. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -22,7 +22,7 @@ namespace SPEA.App.ViewModels.SElements
     /// <summary>
     /// Represents a base class for all cross-section elements view models.
     /// </summary>
-    public abstract class SElementViewModelBase : ObservableObject, IDisposable
+    public abstract class SElementViewModel : ObservableObject, IDisposable
     {
         #region Fields
 
@@ -36,10 +36,10 @@ namespace SPEA.App.ViewModels.SElements
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SElementViewModelBase"/> class.
+        /// Initializes a new instance of the <see cref="SElementViewModel"/> class.
         /// </summary>
         /// <param name="messenger">A reference to <see cref="IMessenger"/> instance.</param>
-        protected SElementViewModelBase(IMessenger messenger)
+        protected SElementViewModel(IMessenger messenger)
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
             _entityInfoMessageToken = new SElementViewModelToken(Guid.NewGuid());
@@ -52,7 +52,7 @@ namespace SPEA.App.ViewModels.SElements
         #region Destructors
 
         ////// Override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        ////~SElementViewModelBase()
+        ////~SElementViewModel()
         ////{
         ////    // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         ////    Dispose(disposing: false);

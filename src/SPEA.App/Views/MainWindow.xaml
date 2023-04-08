@@ -255,9 +255,7 @@
                                                         Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
                                                         Scale="{Binding Path=ContentScale, Mode=OneWay, ElementName=SectionEditorViewport}">
                                                         <shapes:SRectPrimitive.RenderTransform>
-                                                            <TransformGroup>
-                                                                <MatrixTransform Matrix="{Binding Path=TransformMatrix, Mode=OneWay}"/>
-                                                            </TransformGroup>
+                                                            <MatrixTransform x:Name="TransformationMatrix" Matrix="{Binding Path=TransformMatrix, Mode=OneWay}"/>
                                                         </shapes:SRectPrimitive.RenderTransform>
                                                     </shapes:SRectPrimitive>
                                                 </DataTemplate>

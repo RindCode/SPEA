@@ -18,7 +18,7 @@ namespace SPEA.App.ViewModels.SElements
     /// <summary>
     /// Represents a view model for <see cref="Shapes.SRectPrimitive"/> shape.
     /// </summary>
-    public class SRectViewModel : SElementViewModelBase
+    public class SRectViewModel : SElementViewModel
     {
         #region Fields
 

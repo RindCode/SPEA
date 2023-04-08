@@ -7,7 +7,6 @@
 
 namespace SPEA.Geometry.Transform
 {
-    using SPEA.Geometry.Core;
     using SPEA.Numerics.Matrices;
 
     /// <summary>
@@ -57,7 +56,7 @@ namespace SPEA.Geometry.Transform
             }
 
             _value = matrix;
-            _isIdentity = matrix.IsIdentity ? true : false;
+            _isIdentity = matrix.IsIdentity;
         }
 
         #endregion Constructors

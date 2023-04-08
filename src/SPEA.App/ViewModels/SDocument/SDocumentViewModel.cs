@@ -33,9 +33,9 @@ namespace SPEA.App.ViewModels.SDocument
 
         private bool _disposed;
         private CrossSection _model;
-        private ObservableCollection<SElementViewModelBase> _itemsCollection = new ObservableCollection<SElementViewModelBase>();
-        private ObservableCollection<SElementViewModelBase> _selectedItems = new ObservableCollection<SElementViewModelBase>();
-        private SElementViewModelBase? _selectedItem;
+        private ObservableCollection<SElementViewModel> _itemsCollection = new ObservableCollection<SElementViewModel>();
+        private ObservableCollection<SElementViewModel> _selectedItems = new ObservableCollection<SElementViewModel>();
+        private SElementViewModel? _selectedItem;
         private bool _isDirty = false;
         private string _displayName = string.Empty;
 
@@ -214,7 +214,7 @@ namespace SPEA.App.ViewModels.SDocument
         /// <summary>
         /// Gets the reference to the collection of cross-section elements.
         /// </summary>
-        public ObservableCollection<SElementViewModelBase> AddedElements
+        public ObservableCollection<SElementViewModel> AddedElements
         {
             get => _itemsCollection;
             private set => _itemsCollection = value;
@@ -223,7 +223,7 @@ namespace SPEA.App.ViewModels.SDocument
         /// <summary>
         /// Gets the reference to the collection of selected elements.
         /// </summary>
-        public ObservableCollection<SElementViewModelBase> SelectedElements
+        public ObservableCollection<SElementViewModel> SelectedElements
         {
             get => _selectedItems;
             private set => _selectedItems = value;
@@ -232,7 +232,7 @@ namespace SPEA.App.ViewModels.SDocument
         /// <summary>
         /// Gets or sets the currently selected item.
         /// </summary>
-        public SElementViewModelBase? SelectedElement
+        public SElementViewModel? SelectedElement
         {
             get => AddedElements[^1]; // TODO: change back
             set => _selectedItem = value;
@@ -282,7 +282,7 @@ namespace SPEA.App.ViewModels.SDocument
         /// Adds a new element into the collection.
         /// </summary>
         /// <param name="element">The element to be added.</param>
-        public void AddElement(SElementViewModelBase element)
+        public void AddElement(SElementViewModel element)
         {
             AddedElements.Add(element);
         }

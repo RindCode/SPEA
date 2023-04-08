@@ -10,7 +10,7 @@ namespace SPEA.App.Messaging.Tokens
     using System;
 
     /// <summary>
-    /// Represents a message token used between <see cref="ViewModels.SElements.SElementViewModelBase"/>
+    /// Represents a message token used between <see cref="ViewModels.SElements.SElementViewModel"/>
     /// and <see cref="ViewModels.SElements.SElementInfoViewModel"/> view models.
     /// </summary>
     public class SElementViewModelToken : IEquatable<SElementViewModelToken>

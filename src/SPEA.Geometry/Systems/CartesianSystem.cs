@@ -7,7 +7,6 @@
 
 namespace SPEA.Geometry.Systems
 {
-    using SPEA.Geometry.Core;
     using SPEA.Geometry.Transform;
 
     /// <summary>
