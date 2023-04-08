@@ -254,9 +254,18 @@
                                                         Stroke="{DynamicResource SolidColorBrush.PrimaryPalette.Level3.Inverted}"
                                                         Fill="{DynamicResource SolidColorBrush.PrimaryPalette.Accent.SlateGray}"
                                                         Scale="{Binding Path=ContentScale, Mode=OneWay, ElementName=SectionEditorViewport}">
-                                                        <shapes:SRectPrimitive.RenderTransform>
-                                                            <MatrixTransform x:Name="TransformationMatrix" Matrix="{Binding Path=TransformMatrix, Mode=OneWay}"/>
-                                                        </shapes:SRectPrimitive.RenderTransform>
+                                                        <shapes:SRectPrimitive.Resources>
+                                                            <ctrl:BindingProxy x:Key="SRectPrimitiveProxy" Data="{Binding}"/>
+                                                        </shapes:SRectPrimitive.Resources>
+                                                        <shapes:SRectPrimitive.Style>
+                                                            <Style>
+                                                                <Setter Property="ctrl_svp:SElementItemContainer.AppliedTransform">
+                                                                    <Setter.Value>
+                                                                        <MatrixTransform Matrix="{Binding Path=Data.TransformMatrix, Mode=OneWay, Source={StaticResource SRectPrimitiveProxy}}"/>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </shapes:SRectPrimitive.Style>
                                                     </shapes:SRectPrimitive>
                                                 </DataTemplate>
                                             </ctrl_svp:SViewportControl.Resources>

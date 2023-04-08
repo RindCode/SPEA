@@ -282,7 +282,7 @@ namespace SPEA.App.Controls.SViewport
         // Container types and overrides: http://drwpf.com/blog/2008/07/20/itemscontrol-g-is-for-generator/
 
         /// <summary>
-        /// Specifies a <see cref="SViewportControl"/> item container type.
+        /// Specifies an <see cref="SViewportControl"/> item container type.
         /// </summary>
         /// <remarks>
         /// Since <see cref="SViewportControl"/> inherits from <see cref="ItemsControl"/>,

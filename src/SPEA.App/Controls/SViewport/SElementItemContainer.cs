@@ -7,6 +7,7 @@
 
 namespace SPEA.App.Controls.SViewport
 {
+    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
@@ -26,50 +27,40 @@ namespace SPEA.App.Controls.SViewport
 
         #endregion Fields
 
-        static SElementItemContainer()
-        {
-            // To track changed in RenderTransform DP. See https://stackoverflow.com/a/29608443
-            RenderTransformProperty.OverrideMetadata(
-                typeof(SElementItemContainer),
-                new FrameworkPropertyMetadata(
-                    RenderTransformProperty.GetMetadata(typeof(SElementItemContainer)).DefaultValue,
-                    new PropertyChangedCallback(OnRenderTransformChanged)));
-        }
-
         #region Dependency Properties
 
-        /////// <summary>
-        /////// <see cref="DependencyProperty"/> for <see cref="GetAppliedTransform(DependencyObject)"/> getter
-        /////// and <see cref="SetAppliedTransform(DependencyObject, Transform)"/> setter.
-        /////// </summary>
-        ////public static readonly DependencyProperty AppliedTransformProperty =
-        ////    DependencyProperty.RegisterAttached(
-        ////        "AppliedTransform",
-        ////        typeof(Transform),
-        ////        typeof(SElementItemContainer),
-        ////        new FrameworkPropertyMetadata(
-        ////            default(Transform),
-        ////            new PropertyChangedCallback(OnRenderTransformChanged)));
+        /// <summary>
+        /// <see cref="DependencyProperty"/> for <see cref="GetAppliedTransform(DependencyObject)"/> getter
+        /// and <see cref="SetAppliedTransform(DependencyObject, Transform)"/> setter.
+        /// </summary>
+        public static readonly DependencyProperty AppliedTransformProperty =
+            DependencyProperty.RegisterAttached(
+                "AppliedTransform",
+                typeof(Transform),
+                typeof(SElementItemContainer),
+                new FrameworkPropertyMetadata(
+                    default(Transform),
+                    new PropertyChangedCallback(OnRenderTransformChanged)));
 
-        /////// <summary>
-        /////// Gets the value of <see cref="AppliedTransformProperty"/>.
-        /////// </summary>
-        /////// <param name="obj">An object the value is get from.</param>
-        /////// <returns>Transform value.</returns>
-        ////public static Transform GetAppliedTransform(DependencyObject obj)
-        ////{
-        ////    return (Transform)obj.GetValue(AppliedTransformProperty);
-        ////}
+        /// <summary>
+        /// Gets the value of <see cref="AppliedTransformProperty"/>.
+        /// </summary>
+        /// <param name="obj">An object the value is get from.</param>
+        /// <returns>Transform value.</returns>
+        public static Transform GetAppliedTransform(DependencyObject obj)
+        {
+            return (Transform)obj.GetValue(AppliedTransformProperty);
+        }
 
-        /////// <summary>
-        /////// Sets the value of <see cref="AppliedTransformProperty"/>.
-        /////// </summary>
-        /////// <param name="obj">An object the value is set to.</param>
-        /////// <param name="value">Transform value.</param>
-        ////public static void SetAppliedTransform(DependencyObject obj, Transform value)
-        ////{
-        ////    obj.SetValue(AppliedTransformProperty, value);
-        ////}
+        /// <summary>
+        /// Sets the value of <see cref="AppliedTransformProperty"/>.
+        /// </summary>
+        /// <param name="obj">An object the value is set to.</param>
+        /// <param name="value">Transform value.</param>
+        public static void SetAppliedTransform(DependencyObject obj, Transform value)
+        {
+            obj.SetValue(AppliedTransformProperty, value);
+        }
 
         /////// <summary>
         /////// DependencyProperty for <see cref="Left"/> property.
@@ -214,13 +205,16 @@ namespace SPEA.App.Controls.SViewport
         // Is called when the element's render transform has changed.
         private static void OnRenderTransformChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            Debug.WriteLine($"OnRenderTransformChanged");
             var source = (UIElement)d;
             var parent = VisualTreeHelperEx.FindParent<SElementItemContainer>(d);
 
             var transform = (Transform)e.NewValue;
             if (transform != source.RenderTransform)
             {
+                Debug.WriteLine($"Updating SElementItemContainer RenderTransform...");
                 parent?.UpdateRenderTransform(transform);
+                Debug.WriteLine($"Updated.");
             }
         }
 

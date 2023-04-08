@@ -22,16 +22,16 @@ namespace SPEA.App.Utils.Extensions
         /// Calculates the bounding box for a child element relatively to the visual parent based on applied transforms.
         /// </summary>
         /// <param name="element">Element the bounding box will be calculated for.</param>
-        /// <param name="from">Visual element transforms will be calculated from.</param>
+        /// <param name="relativeTo">Visual element transforms will be calculated relative to.</param>
         /// <returns><see cref="Rect"/> bounding box.</returns>
-        public static Rect GetBoundingBox(this FrameworkElement element, Visual from)
+        public static Rect GetBoundingBox(this FrameworkElement element, Visual relativeTo)
         {
-            if (from == null)
+            if (relativeTo == null)
             {
-                throw new ArgumentNullException(nameof(from));
+                throw new ArgumentNullException(nameof(relativeTo));
             }
 
-            var transform = element.TransformToVisual(from);
+            var transform = element.TransformToVisual(relativeTo);
 
             // W and H DP default values are NaN.
             if (double.IsNaN(element.Width) || double.IsNaN(element.Width))
